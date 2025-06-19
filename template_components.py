@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
-from typing import Dict, Any, Tuple, Optional, List, Union
+from typing import Dict, Any, Tuple, Optional, List, Union, Sequence
 import os
 import requests
 from io import BytesIO
@@ -259,7 +259,7 @@ class ImageComponent(Component):
             # Apply tint overlay if specified
             if self.tint_overlay and len(self.tint_overlay) == 4:
                 # Create a new image with the tint color and same size as original
-                tint = Image.new('RGBA', self._image.size, self.tint_overlay)
+                tint = Image.new("RGBA", self._image.size, self.tint_overlay)
                 # Composite the tint over the original image
                 self._image = Image.alpha_composite(self._image, tint)
 
@@ -334,7 +334,7 @@ class ImageComponent(Component):
             tint_overlay = tuple(tint_overlay)
         else:
             tint_overlay = None
-            
+
         return cls(
             image_path=config.get("image_path"),
             image_url=config.get("image_url"),
@@ -591,8 +591,96 @@ class FooterComponent(Component):
             font_size=config.get("font_size", 14),
             color=tuple(config.get("color", (100, 100, 100))),
             bg_color=bg_color,
-            padding=config.get("padding", 10),
-            font_path=config.get("font_path"),
+        )
+
+
+class RectangleComponent(Component):
+    """Component for rendering rectangles"""
+
+    def __init__(
+        self,
+        position: Tuple[int, int] = (0, 0),
+        size: Tuple[int, int] = (100, 50),
+        fill_color: Optional[Tuple[int, int, int]] = None,
+        outline_color: Optional[Tuple[int, int, int]] = None,
+        outline_width: int = 1,
+    ):
+        """
+        Initialize a rectangle component.
+
+        Args:
+            position: Position (x, y) of the top-left corner
+            size: Size (width, height) of the rectangle
+            fill_color: RGB color tuple for the fill color (None for transparent)
+            outline_color: RGB color tuple for the outline (None for no outline)
+            outline_width: Width of the outline in pixels
+        """
+        super().__init__(position)
+        self.size = size
+        self.fill_color = fill_color
+        self.outline_color = outline_color
+        self.outline_width = outline_width
+
+    def render(self, image: Image.Image) -> Image.Image:
+        """
+        Render a rectangle onto an image.
+
+        Args:
+            image: The image to render the rectangle on
+
+        Returns:
+            The image with the rectangle rendered on it
+        """
+        draw = ImageDraw.Draw(image, "RGBA")
+        x, y = self.position
+        width, height = self.size
+
+        # Draw filled rectangle
+        if self.fill_color is not None:
+            draw.rectangle(
+                [x, y, x + width, y + height],
+                fill=tuple(self.fill_color) + (255,),  # Add alpha channel
+            )
+
+        # Draw outline if specified
+        if self.outline_color is not None and self.outline_width > 0:
+            for i in range(self.outline_width):
+                draw.rectangle(
+                    [x + i, y + i, x + width - i, y + height - i],
+                    outline=tuple(self.outline_color) + (255,),  # Add alpha channel
+                    width=1,
+                )
+        return image
+
+    @classmethod
+    def from_config(cls, config: Dict[str, Any]) -> "RectangleComponent":
+        """
+        Create a rectangle component from a configuration dictionary.
+
+        Args:
+            config: Configuration dictionary
+
+        Returns:
+            A new RectangleComponent instance
+        """
+        position = (
+            config.get("position", {}).get("x", 0),
+            config.get("position", {}).get("y", 0),
+        )
+        size = (
+            config.get("size", {}).get("width", 100),
+            config.get("size", {}).get("height", 50),
+        )
+        fill_color = config.get("fill_color")
+        outline_color = config.get("outline_color")
+        outline_width = config.get("outline_width", 1)
+
+        return cls(
+            position=position,
+            size=size,
+            fill_color=fill_color,
+            outline_color=outline_color,
+            outline_width=outline_width,
         )
 
 
@@ -616,5 +704,7 @@ def create_component_from_config(config: Dict[str, Any]) -> Optional[Component]:
         return CTAButtonComponent.from_config(config)
     elif component_type == "footer":
         return FooterComponent.from_config(config)
+    elif component_type == "rectangle":
+        return RectangleComponent.from_config(config)
 
     return None

@@ -23,6 +23,96 @@ class TemplateRegistry:
 
     def _load_default_templates(self) -> None:
         """Load the default templates into the registry"""
+        # Template 69 - Split layout with text left, image right
+        self.register_template(
+            "template69",
+            {
+                "name": "template69",
+                "description": "Split layout with text on left and image on right",
+                "size": {"width": 1080, "height": 1080},
+                "use_base_image": False,
+                "components": [
+                    # Left side - White background
+                    {
+                        "type": "rectangle",
+                        "position": {"x": 0, "y": 0},
+                        "size": {"width": 540, "height": 1080},
+                        "fill_color": [255, 255, 255],
+                        "outline_color": None,
+                    },
+                    # Right side - Image
+                    {
+                        "type": "image",
+                        "image_url": "${image_url}",
+                        "position": {"x": 540, "y": 0},
+                        "size": {"width": 1080, "height": 1080},
+                    },
+                    # Logo
+                    {
+                        "type": "image",
+                        "image_url": "${logo_url}",
+                        "position": {"x": 50, "y": 50},
+                        "size": {"width": 60, "height": 60},
+                    },
+                    # Main heading
+                    {
+                        "type": "text",
+                        "text": "${heading}",
+                        "position": {"x": 50, "y": 200},
+                        "font_size": 56,
+                        "color": [0, 0, 0],
+                        "font_path": get_font_manager().get_font_path("Roboto-Bold"),
+                        "max_width": 440,
+                    },
+                    # Subheading
+                    {
+                        "type": "text",
+                        "text": "${subheading}",
+                        "position": {"x": 50, "y": 350},
+                        "font_size": 36,
+                        "color": [90, 90, 90],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                        "max_width": 440,
+                    },
+                    # Divider line (thick purple line)
+                    {
+                        "type": "rectangle",
+                        "position": {"x": 50, "y": 900},
+                        "size": {"width": 450, "height": 8},
+                        "fill_color": [128, 0, 128],  # Purple
+                        "outline_color": None,
+                    },
+                    # Contact email
+                    {
+                        "type": "text",
+                        "text": "${contact_email}",
+                        "position": {"x": 50, "y": 940},
+                        "font_size": 28,
+                        "color": [100, 100, 100],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                    },
+                    # Contact phone
+                    {
+                        "type": "text",
+                        "text": "${contact_phone}",
+                        "position": {"x": 50, "y": 980},
+                        "font_size": 28,
+                        "color": [100, 100, 100],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                    },
+                    # Website URL
+                    {
+                        "type": "text",
+                        "text": "${website_url}",
+                        "position": {"x": 50, "y": 1020},
+                        "font_size": 28,
+                        "color": [128, 0, 128],  # Purple
+                        "font_path": get_font_manager().get_font_path("Roboto-Medium"),
+                    },
+                ],
+            },
+        )
+
         # Green Fintech template
         self.register_template(
             "green_fintech",
@@ -45,7 +135,6 @@ class TemplateRegistry:
                             30,
                         ],
                     },
-                    # R Refyne logo
                     {
                         "type": "image",
                         "image_url": "${logo_url}",
@@ -53,7 +142,6 @@ class TemplateRegistry:
                         "size": {"width": 60, "height": 60},
                         "circle_crop": True,
                     },
-                    # Main heading part 1 (Your sustainability goals deserve a)
                     {
                         "type": "text",
                         "text": "${heading}",
@@ -62,7 +150,6 @@ class TemplateRegistry:
                         "color": [255, 255, 255],
                         "font_path": get_font_manager().get_font_path("Roboto-Light"),
                     },
-                    # Main heading part 2 (Fintech partner as 'green' as your vision)
                     {
                         "type": "text",
                         "text": "${subheading}",
@@ -73,7 +160,6 @@ class TemplateRegistry:
                         "line_height": 1.1,
                         "font_path": get_font_manager().get_font_path("Roboto-Bold"),
                     },
-                    # Decorative elements (simplified representation)
                     {
                         "type": "rectangle",
                         "position": {"x": 600, "y": 700},
@@ -87,7 +173,6 @@ class TemplateRegistry:
                         "size": 80,
                         "color": [255, 255, 0],  # Yellow
                     },
-                    # CTA Button
                     {
                         "type": "rectangle",
                         "position": {"x": 100, "y": 850},
@@ -104,19 +189,17 @@ class TemplateRegistry:
                         "font_path": get_font_manager().get_font_path("Roboto-Bold"),
                         "alignment": "center",
                     },
-                    # Contact Information
                     {
                         "type": "text",
-                        "text": "${contact_info}",
+                        "text": "${contact_email}",
                         "position": {"x": 600, "y": 880},
                         "font_size": 28,
                         "color": [255, 255, 255],  # White
                         "font_path": get_font_manager().get_font_path("Roboto-Light"),
                     },
-                    # Additional Contact
                     {
                         "type": "text",
-                        "text": "${additional_contact}",
+                        "text": "${contact_phone}",
                         "position": {"x": 600, "y": 920},
                         "font_size": 28,
                         "color": [255, 255, 255],  # White
@@ -387,17 +470,10 @@ if __name__ == "__main__":
         "cta_image": "https://static.vecteezy.com/system/resources/thumbnails/035/576/450/small/ai-generated-3d-rendering-of-a-beautiful-colorful-candle-on-transparent-background-ai-generated-png.png",
         "contact_email": "info@rrefyne.com",
         "contact_phone": "+1-800-555-1234",
-        # Fields for green_fintech template (with defaults that match the original template)
-        # These will be used by the green_fintech template
-        "heading_green_fintech": "Your sustainability goals deserve a",
-        "subheading_green_fintech": "your vision",  # This will be used in the green_fintech template
-        "cta_text": "CONTACT US",
-        "contact_info": "Email: contact@rrefyne.com",
-        "additional_contact": "Call: +1 (555) 123-4567",
     }
 
     # Render the business template
-    output_path = registry.render_template("green_fintech", user_data)
+    output_path = registry.render_template("template69", user_data)
 
     if output_path:
         print(f"\nGenerated business template image: {output_path}")
