@@ -23,6 +23,109 @@ class TemplateRegistry:
 
     def _load_default_templates(self) -> None:
         """Load the default templates into the registry"""
+        # Green Fintech template
+        self.register_template(
+            "green_fintech",
+            {
+                "name": "green_fintech",
+                "description": "Green fintech template with gradient background and modern typography",
+                "size": {"width": 1080, "height": 1080},
+                "use_base_image": False,
+                "components": [
+                    # Background image
+                    {
+                        "type": "image",
+                        "image_url": "https://img.freepik.com/free-vector/abstract-green-background_698452-3092.jpg?t=st=1750341344~exp=1750344944~hmac=fb613d9b3d8c853e9ec583a665051fabcd7b538df96a17c20ba7a18ee4974568",
+                        "position": {"x": 0, "y": 0},
+                        "size": {"width": 1080, "height": 1080},
+                        "tint_overlay": [
+                            0,
+                            0,
+                            0,
+                            30,
+                        ],
+                    },
+                    # R Refyne logo
+                    {
+                        "type": "image",
+                        "image_url": "${logo_url}",
+                        "position": {"x": 60, "y": 60},
+                        "size": {"width": 60, "height": 60},
+                        "circle_crop": True,
+                    },
+                    # Main heading part 1 (Your sustainability goals deserve a)
+                    {
+                        "type": "text",
+                        "text": "${heading}",
+                        "position": {"x": 100, "y": 300},
+                        "font_size": 42,
+                        "color": [255, 255, 255],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                    },
+                    # Main heading part 2 (Fintech partner as 'green' as your vision)
+                    {
+                        "type": "text",
+                        "text": "${subheading}",
+                        "max_width": 880,
+                        "position": {"x": 100, "y": 380},
+                        "font_size": 100,
+                        "color": [255, 255, 0],  # Yellow color
+                        "line_height": 1.1,
+                        "font_path": get_font_manager().get_font_path("Roboto-Bold"),
+                    },
+                    # Decorative elements (simplified representation)
+                    {
+                        "type": "rectangle",
+                        "position": {"x": 600, "y": 700},
+                        "size": {"width": 80, "height": 80},
+                        "color": [0, 80, 0],  # Dark green
+                        "border_radius": 15,
+                    },
+                    {
+                        "type": "circle",
+                        "position": {"x": 720, "y": 700},
+                        "size": 80,
+                        "color": [255, 255, 0],  # Yellow
+                    },
+                    # CTA Button
+                    {
+                        "type": "rectangle",
+                        "position": {"x": 100, "y": 850},
+                        "size": {"width": 350, "height": 100},
+                        "color": [255, 255, 0],  # Yellow
+                        "border_radius": 10,
+                    },
+                    {
+                        "type": "cta_button",
+                        "text": "${cta_text}",
+                        "position": {"x": 275, "y": 885},
+                        "font_size": 36,
+                        "color": [0, 80, 0],  # Dark green
+                        "font_path": get_font_manager().get_font_path("Roboto-Bold"),
+                        "alignment": "center",
+                    },
+                    # Contact Information
+                    {
+                        "type": "text",
+                        "text": "${contact_info}",
+                        "position": {"x": 600, "y": 880},
+                        "font_size": 28,
+                        "color": [255, 255, 255],  # White
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                    },
+                    # Additional Contact
+                    {
+                        "type": "text",
+                        "text": "${additional_contact}",
+                        "position": {"x": 600, "y": 920},
+                        "font_size": 28,
+                        "color": [255, 255, 255],  # White
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                    },
+                ],
+            },
+        )
+
         # Business template
         self.register_template(
             "business_template",
@@ -271,21 +374,30 @@ if __name__ == "__main__":
     for template in templates:
         print(f"- {template['name']}: {template['description']}")
 
-    # Example user data for the business template
+    # Example user data that works with both templates
     user_data = {
-        "image_url": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/3188fb75-00e1-4633-bc1b-55ba41346147.png",
+        # Common fields (used by both templates)
         "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
+        "website_url": "www.rrefyne.com",
+        # Fields for business_template
+        "image_url": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/3188fb75-00e1-4633-bc1b-55ba41346147.png",
         "heading": "Grow Your Business Today",
         "subheading": "Custom solutions for modern challenges in the digital landscape",
         "cta_text": "GET STARTED",
         "cta_image": "https://static.vecteezy.com/system/resources/thumbnails/035/576/450/small/ai-generated-3d-rendering-of-a-beautiful-colorful-candle-on-transparent-background-ai-generated-png.png",
-        "contact_email": "info@acmecorp.com",
+        "contact_email": "info@rrefyne.com",
         "contact_phone": "+1-800-555-1234",
-        "website_url": "www.acmecorp.com",
+        # Fields for green_fintech template (with defaults that match the original template)
+        # These will be used by the green_fintech template
+        "heading_green_fintech": "Your sustainability goals deserve a",
+        "subheading_green_fintech": "your vision",  # This will be used in the green_fintech template
+        "cta_text": "CONTACT US",
+        "contact_info": "Email: contact@rrefyne.com",
+        "additional_contact": "Call: +1 (555) 123-4567",
     }
 
     # Render the business template
-    output_path = registry.render_template("business_template", user_data)
+    output_path = registry.render_template("green_fintech", user_data)
 
     if output_path:
         print(f"\nGenerated business template image: {output_path}")
