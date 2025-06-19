@@ -31,15 +31,33 @@ class FontManager:
         self._scan_fonts()
 
     def _scan_fonts(self) -> None:
-        """Scan the font directory for available fonts"""
+        """
+        Recursively scan the font directory and its subdirectories for available fonts.
+        Fonts are stored with their base filename (without extension) as the key.
+        """
         if not os.path.exists(self.font_dir):
             os.makedirs(self.font_dir, exist_ok=True)
             return
 
-        for filename in os.listdir(self.font_dir):
-            if filename.endswith((".ttf", ".otf")):
-                font_name = os.path.splitext(filename)[0]
-                self.fonts[font_name] = os.path.join(self.font_dir, filename)
+        for root, _, files in os.walk(self.font_dir):
+            for filename in files:
+                if filename.lower().endswith((".ttf", ".otf")):
+                    font_name = os.path.splitext(filename)[0]
+                    font_path = os.path.join(root, filename)
+                    self.fonts[font_name] = font_path
+                    logger.debug(f"Found font: {font_name} at {font_path}")
+
+    def get_font_path(self, font_name: str) -> str:
+        """
+        Get the path to a font file by name.
+
+        Args:
+            font_name: Name of the font (without extension)
+
+        Returns:
+            Path to the font file
+        """
+        return self.fonts.get(font_name)
 
     def get_font(
         self, font_name: Optional[str] = None, size: int = 24
@@ -59,6 +77,7 @@ class FontManager:
             font_path = next(iter(self.fonts.values()))
         elif font_name in self.fonts:
             font_path = self.fonts[font_name]
+            print(font_path, "path")
         else:
             # If the requested font is not available, try to use a default system font
             try:
@@ -109,16 +128,3 @@ def get_font_manager() -> FontManager:
     if _instance is None:
         _instance = FontManager()
     return _instance
-
-
-if __name__ == "__main__":
-    # Example usage
-    manager = get_font_manager()
-
-    print("Available fonts:")
-    for font_name in manager.list_fonts():
-        print(f"- {font_name}")
-
-    # Get a font
-    font = manager.get_font("Roboto-Regular", 24)
-    print(f"Font loaded: {font}")

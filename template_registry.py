@@ -23,7 +23,6 @@ class TemplateRegistry:
 
     def _load_default_templates(self) -> None:
         """Load the default templates into the registry"""
-
         # Business template
         self.register_template(
             "business_template",
@@ -31,40 +30,54 @@ class TemplateRegistry:
                 "name": "business_template",
                 "description": "Professional business template with gradient background",
                 "size": {"width": 1080, "height": 1080},
-                "use_base_image": True,
+                "use_base_image": False,
                 "components": [
+                    {
+                        "type": "image",
+                        "image_url": "${image_url}",
+                        "position": {"x": 0, "y": 0},
+                        "size": {"width": 1080, "height": 1080},
+                        "tint_overlay": [
+                            0,
+                            0,
+                            0,
+                            80,
+                        ],  # Semi-transparent black overlay (0,0,0,80)
+                    },
                     {
                         "type": "image",
                         "image_url": "${logo_url}",
                         "position": {"x": 50, "y": 50},
-                        "size": {"width": 120, "height": 120},
+                        "size": {"width": 80, "height": 80},
                         "circle_crop": True,
                     },
                     {
                         "type": "text",
                         "text": "${heading}",
-                        "position": {"x": 140, "y": 280},
-                        "font_size": 53,
+                        "position": {"x": 100, "y": 180},
+                        "font_size": 72,
                         "color": [255, 255, 255],
-                        "max_width": 800,
-                        "font_path": get_font_manager().get_font("Roboto.ttf"),
+                        "max_width": 880,  # Full width of the template
+                        "alignment": "center",  # Center align the heading
+                        "font_path": get_font_manager().get_font_path(
+                            "Roboto-ExtraBold"
+                        ),
                     },
                     {
                         "type": "text",
                         "text": "${subheading}",
-                        "position": {"x": 140, "y": 360},
+                        "position": {"x": 100, "y": 260},
                         "font_size": 32,
                         "color": [255, 255, 255],
-                        "max_width": 800,
-                        "font_path": get_font_manager().get_font(
-                            "OpenSans-Regular.ttf", 32
-                        ),
+                        "max_width": 880,  # Full width of the template
+                        "alignment": "center",  # Center align the subheading
+                        "font_path": get_font_manager().get_font_path("Roboto-Medium"),
                     },
                     {
                         "type": "image",
                         "image_url": "${cta_image}",
-                        "position": {"x": 100, "y": 600},
-                        "size": {"width": 880, "height": 320},
+                        "position": {"x": 100, "y": 400},
+                        "size": {"width": 880, "height": 520},
                     },
                     {
                         "type": "text",
@@ -72,13 +85,8 @@ class TemplateRegistry:
                         "position": {"x": 300, "y": 980},
                         "font_size": 32,
                         "color": [255, 255, 255],
-                    },
-                    {
-                        "type": "text",
-                        "text": "•",
-                        "position": {"x": 600, "y": 980},
-                        "font_size": 32,
-                        "color": [255, 255, 255],
+                        "alignment": "center",  # Center align contact info
+                        "font_path": get_font_manager().get_font_path("Roboto-Medium"),
                     },
                     {
                         "type": "text",
@@ -86,13 +94,21 @@ class TemplateRegistry:
                         "position": {"x": 640, "y": 980},
                         "font_size": 32,
                         "color": [255, 255, 255],
+                        "alignment": "center",  # Center align phone number
+                        "font_path": get_font_manager().get_font_path("Roboto-Medium"),
                     },
                     {
                         "type": "text",
                         "text": "${website_url}",
-                        "position": {"x": 460, "y": 1030},
+                        "position": {
+                            "x": 100,
+                            "y": 1030,
+                        },  # Adjusted x position for better centering
                         "font_size": 32,
-                        "color": [255, 255, 255],
+                        "color": [166, 166, 166],
+                        "max_width": 880,  # Full width for better centering
+                        "alignment": "center",  # Center align website URL
+                        "font_path": get_font_manager().get_font_path("Roboto-Medium"),
                     },
                 ],
             },
@@ -257,12 +273,12 @@ if __name__ == "__main__":
 
     # Example user data for the business template
     user_data = {
-        "image_url": "https://img.freepik.com/premium-vector/blurry-image-multicolored-gradient-background_502601-1346.jpg",
+        "image_url": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/3188fb75-00e1-4633-bc1b-55ba41346147.png",
         "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
         "heading": "Grow Your Business Today",
         "subheading": "Custom solutions for modern challenges in the digital landscape",
         "cta_text": "GET STARTED",
-        "cta_image": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/36222581-2fba-4839-a1f1-0685615b10c4.png",
+        "cta_image": "https://static.vecteezy.com/system/resources/thumbnails/035/576/450/small/ai-generated-3d-rendering-of-a-beautiful-colorful-candle-on-transparent-background-ai-generated-png.png",
         "contact_email": "info@acmecorp.com",
         "contact_phone": "+1-800-555-1234",
         "website_url": "www.acmecorp.com",
@@ -276,3 +292,8 @@ if __name__ == "__main__":
         print("Try opening the generated image to see the customized template!")
     else:
         print("Failed to generate template image.")
+
+
+# crop bg image and dotn squeeze
+# filter on bg imabe
+# blur on text

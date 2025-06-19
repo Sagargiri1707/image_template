@@ -60,6 +60,7 @@ class TextComponent(Component):
         color: Tuple[int, int, int] = (0, 0, 0),
         max_width: Optional[int] = None,
         font_path: Optional[str] = None,
+        alignment: str = "left",
     ):
         """
         Initialize a text component.
@@ -71,6 +72,7 @@ class TextComponent(Component):
             color: RGB color tuple
             max_width: Maximum width for text wrapping
             font_path: Path to a TTF font file
+            alignment: Text alignment ('left', 'center', 'right')
         """
         super().__init__(position)
         self.text = text
@@ -78,6 +80,12 @@ class TextComponent(Component):
         self.color = color
         self.max_width = max_width
         self.font_path = font_path
+        self.alignment = alignment.lower()
+
+        # Validate alignment
+        if self.alignment not in ["left", "center", "right"]:
+            print(f"Warning: Invalid alignment '{alignment}'. Defaulting to 'left'.")
+            self.alignment = "left"
 
     def render(self, image: Image.Image) -> Image.Image:
         """Render text onto an image"""
@@ -134,15 +142,24 @@ class TextComponent(Component):
 
             lines.append(current_line)
 
-            # Draw each line
+            # Draw each line with proper alignment
             y_offset = self.position[1]
             for line in lines:
-                draw.text(
-                    (self.position[0], y_offset), line, font=font, fill=self.color
-                )
+                line_width = draw.textlength(line, font=font)
+
+                # Calculate x position based on alignment
+                if self.alignment == "center":
+                    x = self.position[0] + (self.max_width - line_width) // 2
+                elif self.alignment == "right":
+                    x = self.position[0] + (self.max_width - line_width)
+                else:  # left alignment (default)
+                    x = self.position[0]
+
+                draw.text((x, y_offset), line, font=font, fill=self.color)
                 y_offset += self.font_size + 5  # Add some spacing between lines
         else:
-            # Draw text without wrapping
+            # For single line without max_width, just draw the text at the given position
+            # (alignment doesn't apply as there's no width constraint)
             draw.text(self.position, self.text, font=font, fill=self.color)
 
         return result
@@ -155,13 +172,21 @@ class TextComponent(Component):
             config.get("position", {}).get("y", 0),
         )
 
+        # Handle color which might be a list or tuple
+        color = config.get("color", (0, 0, 0))
+        if isinstance(color, (list, tuple)) and len(color) >= 3:
+            color = tuple(color[:3])  # Ensure it's a tuple of 3 values
+        else:
+            color = (0, 0, 0)  # Default to black if invalid
+
         return cls(
             text=config.get("text", ""),
             position=position,
             font_size=config.get("font_size", 24),
-            color=tuple(config.get("color", (0, 0, 0))),
+            color=color,
             max_width=config.get("max_width"),
             font_path=config.get("font_path"),
+            alignment=config.get("alignment", "left"),
         )
 
 
@@ -175,6 +200,7 @@ class ImageComponent(Component):
         position: Tuple[int, int] = (0, 0),
         size: Optional[Tuple[int, int]] = None,
         circle_crop: bool = False,
+        tint_overlay: Optional[Tuple[int, int, int, int]] = None,
     ):
         """
         Initialize an image component.
@@ -185,7 +211,11 @@ class ImageComponent(Component):
             position: Position (x, y) to place the image
             size: Size (width, height) to resize the image to
             circle_crop: Whether to crop the image into a circle
+            tint_overlay: Optional RGBA tuple (r,g,b,a) to overlay on the image for tinting.
+                        Useful for making text more visible on background images.
+                        Example: (0, 0, 0, 100) for a semi-transparent black overlay.
         """
+        self.tint_overlay = tint_overlay
         super().__init__(position)
         self.image_path = image_path
         self.image_url = image_url
@@ -225,6 +255,13 @@ class ImageComponent(Component):
             # Resize if needed
             if self.size:
                 self._image = self._image.resize(self.size, Image.Resampling.LANCZOS)
+
+            # Apply tint overlay if specified
+            if self.tint_overlay and len(self.tint_overlay) == 4:
+                # Create a new image with the tint color and same size as original
+                tint = Image.new('RGBA', self._image.size, self.tint_overlay)
+                # Composite the tint over the original image
+                self._image = Image.alpha_composite(self._image, tint)
 
             # Apply circle crop if needed
             if self.circle_crop:
@@ -291,12 +328,20 @@ class ImageComponent(Component):
         if "size" in config:
             size = (config["size"].get("width", 100), config["size"].get("height", 100))
 
+        # Handle tint_overlay which can be a list or tuple of 4 values (RGBA)
+        tint_overlay = config.get("tint_overlay")
+        if isinstance(tint_overlay, (list, tuple)) and len(tint_overlay) == 4:
+            tint_overlay = tuple(tint_overlay)
+        else:
+            tint_overlay = None
+            
         return cls(
             image_path=config.get("image_path"),
             image_url=config.get("image_url"),
             position=position,
             size=size,
             circle_crop=config.get("circle_crop", False),
+            tint_overlay=tint_overlay,
         )
 
 
