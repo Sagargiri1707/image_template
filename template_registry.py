@@ -30,82 +30,68 @@ class TemplateRegistry:
             {
                 "name": "business_template",
                 "description": "Professional business template with gradient background",
-                "size": {"width": 800, "height": 800},
+                "size": {"width": 1080, "height": 1080},
                 "use_base_image": True,
                 "components": [
-                    # Logo in top-left corner
                     {
                         "type": "image",
-                        "image_url": "${logo_url|https://placehold.co/200x200/ffffff/0000FF?text=LOGO}",
-                        "position": {"x": 70, "y": 70},
-                        "size": {"width": 100, "height": 100},
+                        "image_url": "${logo_url}",
+                        "position": {"x": 50, "y": 50},
+                        "size": {"width": 120, "height": 120},
                         "circle_crop": True,
                     },
-                    # Main heading
                     {
                         "type": "text",
-                        "text": "${heading|Transform Your Business Today}",
-                        "position": {"x": 100, "y": 250},
-                        "font_size": 48,
+                        "text": "${heading}",
+                        "position": {"x": 140, "y": 280},
+                        "font_size": 53,
                         "color": [255, 255, 255],
-                        "max_width": 600,
+                        "max_width": 800,
+                        "font_path": get_font_manager().get_font("Roboto.ttf"),
                     },
-                    # Subheading
                     {
                         "type": "text",
-                        "text": "${subheading|Discover innovative solutions that drive growth and success in the digital age}",
-                        "position": {"x": 120, "y": 330},
-                        "font_size": 16,
+                        "text": "${subheading}",
+                        "position": {"x": 140, "y": 360},
+                        "font_size": 32,
                         "color": [255, 255, 255],
-                        "max_width": 560,
-                        "font_path": get_font_manager().get_font("Roboto.ttf", 90),
+                        "max_width": 800,
+                        "font_path": get_font_manager().get_font(
+                            "OpenSans-Regular.ttf", 32
+                        ),
                     },
-                    # CTA button with image background
                     {
                         "type": "image",
-                        "image_url": "${cta_image|https://img.freepik.com/free-photo/group-diverse-people-having-business-meeting_53876-25060.jpg}",
-                        "position": {"x": 70, "y": 450},
-                        "size": {"width": 660, "height": 240},
+                        "image_url": "${cta_image}",
+                        "position": {"x": 100, "y": 600},
+                        "size": {"width": 880, "height": 320},
                     },
-                    # CTA text overlay
                     {
                         "type": "text",
-                        "text": "${cta_text|EXPLORE MORE}",
-                        "position": {"x": 280, "y": 570},
-                        "font_size": 48,
-                        "color": [255, 255, 255],
-                        "max_width": 400,
-                    },
-                    # Contact email
-                    {
-                        "type": "text",
-                        "text": "${contact_email|hello@business.com}",
-                        "position": {"x": 220, "y": 770},
-                        "font_size": 24,
+                        "text": "${contact_email}",
+                        "position": {"x": 300, "y": 980},
+                        "font_size": 32,
                         "color": [255, 255, 255],
                     },
-                    # Dot separator
                     {
                         "type": "text",
                         "text": "•",
-                        "position": {"x": 450, "y": 770},
-                        "font_size": 24,
+                        "position": {"x": 600, "y": 980},
+                        "font_size": 32,
                         "color": [255, 255, 255],
                     },
-                    # Contact phone
                     {
                         "type": "text",
-                        "text": "${contact_phone|+987654310}",
-                        "position": {"x": 480, "y": 770},
-                        "font_size": 24,
+                        "text": "${contact_phone}",
+                        "position": {"x": 640, "y": 980},
+                        "font_size": 32,
                         "color": [255, 255, 255],
                     },
-                    # Website URL
                     {
                         "type": "text",
                         "text": "${website_url}",
-                        "position": {"x": 340, "y": 820},
-                        "font_size": 24,
+                        "position": {"x": 460, "y": 1030},
+                        "font_size": 32,
                         "color": [255, 255, 255],
                     },
                 ],
@@ -271,11 +257,12 @@ if __name__ == "__main__":
 
     # Example user data for the business template
     user_data = {
-        "image_url": "https://img.freepik.com/free-vector/gradient-purple-color-background-abstract-modern-design_343694-2078.jpg",
-        "logo_url": "https://placehold.co/200x200/ffffff/0000FF?text=ACME",
+        "image_url": "https://img.freepik.com/premium-vector/blurry-image-multicolored-gradient-background_502601-1346.jpg",
+        "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
         "heading": "Grow Your Business Today",
         "subheading": "Custom solutions for modern challenges in the digital landscape",
         "cta_text": "GET STARTED",
+        "cta_image": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/36222581-2fba-4839-a1f1-0685615b10c4.png",
         "contact_email": "info@acmecorp.com",
         "contact_phone": "+1-800-555-1234",
         "website_url": "www.acmecorp.com",

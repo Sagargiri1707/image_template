@@ -81,17 +81,20 @@ class TextComponent(Component):
 
     def render(self, image: Image.Image) -> Image.Image:
         """Render text onto an image"""
+        if not self.text:  # Skip rendering if text is None or empty
+            return image
+
         result = image.copy()
         draw = ImageDraw.Draw(result)
 
         # Use font manager to get the font
         font_manager = get_font_manager()
-        
+
         # If font_path is a font object, use it directly and get its size
         if hasattr(self.font_path, "getsize"):  # Check if it's a font object
             font = self.font_path
             # If the font has a size attribute, use it
-            if hasattr(font, 'size') and font.size:
+            if hasattr(font, "size") and font.size:
                 self.font_size = font.size
         # If it's a string path that exists, try to load it
         elif isinstance(self.font_path, str) and os.path.exists(self.font_path):
@@ -195,23 +198,37 @@ class ImageComponent(Component):
         if self._image is not None:
             return self._image
 
+        self._image = None
+
         if self.image_path and os.path.exists(self.image_path):
-            self._image = Image.open(self.image_path)
+            try:
+                self._image = Image.open(self.image_path)
+            except (IOError, OSError):
+                print(f"Error loading image from path: {self.image_path}")
         elif self.image_url:
             try:
-                response = requests.get(self.image_url)
+                response = requests.get(self.image_url, timeout=10)
                 response.raise_for_status()
                 self._image = Image.open(BytesIO(response.content))
-            except (requests.RequestException, IOError):
-                return None
+            except (requests.RequestException, IOError) as e:
+                print(f"Error loading image from URL {self.image_url}: {e}")
+        else:
+            print("No valid image path or URL provided")
+            return None
 
-        # Resize if needed
-        if self._image and self.size:
-            self._image = self._image.resize(self.size)
+        # If we have an image, process it
+        if self._image:
+            # Convert to RGBA if needed
+            if self._image.mode != "RGBA":
+                self._image = self._image.convert("RGBA")
 
-        # Apply circle crop if needed
-        if self._image and self.circle_crop:
-            self._image = self._circle_crop(self._image)
+            # Resize if needed
+            if self.size:
+                self._image = self._image.resize(self.size, Image.Resampling.LANCZOS)
+
+            # Apply circle crop if needed
+            if self.circle_crop:
+                self._image = self._circle_crop(self._image)
 
         return self._image
 
@@ -235,22 +252,30 @@ class ImageComponent(Component):
 
     def render(self, image: Image.Image) -> Image.Image:
         """Render the image component onto an image"""
+        # Skip rendering if no image source is provided
+        if not self.image_path and not self.image_url:
+            return image
+
         result = image.copy()
+        img = self._load_image()
 
-        component_image = self._load_image()
-        if component_image is None:
-            return result
+        if img:
+            try:
+                # Calculate position to paste the image
+                x = self.position[0]
+                y = self.position[1]
 
-        # Ensure component image has alpha channel for proper pasting
-        if component_image.mode != "RGBA":
-            component_image = component_image.convert("RGBA")
+                # Create a transparent layer for the image
+                img_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
+                img_layer.paste(img, (x, y), img if img.mode == "RGBA" else None)
 
-        # Paste the component image onto the result
-        result.paste(
-            component_image,
-            self.position,
-            component_image if component_image.mode == "RGBA" else None,
-        )
+                # Composite the image onto the result
+                result = Image.alpha_composite(result.convert("RGBA"), img_layer)
+            except Exception as e:
+                print(f"Error rendering image: {e}")
+
+                # If there's an error during rendering, just return the original image
+                return image
 
         return result
 
@@ -286,6 +311,7 @@ class CTAButtonComponent(Component):
         bg_color: Tuple[int, int, int] = (0, 123, 255),
         text_color: Tuple[int, int, int] = (255, 255, 255),
         corner_radius: int = 10,
+        font_size: int = 18,
         font_path: Optional[str] = None,
         url: Optional[str] = None,
     ):
@@ -299,6 +325,7 @@ class CTAButtonComponent(Component):
             bg_color: RGB color tuple for button background
             text_color: RGB color tuple for button text
             corner_radius: Radius for rounded corners
+            font_size: Font size in points
             font_path: Path to a TTF font file
             url: URL to link to (for metadata)
         """
@@ -308,49 +335,61 @@ class CTAButtonComponent(Component):
         self.bg_color = bg_color
         self.text_color = text_color
         self.corner_radius = corner_radius
+        self.font_size = font_size
         self.font_path = font_path
         self.url = url
 
     def render(self, image: Image.Image) -> Image.Image:
         """Render a CTA button onto an image"""
+        # Skip rendering if button text is empty or None
+        if not self.text:
+            return image
+
         result = image.copy()
         draw = ImageDraw.Draw(result)
 
-        # Draw rounded rectangle for button
-        x, y = self.position
-        width, height = self.size
+        try:
+            # Create a rounded rectangle for the button
+            x1, y1 = self.position
+            x2, y2 = x1 + self.size[0], y1 + self.size[1]
 
-        # Draw the button with rounded corners
-        draw.rounded_rectangle(
-            [x, y, x + width, y + height], fill=self.bg_color, radius=self.corner_radius
-        )
+            # Draw button background
+            draw.rounded_rectangle(
+                [x1, y1, x2, y2],
+                radius=self.corner_radius,
+                fill=tuple(self.bg_color),
+                outline=None,
+            )
 
-        # Use font manager to get the font
-        font_manager = get_font_manager()
+            # Load font
+            font_manager = get_font_manager()
+            font = font_manager.get_font(self.font_path, self.font_size)
 
-        # If font_path is already a font object, use it directly
-        if hasattr(self.font_path, "getsize"):  # Check if it's a font object
-            font = self.font_path
-        # If it's a string path that exists, try to load it
-        elif isinstance(self.font_path, str) and os.path.exists(self.font_path):
-            try:
-                font = ImageFont.truetype(self.font_path, 18)
-            except (IOError, OSError) as e:
-                print(f"Error loading font from {self.font_path}: {e}")
-                font = font_manager.get_font("Roboto-Bold", 18)
-        # Otherwise, use default font
-        else:
-            font = font_manager.get_font("Roboto-Bold", 18)
+            if not font:
+                print("Warning: Could not load font for CTA button")
+                return result
 
-        # Calculate text position to center it in the button
-        text_width = draw.textlength(self.text, font=font)
-        text_x = x + (width - text_width) // 2
-        text_y = y + (height - 18) // 2  # Approximate font height
+            # Calculate text position (centered)
+            text_bbox = draw.textbbox((0, 0), self.text, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+            text_x = x1 + (self.size[0] - text_width) // 2
+            text_y = y1 + (self.size[1] - text_height) // 2
 
-        # Draw the text
-        draw.text((text_x, text_y), self.text, font=font, fill=self.text_color)
+            # Draw text
+            draw.text(
+                (text_x, text_y),
+                self.text,
+                font=font,
+                fill=tuple(self.text_color),
+            )
 
-        return result
+            return result
+
+        except Exception as e:
+            print(f"Error rendering CTA button: {e}")
+            # Return the original image if there's an error
+            return image
 
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> "CTAButtonComponent":
@@ -413,52 +452,82 @@ class FooterComponent(Component):
 
     def render(self, image: Image.Image) -> Image.Image:
         """Render a footer onto an image"""
+        # Skip rendering if footer text is empty or None
+        if not self.text:
+            return image
+
         result = image.copy()
         draw = ImageDraw.Draw(result)
 
-        # Use font manager to get the font
-        font_manager = get_font_manager()
+        try:
+            # Load font
+            font_manager = get_font_manager()
 
-        # If font_path is already a font object, use it directly
-        if hasattr(self.font_path, "getsize"):  # Check if it's a font object
-            font = self.font_path
-        # If it's a string path that exists, try to load it
-        elif isinstance(self.font_path, str) and os.path.exists(self.font_path):
-            try:
-                font = ImageFont.truetype(self.font_path, self.font_size)
-            except (IOError, OSError) as e:
-                print(f"Error loading font from {self.font_path}: {e}")
-                font = font_manager.get_font("OpenSans-Regular", self.font_size)
-        # Otherwise, use default font
-        else:
-            font = font_manager.get_font("OpenSans-Regular", self.font_size)
+            # If font_path is already a font object, use it directly
+            if hasattr(self.font_path, "getsize"):  # Check if it's a font object
+                font = self.font_path
+            else:
+                # Otherwise, get font from font manager
+                font = (
+                    font_manager.get_font(self.font_path, self.font_size)
+                    if self.font_path
+                    else None
+                )
+                if not font:
+                    font = font_manager.get_font("OpenSans-Regular", self.font_size)
 
-        # Calculate position if auto-positioning is enabled
-        if self._auto_position:
-            width, height = image.size
-            text_width = draw.textlength(self.text, font=font)
-            x = (width - text_width) // 2
-            y = height - self.font_size - self.padding * 2
-            self.position = (x, y)
+            if not font:
+                print("Warning: Could not load font for footer")
+                return result
 
-        # Draw background if specified
-        if self.bg_color:
-            text_width = draw.textlength(self.text, font=font)
-            x, y = self.position
-            draw.rectangle(
-                [
-                    x - self.padding,
-                    y - self.padding,
-                    x + text_width + self.padding,
-                    y + self.font_size + self.padding,
-                ],
-                fill=self.bg_color,
+            # Calculate text size
+            text_bbox = draw.textbbox((0, 0), self.text, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+
+            # Calculate position (centered at bottom if auto-positioned)
+            if self._auto_position:
+                x = (image.width - text_width) // 2
+                y = image.height - text_height - self.padding
+                self.position = (x, y)
+
+            # Draw background if specified
+            if self.bg_color:
+                bg_x1 = self.position[0] - self.padding
+                bg_y1 = self.position[1] - self.padding
+                bg_x2 = self.position[0] + text_width + self.padding
+                bg_y2 = self.position[1] + text_height + self.padding
+                draw.rectangle(
+                    [bg_x1, bg_y1, bg_x2, bg_y2],
+                    fill=(
+                        tuple(self.bg_color)
+                        if hasattr(self.bg_color, "__iter__")
+                        else self.bg_color
+                    ),
+                    outline=None,
+                )
+
+            # Draw text
+            draw.text(
+                self.position,
+                self.text,
+                font=font,
+                fill=(
+                    tuple(self.color) if hasattr(self.color, "__iter__") else self.color
+                ),
             )
 
-        # Draw the text
-        draw.text(self.position, self.text, font=font, fill=self.color)
+            return result
 
-        return result
+        except Exception as e:
+            print(f"Error rendering footer: {e}")
+            # Return the original image if there's an error
+            return image
+
+    # except Exception as e:
+    #     print(f"Error rendering footer: {e}")
+    #     # Return the original image if there's an error
+    #     return image
 
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> "FooterComponent":
