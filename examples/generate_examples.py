@@ -36,20 +36,21 @@ def generate_business_template(templateName: str):
     registry = get_template_registry()
 
     # Render the template with sample data
-    output_path = os.path.join("output", "business_template_post.png")
+    output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
         templateName,
         {
             "cta_text": "LEARN MORE",
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
-            "image_url": "https://images.unsplash.com/photo-1551434678-e076c223a692",
+            "image_url": "https://www.calendar.com/wp-content/uploads/2019/09/CalendarAndroidApp.png.webp",
             "cta_image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d",
-            "heading": "Business Solutions",
+            "heading": "plan your day in a snap",
             "subheading": "Driving your success forward",
             "contact_email": "contact@business.com",
             "contact_phone": "+1-800-555-1234",
-            "website_url": "www.business.com",
+            "website_url": "dolze.ai /download",
             "quote": "The only way to do great work is to love what you do.",
+            "theme_color": "#d4ffdd",
         },
         output_path=output_path,
     )
@@ -64,8 +65,7 @@ def main():
     os.makedirs(os.path.join(os.path.dirname(__file__), "output"), exist_ok=True)
 
     try:
-        generate_business_template("promotional_banner")
-        generate_business_template("template69")
+        generate_business_template("calendar_app_promo")
 
         print("\nAll examples generated successfully!")
     except Exception as e:

@@ -21,6 +21,7 @@ class ImageComponent(Component):
         size: Optional[Tuple[int, int]] = None,
         circle_crop: bool = False,
         opacity: float = 1.0,
+        border_radius: int = 0,
     ):
         """
         Initialize an image component.
@@ -32,6 +33,7 @@ class ImageComponent(Component):
             size: Optional size (width, height) to resize the image to
             circle_crop: Whether to crop the image to a circle
             opacity: Opacity of the image (0.0 to 1.0)
+            border_radius: Radius for rounded corners in pixels (0 for no rounding)
         """
         super().__init__(position)
         self.image_path = image_path
@@ -39,6 +41,7 @@ class ImageComponent(Component):
         self.size = size
         self.circle_crop = circle_crop
         self.opacity = max(0.0, min(1.0, opacity))  # Clamp between 0 and 1
+        self.border_radius = max(0, int(border_radius))  # Ensure non-negative integer
         self._cached_image = None
 
     def _load_image(self) -> Optional[Image.Image]:
@@ -109,6 +112,23 @@ class ImageComponent(Component):
             result_img = Image.new("RGBA", img.size, (0, 0, 0, 0))
             result_img.paste(img, (0, 0), mask)
             img = result_img
+        # Apply border radius if specified
+        elif self.border_radius > 0:
+            # Create a mask with rounded corners
+            mask = Image.new("L", img.size, 0)
+            draw = ImageDraw.Draw(mask)
+            
+            # Draw a rounded rectangle on the mask
+            draw.rounded_rectangle(
+                [(0, 0), (img.width - 1, img.height - 1)],
+                radius=self.border_radius,
+                fill=255
+            )
+            
+            # Apply the mask
+            result_img = Image.new("RGBA", img.size, (0, 0, 0, 0))
+            result_img.paste(img, (0, 0), mask)
+            img = result_img
 
         # Paste the image at the specified position
         if img.mode == "RGBA":
@@ -150,4 +170,5 @@ class ImageComponent(Component):
             size=size,
             circle_crop=config.get("circle_crop", False),
             opacity=float(config.get("opacity", 1.0)),
+            border_radius=int(config.get("border_radius", 0)),
         )
