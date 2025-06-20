@@ -3,12 +3,18 @@ Template engine for rendering templates with components.
 """
 import os
 import json
-import requests
+import logging
 from io import BytesIO
 from typing import Dict, Any, List, Optional, Tuple
+from pathlib import Path
 from PIL import Image
 
 from dolze_templates.components import create_component_from_config, Component
+from dolze_templates.resources import load_image, load_font
+from dolze_templates.exceptions import ResourceError
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 
 class Template:
@@ -132,7 +138,7 @@ class TemplateEngine:
 
     def download_image(self, url: str) -> Optional[Image.Image]:
         """
-        Download an image from a URL.
+        Download an image from a URL with caching.
 
         Args:
             url: URL of the image to download
@@ -141,11 +147,10 @@ class TemplateEngine:
             PIL Image object or None if download fails
         """
         try:
-            response = requests.get(url, timeout=10)
-            response.raise_for_status()
-            return Image.open(BytesIO(response.content))
-        except (requests.RequestException, IOError) as e:
-            print(f"Failed to download image from {url}: {e}")
+            # Use the cached image loading function which handles caching automatically
+            return load_image(url)
+        except ResourceError as e:
+            logger.error(f"Error downloading image from {url}: {e}")
             return None
 
     def process_json(self, json_data: Dict[str, Any]) -> Dict[str, str]:
@@ -158,60 +163,114 @@ class TemplateEngine:
         Returns:
             Dictionary with paths to generated images
         """
-        result = {}
+        results = {}
+        
+        # Ensure output directory exists
+        os.makedirs(self.output_dir, exist_ok=True)
 
-        # Validate input
-        if "image_url" not in json_data:
-            raise ValueError("JSON input must contain 'image_url' field")
+        # Process each template in the JSON
+        for template_name, template_data in json_data.items():
+            try:
+                logger.info(f"Processing template: {template_name}")
+                
+                # Create a new template
+                template = Template(
+                    name=template_name,
+                    size=template_data.get("size", (800, 600)),
+                    background_color=template_data.get("background_color", (255, 255, 255)),
+                )
 
-        # Download the base image
-        base_image = self.download_image(json_data["image_url"])
-        if base_image is None:
-            raise ValueError(f"Failed to download image from {json_data['image_url']}")
+                # Add components
+                for component_data in template_data.get("components", []):
+                    try:
+                        component = create_component_from_config(component_data)
+                        if component:
+                            template.add_component(component)
+                    except Exception as e:
+                        logger.error(f"Error creating component in {template_name}: {e}")
+                        continue
 
-        # Process each template
-        for template_config in json_data.get("templates", []):
-            template_name = template_config.get("name")
-            if not template_name:
-                continue
+                # Render the template
+                output_path = os.path.join(
+                    self.output_dir, f"{template_name}.png"
+                )
+                
+                try:
+                    # Handle base image if specified
+                    base_image = None
+                    if template_data.get("use_base_image"):
+                        base_image_path = template_data.get("base_image_path")
+                        if base_image_path:
+                            if base_image_path.startswith(('http://', 'https://')):
+                                base_image = self.download_image(base_image_path)
+                            else:
+                                base_image = load_image(base_image_path)
+                    
+                    # Render with or without base image
+                    rendered_image = template.render(base_image=base_image)
+                    
+                    # Save the result
+                    rendered_image.save(output_path)
+                    results[template_name] = output_path
+                    logger.info(f"Successfully generated: {output_path}")
+                    
+                except Exception as e:
+                    error_msg = f"Error rendering template {template_name}: {e}"
+                    logger.error(error_msg)
+                    results[template_name] = f"Error: {error_msg}"
 
-            # Create template from config
-            template = Template.from_config(template_config)
+            except Exception as e:
+                error_msg = f"Error processing template {template_name}: {e}"
+                logger.error(error_msg)
+                results[template_name] = f"Error: {error_msg}"
 
-
-            # Render the template
-            rendered_image = template.render(
-                base_image.copy()
-                if template_config.get("use_base_image", False)
-                else None
-            )
-
-            # Save the rendered image
-            output_path = os.path.join(self.output_dir, f"{template_name}.png")
-            rendered_image.save(output_path)
-
-            # Add to result
-            result[template_name] = output_path
-
-        return result
+        return results
 
     def process_from_file(self, json_file: str) -> Dict[str, str]:
         """
         Process JSON from a file.
 
         Args:
-            json_file: Path to JSON file
+            json_file: Path to JSON file or directory containing JSON files
 
         Returns:
             Dictionary with paths to generated images
         """
+        json_path = Path(json_file)
+        results = {}
+        
         try:
-            with open(json_file, 'r') as f:
-                json_data = json.load(f)
-            return self.process_json(json_data)
-        except (IOError, json.JSONDecodeError) as e:
-            print(f"Error reading JSON file {json_file}: {e}")
-            return {}
+            if json_path.is_file():
+                # Process a single file
+                with open(json_path, "r", encoding='utf-8') as f:
+                    json_data = json.load(f)
+                results.update(self.process_json(json_data))
+                
+            elif json_path.is_dir():
+                # Process all JSON files in the directory
+                for file_path in json_path.glob("*.json"):
+                    try:
+                        with open(file_path, "r", encoding='utf-8') as f:
+                            json_data = json.load(f)
+                        results.update(self.process_json(json_data))
+                    except Exception as e:
+                        logger.error(f"Error processing file {file_path}: {e}")
+                        results[str(file_path)] = f"Error: {e}"
+            else:
+                error_msg = f"File or directory not found: {json_file}"
+                logger.error(error_msg)
+                results[json_file] = f"Error: {error_msg}"
+                
+        except json.JSONDecodeError as e:
+            error_msg = f"Invalid JSON in {json_file}: {e}"
+            logger.error(error_msg)
+            results[json_file] = f"Error: {error_msg}"
+        except Exception as e:
+            error_msg = f"Error processing {json_file}: {e}"
+            logger.error(error_msg)
+            results[json_file] = f"Error: {error_msg}"
+            
+        return results
 
     def clear_templates(self) -> None:
         """Clear all registered templates."""

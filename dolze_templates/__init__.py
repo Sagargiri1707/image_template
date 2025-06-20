@@ -5,6 +5,9 @@ This package provides a powerful and extensible system for generating images wit
 components in a template-based approach.
 """
 
+# Version information
+__version__ = "0.1.0"
+
 # Core functionality
 from .core import (
     Template,
@@ -14,6 +17,10 @@ from .core import (
     FontManager,
     get_font_manager,
 )
+
+# Resource management and caching
+from .resources import load_image, load_font
+from .utils.cache import clear_cache, get_cache_info
 
 # Components
 from .components import (
@@ -47,6 +54,7 @@ __email__ = "support@dolze.com"
 __license__ = "MIT"
 __description__ = "A flexible template generation library for creating social media posts, banners, and more."
 
+
 # Package-level initialization
 def init() -> None:
     """
@@ -54,50 +62,50 @@ def init() -> None:
     This function ensures all required directories exist and performs any necessary setup.
     """
     settings = get_settings()
-    
+
     # Ensure required directories exist
     import os
+
     os.makedirs(settings.templates_dir, exist_ok=True)
     os.makedirs(settings.fonts_dir, exist_ok=True)
     os.makedirs(settings.output_dir, exist_ok=True)
 
+
 # Initialize the package when imported
 init()
+
 
 # Clean up namespace
 del init
 
 __all__ = [
     # Core
-    'Template',
-    'TemplateEngine',
-    'TemplateRegistry',
-    'get_template_registry',
-    'FontManager',
-    'get_font_manager',
-    
+    "Template",
+    "TemplateEngine",
+    "TemplateRegistry",
+    "get_template_registry",
+    "FontManager",
+    "get_font_manager",
     # Components
-    'Component',
-    'TextComponent',
-    'ImageComponent',
-    'CircleComponent',
-    'RectangleComponent',
-    'CTAButtonComponent',
-    'FooterComponent',
-    'create_component_from_config',
-    
+    "Component",
+    "TextComponent",
+    "ImageComponent",
+    "CircleComponent",
+    "RectangleComponent",
+    "CTAButtonComponent",
+    "FooterComponent",
+    "create_component_from_config",
     # Configuration
-    'Settings',
-    'get_settings',
-    'configure',
-    'DEFAULT_TEMPLATES_DIR',
-    'DEFAULT_FONTS_DIR',
-    'DEFAULT_OUTPUT_DIR',
-    
+    "Settings",
+    "get_settings",
+    "configure",
+    "DEFAULT_TEMPLATES_DIR",
+    "DEFAULT_FONTS_DIR",
+    "DEFAULT_OUTPUT_DIR",
     # Metadata
-    '__version__',
-    '__author__',
-    '__email__',
-    '__license__',
-    '__description__',
+    "__version__",
+    "__author__",
+    "__email__",
+    "__license__",
+    "__description__",
 ]

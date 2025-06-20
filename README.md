@@ -1,52 +1,179 @@
 # Dolze Templates
 
-A powerful Python library for generating social media posts, banners, and other marketing materials using JSON templates.
+A powerful Python library for generating beautiful, dynamic images using JSON templates. Perfect for creating social media posts, marketing materials, product showcases, and more.
 
-## Features
+## ✨ Features
 
-- 🎨 Create beautiful, responsive templates with a simple JSON structure
-- 🖼️ Support for images, text, buttons, and other UI elements
-- 🎯 Pre-built templates for common use cases (social media posts, quotes, banners)
-- 🚀 Easy to extend with custom components
-- 🎨 Support for custom fonts and colors
-- 📱 Responsive design that works across different aspect ratios
+- 🎨 **Template Engine**: Create complex image compositions using a simple JSON structure
+- 🖼️ **Rich Component Library**: Text, images, shapes, and more with extensive styling options
+- ⚡ **Performance**: Built-in caching for fonts and images to speed up generation
+- 📦 **Extensible**: Easy to extend with custom components and templates
+- 🎯 **Production Ready**: Comprehensive validation and error handling
 
-## Installation
+## 📦 Installation
 
-1. Clone this repository
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Install the package using pip:
 
-## Quick Start
+```bash
+pip install dolze-templates
+```
 
-### Using Pre-built Templates
+For development, you can install from source:
+
+```bash
+git clone https://github.com/yourusername/dolze-templates.git
+cd dolze-templates
+pip install -e .
+```
+
+## 🚀 Quick Start
+
+### 1. Using Python API
 
 ```python
-from dolze_templates import get_template_registry
+from dolze_templates import TemplateEngine
 
-# Get the template registry
-registry = get_template_registry()
+# Initialize the template engine
+engine = TemplateEngine(output_dir="output")
 
-# Render a template with your data
-result = registry.render_template(
-    "social_media_post",  # Template name
-    {
-        "logo_url": "https://example.com/logo.png",
-        "image_url": "https://example.com/featured.jpg",
-        "heading": "Amazing Product Launch",
-        "subheading": "Check out our latest innovation!",
-        "cta_text": "Learn More",
-        "contact_email": "info@example.com",
-        "contact_phone": "+1-800-555-1234",
-        "website_url": "https://example.com"
-    }
-)
+# Process a template file
+results = engine.process_from_file("templates/social_media_post.json")
 
-# Save the result
-result.save("output/post.png")
+# Process multiple templates from a directory
+# results = engine.process_from_file("templates/")
+
+print(f"Generated: {results}")
 ```
+
+### 2. Using the Command Line
+
+```bash
+# Process a single template
+dolze-templates render templates/social_media_post.json -o output
+
+# Process all templates in a directory
+dolze-templates render templates/ -o output
+
+# Clear the cache
+dolze-templates cache clear
+
+# Show cache info
+dolze-templates cache info
+```
+
+## 📋 Example Templates
+
+Check out the [examples](examples/) directory for ready-to-use templates:
+
+1. **Social Media Post** - Create engaging social media posts with images and text overlays
+2. **Quote Image** - Generate beautiful quote images with custom styling
+3. **Product Showcase** - Showcase products with images, descriptions, and pricing
+
+## 🛠️ Template Structure
+
+Templates are defined using JSON and can include various components:
+
+```json
+{
+  "template_name": {
+    "size": [1200, 1200],
+    "background_color": [255, 255, 255],
+    "use_base_image": false,
+    "components": [
+      {
+        "type": "text",
+        "text": "Hello, World!",
+        "position": [100, 100],
+        "font_size": 48,
+        "color": [0, 0, 0]
+      },
+      {
+        "type": "image",
+        "image_url": "https://example.com/image.jpg",
+        "position": [200, 200],
+        "size": [400, 300]
+      }
+    ]
+  }
+}
+```
+
+## 📚 Documentation
+
+### Available Components
+
+#### Text
+
+Display text with various styling options.
+
+```json
+{
+  "type": "text",
+  "text": "Hello, World!",
+  "position": [100, 100],
+  "font_size": 36,
+  "font_weight": "bold",
+  "color": [0, 0, 0],
+  "max_width": 800,
+  "align": "center",
+  "line_height": 1.5
+}
+```
+
+#### Image
+
+Display images from URLs or local files.
+
+```json
+{
+  "type": "image",
+  "image_url": "https://example.com/image.jpg",
+  "position": [100, 100],
+  "size": [400, 300],
+  "border_radius": 10,
+  "opacity": 0.9
+}
+```
+
+#### Rectangle
+
+Draw rectangles with customizable styles.
+
+```json
+{
+  "type": "rectangle",
+  "position": [50, 50],
+  "size": [200, 100],
+  "color": [255, 0, 0, 128],
+  "border_radius": 10,
+  "border_width": 2,
+  "border_color": [0, 0, 0]
+}
+```
+
+### Effects
+
+Apply various visual effects to components:
+
+```json
+{
+  "effects": ["shadow", "blur"],
+  "shadow_color": [0, 0, 0, 100],
+  "shadow_offset": [5, 5],
+  "shadow_blur_radius": 10,
+  "blur_radius": 5
+}
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+````
 
 ### Available Templates
 
@@ -101,7 +228,7 @@ Templates are defined using a simple JSON structure. Here's an example:
     }
   ]
 }
-```
+````
 
 ### Standard Template Variables
 
@@ -160,9 +287,11 @@ MIT
 result = processor.process_json(json_data)
 
 # Print paths to generated images
+
 for key, path in result.items():
-    print(f"{key}: {path}")
-```
+print(f"{key}: {path}")
+
+````
 
 ## JSON Schema
 
@@ -172,7 +301,7 @@ The input JSON must contain at least an `image_url` field:
 {
   "image_url": "https://example.com/image.jpg"
 }
-```
+````
 
 Additional fields can be added for future extensions:
 
