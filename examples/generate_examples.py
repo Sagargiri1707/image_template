@@ -90,6 +90,15 @@ def generate_business_template(templateName: str):
             "image_url": "https://img.freepik.com/free-vector/underwater-ocean-reef-coral-background_107791-1853.jpg",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
         }
+    elif templateName == "qa_template":
+        template_data = {
+            "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+            "question": "What is Title?",
+            "answer": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
+            "username": "@username",
+            "theme_color": "#d4ffdd",
+            "website_url": "website.com/blog",
+        }
     elif templateName == "education_info":
         template_data = {
             "theme_color": "#d4ffdd",
@@ -122,13 +131,14 @@ def main():
     try:
         # Generate all templates
         templates = [
-            "calendar_app_promo",
-            "testimonials_template",
-            "blog_post",
-            "education_info",
-            "product_promotion_2",
-            "promotional_banner",
-            "product_promotion",
+            # "calendar_app_promo",
+            # "testimonials_template",
+            # "blog_post",
+            # "education_info",
+            # "product_promotion_2",
+            # "promotional_banner",
+            # "product_promotion",
+            "qa_template"
         ]
         for template in templates:
             generate_business_template(template)
