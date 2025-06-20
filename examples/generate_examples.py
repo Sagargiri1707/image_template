@@ -47,7 +47,7 @@ def generate_business_template(templateName: str):
         "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
         "user_name": "Alex Johnson",
         "user_title": "Marketing Director, TechCorp",
-        "testimonial_text": "This product has completely transformed how our team works. The intuitive interface and powerful features have saved us countless hours of work. Highly recommended!",
+        "testimonial_text": "This product has completely transformed how we works. The intuitive interface and powerful features have saved us countless hours.",
     }
     # Template data mapping
     if templateName == "calendar_app_promo":
@@ -66,23 +66,23 @@ def generate_business_template(templateName: str):
             "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
             "user_name": "Alex Johnson",
             "user_title": "Marketing Director, TechCorp",
-            "testimonial_text": "This product has completely transformed how our team works. The intuitive interface and powerful features have saved us countless hours of work. Highly recommended!",
+            "testimonial_text": "This product has completely transformed how we works. The intuitive interface and powerful features have saved us countless hours.",
         }
     elif templateName == "testimonials_template":
         template_data = {
             # Common fields
-            "theme_color": "#44ec9d",
+            "theme_color": "#d4ffdd",
             "website_url": "dolze.ai/download",
             # Testimonials specific
             "user_avatar": "https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
             "user_name": "Sarah Johnson",
             "user_title": "Verified Buyer",
-            "testimonial_text": "This product was absolutely amazing! The quality exceeded my expectations and the customer service was outstanding. I've already recommended it to all my friends.",
+            "testimonial_text": "This product has completely transformed how we works. The intuitive interface and powerful features have saved us countless hours.",
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
         }
     elif templateName == "blog_post":
         template_data = {
-            "theme_color": "#44EC9D",
+            "theme_color": "#d4ffdd",
             "website_url": "website.com/blog",
             "title": "How to be environment conscious without being weird",
             "author": "@username",  # to be inserted by db
@@ -92,7 +92,7 @@ def generate_business_template(templateName: str):
         }
     elif templateName == "education_info":
         template_data = {
-            "theme_color": "#44EC9D",
+            "theme_color": "#d4ffdd",
             "website_url": "website.com/blog",
             "testimonial_text": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
             "author": "@username",  # to be inserted by db
@@ -122,13 +122,13 @@ def main():
     try:
         # Generate all templates
         templates = [
-            # "calendar_app_promo",
-            # "testimonials_template",
-            # "blog_post",
-            # "education_info",
-            # "template69",
-            # "promotional_banner",
-            # "product_promotion",
+            "calendar_app_promo",
+            "testimonials_template",
+            "blog_post",
+            "education_info",
+            "template69",
+            "promotional_banner",
+            "product_promotion",
         ]
         for template in templates:
             generate_business_template(template)

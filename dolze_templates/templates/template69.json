@@ -1,74 +1,74 @@
 {
   "name": "template69",
   "description": "Split layout with text on left and image on right",
-  "size": {"width": 1080, "height": 1080},
+  "size": { "width": 2560, "height": 2560 },
   "use_base_image": false,
   "components": [
     {
       "type": "rectangle",
-      "position": {"x": 0, "y": 0},
-      "size": {"width": 540, "height": 1080},
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 1280, "height": 2560 },
       "fill_color": [255, 255, 255],
       "outline_color": null
     },
     {
       "type": "image",
       "image_url": "${image_url}",
-      "position": {"x": 540, "y": 0},
-      "size": {"width": 1080, "height": 1080}
+      "position": { "x": 1280, "y": 0 },
+      "size": { "width": 2560, "height": 2560 }
     },
     {
       "type": "image",
       "image_url": "${logo_url}",
-      "position": {"x": 50, "y": 50},
-      "size": {"width": 60, "height": 60}
+      "position": { "x": 119, "y": 119 },
+      "size": { "width": 142, "height": 142 }
     },
     {
       "type": "text",
       "text": "${heading}",
-      "position": {"x": 50, "y": 200},
-      "font_size": 56,
+      "position": { "x": 119, "y": 474 },
+      "font_size": 133,
       "color": [0, 0, 0],
       "font_path": "Roboto-Bold",
-      "max_width": 440
+      "max_width": 1042
     },
     {
       "type": "text",
       "text": "${subheading}",
-      "position": {"x": 50, "y": 350},
-      "font_size": 36,
+      "position": { "x": 119, "y": 830 },
+      "font_size": 85,
       "color": [90, 90, 90],
       "font_path": "Roboto-Light",
-      "max_width": 440
+      "max_width": 1042
     },
     {
       "type": "rectangle",
-      "position": {"x": 50, "y": 900},
-      "size": {"width": 450, "height": 8},
+      "position": { "x": 119, "y": 2133 },
+      "size": { "width": 1067, "height": 19 },
       "fill_color": [128, 0, 128],
       "outline_color": null
     },
     {
       "type": "text",
       "text": "${contact_email}",
-      "position": {"x": 50, "y": 940},
-      "font_size": 28,
+      "position": { "x": 119, "y": 2227 },
+      "font_size": 66,
       "color": [100, 100, 100],
       "font_path": "Roboto-Light"
     },
     {
       "type": "text",
       "text": "${contact_phone}",
-      "position": {"x": 50, "y": 980},
-      "font_size": 28,
+      "position": { "x": 119, "y": 2327 },
+      "font_size": 66,
       "color": [100, 100, 100],
       "font_path": "Roboto-Light"
     },
     {
       "type": "text",
       "text": "${website_url}",
-      "position": {"x": 50, "y": 1020},
-      "font_size": 28,
+      "position": { "x": 119, "y": 2427 },
+      "font_size": 66,
       "color": [128, 0, 128],
       "font_path": "Roboto-Medium"
     }
