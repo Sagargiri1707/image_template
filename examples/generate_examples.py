@@ -126,7 +126,7 @@ def main():
             "testimonials_template",
             "blog_post",
             "education_info",
-            "template69",
+            "product_promotion_2",
             "promotional_banner",
             "product_promotion",
         ]
