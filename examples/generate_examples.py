@@ -99,6 +99,15 @@ def generate_business_template(templateName: str):
             "theme_color": "#d4ffdd",
             "website_url": "website.com/blog",
         }
+    elif templateName == "quote_template":
+        template_data = {
+            "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+            "quote1": "The only way to do",
+            "quote2": "great work is to love what you do",
+            "username": "@stevejobs",
+            "website_url": "www.example.com",
+            "theme_color": "#12B76A",
+        }
     elif templateName == "education_info":
         template_data = {
             "theme_color": "#d4ffdd",
@@ -138,7 +147,8 @@ def main():
             # "product_promotion_2",
             # "promotional_banner",
             # "product_promotion",
-            "qa_template"
+            # "qa_template",
+            "quote_template"
         ]
         for template in templates:
             generate_business_template(template)
