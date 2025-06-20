@@ -151,6 +151,7 @@ class RectangleComponent(Component):
         fill_color: Optional[Tuple[int, int, int]] = None,
         outline_color: Optional[Tuple[int, int, int]] = None,
         outline_width: int = 1,
+        border_radius: int = 0,
     ):
         """
         Initialize a rectangle component.
@@ -161,12 +162,14 @@ class RectangleComponent(Component):
             fill_color: RGB color tuple for the fill color (None for transparent)
             outline_color: RGB color tuple for the outline (None for no outline)
             outline_width: Width of the outline in pixels
+            border_radius: Radius of the corners in pixels (0 for square corners)
         """
         super().__init__(position)
         self.size = size
         self.fill_color = fill_color
         self.outline_color = outline_color
         self.outline_width = outline_width
+        self.border_radius = border_radius
 
     def render(self, image: Image.Image) -> Image.Image:
         """
@@ -186,12 +189,39 @@ class RectangleComponent(Component):
         width, height = self.size
         bbox = [x, y, x + width, y + height]
 
-        # Draw the rectangle
-        if self.fill_color is not None:
-            draw.rectangle(bbox, fill=self.fill_color)
+        # Draw the rectangle with optional rounded corners
+        if self.border_radius > 0:
+            # Draw filled rectangle with rounded corners
+            if self.fill_color is not None:
+                draw.rounded_rectangle(
+                    bbox, radius=self.border_radius, fill=self.fill_color, outline=None
+                )
 
-        if self.outline_color is not None and self.outline_width > 0:
-            draw.rectangle(bbox, outline=self.outline_color, width=self.outline_width)
+            # Draw outline with rounded corners if specified
+            if self.outline_color is not None and self.outline_width > 0:
+                # For outline, we need to draw a slightly smaller rectangle to prevent antialiasing issues
+                half_width = self.outline_width / 2
+                outline_bbox = [
+                    bbox[0] + half_width,
+                    bbox[1] + half_width,
+                    bbox[2] - half_width - 1,  # -1 to account for 0-based indexing
+                    bbox[3] - half_width - 1,
+                ]
+                draw.rounded_rectangle(
+                    outline_bbox,
+                    radius=max(0, self.border_radius - self.outline_width // 2),
+                    outline=self.outline_color,
+                    width=self.outline_width,
+                )
+        else:
+            # Original rectangle drawing for backward compatibility
+            if self.fill_color is not None:
+                draw.rectangle(bbox, fill=self.fill_color)
+
+            if self.outline_color is not None and self.outline_width > 0:
+                draw.rectangle(
+                    bbox, outline=self.outline_color, width=self.outline_width
+                )
 
         return result
 
@@ -239,6 +269,7 @@ class RectangleComponent(Component):
             fill_color=fill_color,
             outline_color=outline_color,
             outline_width=config.get("outline_width", 1),
+            border_radius=config.get("border_radius", 0),
         )
 
 

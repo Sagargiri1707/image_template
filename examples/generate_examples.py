@@ -64,6 +64,16 @@ def generate_business_template(templateName: str):
             "testimonial_text": "This product was absolutely amazing! The quality exceeded my expectations and the customer service was outstanding. I've already recommended it to all my friends.",
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
         }
+    elif templateName == "blog_post":
+        template_data = {
+            "theme_color": "#44EC9D",
+            "website_url": "website.com/blog",
+            "title": "How to be environment conscious without being weird",
+            "author": "@username",
+            "read_time": "4",
+            "image_url": "https://img.freepik.com/free-vector/underwater-ocean-reef-coral-background_107791-1853.jpg",
+            "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
+        }
 
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
@@ -86,8 +96,9 @@ def main():
     try:
         # Generate all templates
         templates = [
-            "calendar_app_promo",
-            "testimonials_template",
+            # "calendar_app_promo",
+            # "testimonials_template",
+            "blog_post",
         ]
         for template in templates:
             generate_business_template(template)
