@@ -1,11 +1,14 @@
-from PIL import Image
-from typing import Dict, Any, List, Optional, Tuple
+"""
+Template engine for rendering templates with components.
+"""
 import os
 import json
 import requests
 from io import BytesIO
+from typing import Dict, Any, List, Optional, Tuple
+from PIL import Image
 
-from template_components import Component, create_component_from_config
+from dolze_templates.components import create_component_from_config, Component
 
 
 class Template:
@@ -57,7 +60,7 @@ class Template:
         else:
             # Resize the base image if needed
             if base_image.size != self.size:
-                base_image = base_image.resize(self.size)
+                base_image = base_image.resize(self.size, Image.Resampling.LANCZOS)
 
             # Convert to RGBA if needed
             if base_image.mode != "RGBA":
@@ -72,7 +75,7 @@ class Template:
         return result
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> "Template":
+    def from_config(cls, config: Dict[str, Any]) -> 'Template':
         """
         Create a template from a configuration dictionary.
 
@@ -138,10 +141,11 @@ class TemplateEngine:
             PIL Image object or None if download fails
         """
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
             return Image.open(BytesIO(response.content))
-        except (requests.RequestException, IOError):
+        except (requests.RequestException, IOError) as e:
+            print(f"Failed to download image from {url}: {e}")
             return None
 
     def process_json(self, json_data: Dict[str, Any]) -> Dict[str, str]:
@@ -174,6 +178,7 @@ class TemplateEngine:
             # Create template from config
             template = Template.from_config(template_config)
 
+
             # Render the template
             rendered_image = template.render(
                 base_image.copy()
@@ -200,21 +205,14 @@ class TemplateEngine:
         Returns:
             Dictionary with paths to generated images
         """
-        with open(json_file, "r") as f:
-            json_data = json.load(f)
+        try:
+            with open(json_file, 'r') as f:
+                json_data = json.load(f)
+            return self.process_json(json_data)
+        except (IOError, json.JSONDecodeError) as e:
+            print(f"Error reading JSON file {json_file}: {e}")
+            return {}
 
-        return self.process_json(json_data)
-
-    def process_from_string(self, json_string: str) -> Dict[str, str]:
-        """
-        Process JSON from a string.
-
-        Args:
-            json_string: JSON string
-
-        Returns:
-            Dictionary with paths to generated images
-        """
-        json_data = json.loads(json_string)
-
-        return self.process_json(json_data)
+    def clear_templates(self) -> None:
+        """Clear all registered templates."""
+        self.templates.clear()
