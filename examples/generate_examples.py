@@ -90,7 +90,11 @@ def generate_business_template(templateName: str):
             "image_url": "https://img.freepik.com/free-vector/underwater-ocean-reef-coral-background_107791-1853.jpg",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
         }
-    elif templateName == "qa_template":
+    elif (
+        templateName == "qa_template"
+        or templateName == "qa_template_2"
+        or templateName == "qa_template_3"
+    ):
         template_data = {
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
             "question": "What is Title?",
@@ -108,7 +112,7 @@ def generate_business_template(templateName: str):
             "website_url": "www.example.com",
             "theme_color": "#44EC9D",
         }
-    elif templateName == "education_info":
+    elif templateName == "education_info" or templateName == "education_info_2":
         template_data = {
             "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
@@ -125,13 +129,19 @@ def generate_business_template(templateName: str):
             "quote1": "the kanban board",
             "quote2": "you'll absolutely love",
         }
-    elif templateName == "product_showcase":
+    elif (
+        templateName == "product_showcase"
+        or templateName == "product_showcase_2"
+        or templateName == "product_showcase_3"
+    ):
         template_data = {
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?w=200&h=200&white=true",
             "product_image": "https://media.istockphoto.com/id/171384959/photo/executive-office-chair.jpg?s=612x612&w=0&k=20&c=5vRz91x_JdXHGrzWoDxtj7xEYvI35ls3pDfysHgd57M=",
             "product_name": "Strong chair",
             "product_price": "$52",
             "product_description": "made with highly refined wood",
+            "theme_color": "#44EC9D",
+            "badge_text": "Bestseller",
         }
 
     # Render the template with the data
@@ -155,17 +165,25 @@ def main():
     try:
         # Generate all templates
         templates = [
-            "calendar_app_promo",
-            "testimonials_template",
-            "blog_post",
-            "blog_post_2",
-            "education_info",
-            "product_promotion_2",
-            "promotional_banner",
-            "product_promotion",
-            "qa_template",
-            "quote_template",
-            "product_showcase",
+            # "calendar_app_promo",
+            # "testimonials_template",
+            # "blog_post",
+            # "blog_post_2",
+            # "education_info",
+            # "product_promotion_2",
+            # "promotional_banner",
+            # "product_promotion",
+            # "qa_template",
+            # "quote_template",
+            # "product_showcase",
+            # "testimonials_template_2",
+            # "product_showcase_2",
+            # "product_showcase_3",
+            # "qa_template_2",
+            # "qa_template",
+            # "qa_template_3",
+            # "education_info",
+            # "education_info_2",
         ]
         for template in templates:
             generate_business_template(template)
