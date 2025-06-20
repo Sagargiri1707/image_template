@@ -103,7 +103,7 @@ def generate_business_template(templateName: str):
             "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
         }
-    elif templateName == "quote_template":
+    elif templateName == "quote_template" or templateName == "quote_template_2":
         template_data = {
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
             "quote1": "The only way to do",
@@ -174,7 +174,8 @@ def main():
             # "promotional_banner",
             # "product_promotion",
             # "qa_template",
-            # "quote_template",
+            "quote_template",
+            "quote_template_2",
             # "product_showcase",
             # "testimonials_template_2",
             # "product_showcase_2",
