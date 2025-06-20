@@ -128,7 +128,7 @@ def main():
             # "education_info",
             # "template69",
             # "promotional_banner",
-            "payment_promotion",
+            # "product_promotion",
         ]
         for template in templates:
             generate_business_template(template)
