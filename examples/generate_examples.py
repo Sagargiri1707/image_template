@@ -29,17 +29,13 @@ configure(
 
 
 def generate_business_template(templateName: str):
-    """Generate a post using the business_template template."""
-    print("\nGenerating business template post...")
-
+    """Generate a business template post."""
     # Get the template registry
     registry = get_template_registry()
 
-    # Render the template with sample data
-    output_path = os.path.join("output", f"{templateName}.png")
-    rendered_image = registry.render_template(
-        templateName,
-        {
+    # Template data mapping
+    if templateName == "calendar_app_promo":
+        template_data = {
             "cta_text": "LEARN MORE",
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
             "image_url": "https://www.calendar.com/wp-content/uploads/2019/09/CalendarAndroidApp.png.webp",
@@ -51,21 +47,50 @@ def generate_business_template(templateName: str):
             "website_url": "dolze.ai /download",
             "quote": "The only way to do great work is to love what you do.",
             "theme_color": "#d4ffdd",
-        },
+            "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
+            "user_name": "Alex Johnson",
+            "user_title": "Marketing Director, TechCorp",
+            "testimonial_text": "This product has completely transformed how our team works. The intuitive interface and powerful features have saved us countless hours of work. Highly recommended!",
+        }
+    elif templateName == "testimonials_template":
+        template_data = {
+            # Common fields
+            "theme_color": "#44ec9d",
+            "website_url": "dolze.ai/download",
+            # Testimonials specific
+            "user_avatar": "https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
+            "user_name": "Sarah Johnson",
+            "user_title": "Verified Buyer",
+            "testimonial_text": "This product was absolutely amazing! The quality exceeded my expectations and the customer service was outstanding. I've already recommended it to all my friends.",
+            "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+        }
+
+    # Render the template with the data
+    output_path = os.path.join("output", f"{templateName}.png")
+    rendered_image = registry.render_template(
+        templateName,
+        template_data,
         output_path=output_path,
     )
 
-    print(f"Business template post saved to {os.path.abspath(output_path)}")
+    print(f"Template saved to {os.path.abspath(output_path)}")
     return rendered_image
 
 
 def main():
     """Generate all example templates."""
     # Create output directory if it doesn't exist
-    os.makedirs(os.path.join(os.path.dirname(__file__), "output"), exist_ok=True)
+    output_dir = os.path.join(os.path.dirname(__file__), "output")
+    os.makedirs(output_dir, exist_ok=True)
 
     try:
-        generate_business_template("calendar_app_promo")
+        # Generate all templates
+        templates = [
+            "calendar_app_promo",
+            "testimonials_template",
+        ]
+        for template in templates:
+            generate_business_template(template)
 
         print("\nAll examples generated successfully!")
     except Exception as e:

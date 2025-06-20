@@ -7,7 +7,7 @@ from typing import Dict, Any, Type, Optional
 from .base import Component
 from .text import TextComponent
 from .image import ImageComponent
-from .shapes import CircleComponent, RectangleComponent
+from .shapes import CircleComponent, RectangleComponent, PolygonComponent
 from .buttons import CTAButtonComponent
 from .footer import FooterComponent
 
@@ -17,6 +17,7 @@ COMPONENT_CLASSES: Dict[str, Type[Component]] = {
     "image": ImageComponent,
     "circle": CircleComponent,
     "rectangle": RectangleComponent,
+    "polygon": PolygonComponent,
     "cta_button": CTAButtonComponent,
     "footer": FooterComponent,
 }

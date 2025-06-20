@@ -1,8 +1,9 @@
 """
 Shape components for rendering basic shapes in templates.
 """
-from typing import Tuple, Optional, Dict, Any
-from PIL import Image, ImageDraw, ImageOps
+
+from typing import Tuple, Optional, Dict, Any, List
+from PIL import Image, ImageDraw
 from .base import Component
 
 
@@ -105,20 +106,28 @@ class CircleComponent(Component):
         return result
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> 'CircleComponent':
+    def from_config(cls, config: Dict[str, Any]) -> "CircleComponent":
         """Create a circle component from a configuration dictionary"""
         position = (
             config.get("position", {}).get("x", 0),
             config.get("position", {}).get("y", 0),
         )
-        
+
         # Handle color which might be a list or tuple
         fill_color = config.get("fill_color")
-        if fill_color and isinstance(fill_color, (list, tuple)) and len(fill_color) >= 3:
+        if (
+            fill_color
+            and isinstance(fill_color, (list, tuple))
+            and len(fill_color) >= 3
+        ):
             fill_color = tuple(fill_color[:3])
-            
+
         outline_color = config.get("outline_color")
-        if outline_color and isinstance(outline_color, (list, tuple)) and len(outline_color) >= 3:
+        if (
+            outline_color
+            and isinstance(outline_color, (list, tuple))
+            and len(outline_color) >= 3
+        ):
             outline_color = tuple(outline_color[:3])
 
         return cls(
@@ -187,7 +196,7 @@ class RectangleComponent(Component):
         return result
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> 'RectangleComponent':
+    def from_config(cls, config: Dict[str, Any]) -> "RectangleComponent":
         """
         Create a rectangle component from a configuration dictionary.
 
@@ -201,24 +210,137 @@ class RectangleComponent(Component):
             config.get("position", {}).get("x", 0),
             config.get("position", {}).get("y", 0),
         )
-        
+
         size = (
             config.get("size", {}).get("width", 100),
             config.get("size", {}).get("height", 50),
         )
-        
+
         # Handle color which might be a list or tuple
         fill_color = config.get("fill_color")
-        if fill_color and isinstance(fill_color, (list, tuple)) and len(fill_color) >= 3:
+        if (
+            fill_color
+            and isinstance(fill_color, (list, tuple))
+            and len(fill_color) >= 3
+        ):
             fill_color = tuple(fill_color[:3])
-            
+
         outline_color = config.get("outline_color")
-        if outline_color and isinstance(outline_color, (list, tuple)) and len(outline_color) >= 3:
+        if (
+            outline_color
+            and isinstance(outline_color, (list, tuple))
+            and len(outline_color) >= 3
+        ):
             outline_color = tuple(outline_color[:3])
 
         return cls(
             position=position,
             size=size,
+            fill_color=fill_color,
+            outline_color=outline_color,
+            outline_width=config.get("outline_width", 1),
+        )
+
+
+class PolygonComponent(Component):
+    """Component for rendering polygons (triangles, etc.)"""
+
+    def __init__(
+        self,
+        position: Tuple[int, int] = (0, 0),
+        points: Optional[List[Tuple[int, int]]] = None,
+        fill_color: Optional[Tuple[int, int, int]] = None,
+        outline_color: Optional[Tuple[int, int, int]] = None,
+        outline_width: int = 1,
+    ):
+        """
+        Initialize a polygon component.
+
+        Args:
+            position: Position (x, y) offset for all points
+            points: List of (x, y) points relative to position
+            fill_color: RGB color tuple for the fill color (None for transparent)
+            outline_color: RGB color tuple for the outline (None for no outline)
+            outline_width: Width of the outline in pixels
+        """
+        super().__init__(position)
+        self.points = points or []
+        self.fill_color = fill_color
+        self.outline_color = outline_color
+        self.outline_width = outline_width
+
+    def render(self, image: Image.Image) -> Image.Image:
+        """
+        Render a polygon onto an image.
+
+        Args:
+            image: The image to render the polygon on
+
+        Returns:
+            The image with the polygon rendered on it
+        """
+        if not self.points:
+            return image
+
+        result = image.copy()
+        draw = ImageDraw.Draw(result)
+
+        # Convert points to absolute coordinates
+        x_offset, y_offset = self.position
+        absolute_points = [(x + x_offset, y + y_offset) for x, y in self.points]
+
+        # Draw the polygon
+        if self.fill_color is not None:
+            draw.polygon(absolute_points, fill=self.fill_color)
+
+        if self.outline_color is not None and self.outline_width > 0:
+            draw.polygon(
+                absolute_points, outline=self.outline_color, width=self.outline_width
+            )
+
+        return result
+
+    @classmethod
+    def from_config(cls, config: Dict[str, Any]) -> "PolygonComponent":
+        """
+        Create a polygon component from a configuration dictionary.
+
+        Args:
+            config: Configuration dictionary
+
+        Returns:
+            A new PolygonComponent instance
+        """
+        position = (
+            config.get("position", {}).get("x", 0),
+            config.get("position", {}).get("y", 0),
+        )
+
+        # Get points list from config
+        points = config.get("points", [])
+        if not isinstance(points, list):
+            points = []
+
+        # Handle color which might be a list or tuple
+        fill_color = config.get("fill_color")
+        if (
+            fill_color
+            and isinstance(fill_color, (list, tuple))
+            and len(fill_color) >= 3
+        ):
+            fill_color = tuple(fill_color[:3])
+
+        outline_color = config.get("outline_color")
+        if (
+            outline_color
+            and isinstance(outline_color, (list, tuple))
+            and len(outline_color) >= 3
+        ):
+            outline_color = tuple(outline_color[:3])
+
+        return cls(
+            position=position,
+            points=points,
             fill_color=fill_color,
             outline_color=outline_color,
             outline_width=config.get("outline_width", 1),
