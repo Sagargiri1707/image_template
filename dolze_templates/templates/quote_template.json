@@ -48,7 +48,7 @@
       "position": { "x": 20, "y": 2300 },
       "font_size": 70,
       "max_width": 2560,
-      "color": [204, 205, 207],
+      "color": [255, 255, 255],
       "font_path": "Outfit-Bold",
       "alignment": "center"
     },

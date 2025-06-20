@@ -8,7 +8,7 @@
       "type": "rectangle",
       "position": { "x": 0, "y": 0 },
       "size": { "width": 2560, "height": 2560 },
-      "fill_color": "#ffffff",
+      "fill_color": [255, 255, 255, 1],
       "outline_color": null
     },
     {
@@ -44,7 +44,7 @@
       "text": "by ${author} • ${read_time} min",
       "position": { "x": 256, "y": 1877 },
       "font_size": 68,
-      "color": "#666666",
+      "color": [102, 102, 103, 1],
       "font_path": "Outfit-Regular",
       "alignment": "left"
     },
@@ -53,7 +53,7 @@
       "text": "Read now at ${website_url}",
       "position": { "x": 181, "y": 2400 },
       "font_size": 77,
-      "color": "#111111",
+      "color": "#11111",
       "font_path": "Outfit-Medium",
       "alignment": "left"
     },

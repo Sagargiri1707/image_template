@@ -43,7 +43,7 @@ def generate_business_template(templateName: str):
         "contact_phone": "+1-800-555-1234",
         "website_url": "dolze.ai /download",
         "quote": "The only way to do great work is to love what you do.",
-        "theme_color": "#d4ffdd",
+        "theme_color": "#44EC9D",
         "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
         "user_name": "Alex Johnson",
         "user_title": "Marketing Director, TechCorp",
@@ -62,7 +62,7 @@ def generate_business_template(templateName: str):
             "contact_phone": "+1-800-555-1234",
             "website_url": "dolze.ai /download",
             "quote": "The only way to do great work is to love what you do.",
-            "theme_color": "#d4ffdd",
+            "theme_color": "#44EC9D",
             "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
             "user_name": "Alex Johnson",
             "user_title": "Marketing Director, TechCorp",
@@ -71,7 +71,7 @@ def generate_business_template(templateName: str):
     elif templateName == "testimonials_template":
         template_data = {
             # Common fields
-            "theme_color": "#d4ffdd",
+            "theme_color": "#44EC9D",
             "website_url": "dolze.ai/download",
             # Testimonials specific
             "user_avatar": "https://img.freepik.com/free-vector/isolated-young-handsome-man-different-poses-white-background-illustration_632498-859.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
@@ -96,7 +96,7 @@ def generate_business_template(templateName: str):
             "question": "What is Title?",
             "answer": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
             "username": "@username",
-            "theme_color": "#d4ffdd",
+            "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
         }
     elif templateName == "quote_template":
@@ -106,17 +106,24 @@ def generate_business_template(templateName: str):
             "quote2": "great work is to love what you do",
             "username": "@stevejobs",
             "website_url": "www.example.com",
-            "theme_color": "#12B76A",
+            "theme_color": "#44EC9D",
         }
     elif templateName == "education_info":
         template_data = {
-            "theme_color": "#d4ffdd",
+            "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
             "testimonial_text": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
             "author": "@username",  # to be inserted by db
             "read_time": "4",
             "image_url": "https://img.freepik.com/free-photo/portrait-young-businesswoman-holding-eyeglasses-hand-against-gray-backdrop_23-2148029483.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
+        }
+    elif templateName == "product_promotion_2":
+        template_data = {
+            "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?w=200&h=200&white=true",
+            "image_url": "https://media.licdn.com/dms/image/v2/D4D12AQGnbgq78a4LMg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1677634984855?e=1755734400&v=beta&t=PS0JBTOx91C-z1Tb4Ky4NOnQeRosuW-7i1GIDUj088o",
+            "quote1": "the kanban board",
+            "quote2": "you'll absolutely love",
         }
 
     # Render the template with the data
@@ -139,7 +146,18 @@ def main():
 
     try:
         # Generate all templates
-        templates = ["blog_post_2"]
+        templates = [
+            "calendar_app_promo",
+            "testimonials_template",
+            "blog_post",
+            "blog_post_2",
+            "education_info",
+            "product_promotion_2",
+            "promotional_banner",
+            "product_promotion",
+            "qa_template",
+            "quote_template",
+        ]
         for template in templates:
             generate_business_template(template)
 
