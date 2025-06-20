@@ -1,6 +1,7 @@
 """
 Template engine for rendering templates with components.
 """
+
 import os
 import json
 import logging
@@ -81,7 +82,7 @@ class Template:
         return result
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> 'Template':
+    def from_config(cls, config: Dict[str, Any]) -> "Template":
         """
         Create a template from a configuration dictionary.
 
@@ -164,7 +165,7 @@ class TemplateEngine:
             Dictionary with paths to generated images
         """
         results = {}
-        
+
         # Ensure output directory exists
         os.makedirs(self.output_dir, exist_ok=True)
 
@@ -172,12 +173,14 @@ class TemplateEngine:
         for template_name, template_data in json_data.items():
             try:
                 logger.info(f"Processing template: {template_name}")
-                
+
                 # Create a new template
                 template = Template(
                     name=template_name,
                     size=template_data.get("size", (800, 600)),
-                    background_color=template_data.get("background_color", (255, 255, 255)),
+                    background_color=template_data.get(
+                        "background_color", (255, 255, 255)
+                    ),
                 )
 
                 # Add components
@@ -187,33 +190,33 @@ class TemplateEngine:
                         if component:
                             template.add_component(component)
                     except Exception as e:
-                        logger.error(f"Error creating component in {template_name}: {e}")
+                        logger.error(
+                            f"Error creating component in {template_name}: {e}"
+                        )
                         continue
 
                 # Render the template
-                output_path = os.path.join(
-                    self.output_dir, f"{template_name}.png"
-                )
-                
+                output_path = os.path.join(self.output_dir, f"{template_name}.png")
+
                 try:
                     # Handle base image if specified
                     base_image = None
                     if template_data.get("use_base_image"):
                         base_image_path = template_data.get("base_image_path")
                         if base_image_path:
-                            if base_image_path.startswith(('http://', 'https://')):
+                            if base_image_path.startswith(("http://", "https://")):
                                 base_image = self.download_image(base_image_path)
                             else:
                                 base_image = load_image(base_image_path)
-                    
+
                     # Render with or without base image
                     rendered_image = template.render(base_image=base_image)
-                    
+
                     # Save the result
                     rendered_image.save(output_path)
                     results[template_name] = output_path
                     logger.info(f"Successfully generated: {output_path}")
-                    
+
                 except Exception as e:
                     error_msg = f"Error rendering template {template_name}: {e}"
                     logger.error(error_msg)
@@ -238,19 +241,19 @@ class TemplateEngine:
         """
         json_path = Path(json_file)
         results = {}
-        
+
         try:
             if json_path.is_file():
                 # Process a single file
-                with open(json_path, "r", encoding='utf-8') as f:
+                with open(json_path, "r", encoding="utf-8") as f:
                     json_data = json.load(f)
                 results.update(self.process_json(json_data))
-                
+
             elif json_path.is_dir():
                 # Process all JSON files in the directory
                 for file_path in json_path.glob("*.json"):
                     try:
-                        with open(file_path, "r", encoding='utf-8') as f:
+                        with open(file_path, "r", encoding="utf-8") as f:
                             json_data = json.load(f)
                         results.update(self.process_json(json_data))
                     except Exception as e:
@@ -260,7 +263,7 @@ class TemplateEngine:
                 error_msg = f"File or directory not found: {json_file}"
                 logger.error(error_msg)
                 results[json_file] = f"Error: {error_msg}"
-                
+
         except json.JSONDecodeError as e:
             error_msg = f"Invalid JSON in {json_file}: {e}"
             logger.error(error_msg)
@@ -269,9 +272,67 @@ class TemplateEngine:
             error_msg = f"Error processing {json_file}: {e}"
             logger.error(error_msg)
             results[json_file] = f"Error: {error_msg}"
-            
+
         return results
 
     def clear_templates(self) -> None:
         """Clear all registered templates."""
         self.templates.clear()
+
+    def render_template(
+        self,
+        template_name: str,
+        variables: Optional[Dict[str, Any]] = None,
+        output_path: Optional[str] = None,
+        output_format: str = "png",
+    ) -> str:
+        """
+        Render a template with the given variables.
+
+        Args:
+            template_name: Name of the template to render (must be in the templates directory)
+            variables: Dictionary of variables to substitute in the template
+            output_path: Path to save the rendered image. If None, a path will be generated.
+            output_format: Output image format (e.g., 'png', 'jpg', 'jpeg')
+
+        Returns:
+            Path to the rendered image
+
+        Raises:
+            ValueError: If the template is not found or configuration is invalid
+            IOError: If there's an error saving the image
+            RuntimeError: If there's an error during rendering
+        """
+        try:
+            # Get the template registry
+            registry = get_template_registry()
+            
+            # Render the template with variables
+            variables = variables or {}
+            image = registry.render_template(template_name, variables)
+            
+            if image is None:
+                raise ValueError(f"Template '{template_name}' not found or failed to render")
+
+            # Generate output path if not provided
+            if output_path is None:
+                os.makedirs(self.output_dir, exist_ok=True)
+                output_path = os.path.join(
+                    self.output_dir,
+                    f"{template_name}_{int(time.time())}.{output_format.lower()}",
+                )
+
+            # Ensure output directory exists
+            os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+
+            # Save the image
+            image.save(output_path, format=output_format.upper())
+
+            return output_path
+
+        except Exception as e:
+            error_msg = f"Error rendering template '{template_name}': {str(e)}"
+            logger.error(error_msg)
+            if not isinstance(e, (ValueError, IOError, RuntimeError)):
+                raise RuntimeError(error_msg) from e
+            raise

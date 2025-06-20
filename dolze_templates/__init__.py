@@ -18,6 +18,58 @@ from .core import (
     get_font_manager,
 )
 
+
+def render_template(
+    template_name: str,
+    variables: Optional[Dict[str, Any]] = None,
+    output_dir: str = "output",
+    output_path: Optional[str] = None,
+    output_format: str = "png"
+) -> str:
+    """
+    Render a template with the given variables.
+    
+    This is a convenience function that creates a TemplateEngine instance and
+    renders a template in one step. The template must be present in the templates directory.
+    
+    Args:
+        template_name: Name of the template to render (must be in the templates directory)
+        variables: Dictionary of variables to substitute in the template
+        output_dir: Directory to save the rendered image (used if output_path is None)
+        output_path: Full path to save the rendered image. If None, a path will be generated.
+        output_format: Output image format (e.g., 'png', 'jpg', 'jpeg')
+        
+    Returns:
+        Path to the rendered image
+        
+    Example:
+        ```python
+        from dolze_templates import render_template
+        
+        # Define template variables
+        variables = {
+            "title": "Welcome to Dolze",
+            "subtitle": "Create amazing images with ease",
+            "image_url": "https://example.com/hero.jpg"
+        }
+        
+        # Render a template from the templates directory
+        output_path = render_template(
+            template_name="my_template",
+            variables=variables,
+            output_dir="output"
+        )
+        print(f"Rendered image saved to: {output_path}")
+        ```
+    """
+    engine = TemplateEngine(output_dir=output_dir)
+    return engine.render_template(
+        template_name=template_name,
+        variables=variables or {},
+        output_path=output_path,
+        output_format=output_format
+    )
+
 # Resource management and caching
 from .resources import load_image, load_font
 from .utils.cache import clear_cache, get_cache_info

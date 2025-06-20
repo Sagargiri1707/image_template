@@ -1,97 +1,575 @@
-# Dolze Templates
+<div align="center">
+  <h1>Dolze Templates</h1>
+  <p>
+    <strong>A powerful Python library for generating beautiful, dynamic images using JSON templates</strong>
+  </p>
+  <p>
+    <a href="https://pypi.org/project/dolze-templates/">
+      <img src="https://img.shields.io/pypi/v/dolze-templates?color=blue" alt="PyPI Version">
+    </a>
+    <a href="https://pypi.org/project/dolze-templates/">
+      <img src="https://img.shields.io/pypi/pyversions/dolze-templates" alt="Python Versions">
+    </a>
+    <a href="https://github.com/yourusername/dolze-templates/actions">
+      <img src="https://github.com/yourusername/dolze-templates/actions/workflows/tests.yml/badge.svg" alt="Tests Status">
+    </a>
+    <a href="https://github.com/yourusername/dolze-templates/blob/main/LICENSE">
+      <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
+    </a>
+  </p>
+</div>
 
-A powerful Python library for generating beautiful, dynamic images using JSON templates. Perfect for creating social media posts, marketing materials, product showcases, and more.
+Dolze Templates is a versatile Python library that enables developers to generate stunning, dynamic images programmatically using simple JSON templates. Perfect for creating social media posts, marketing materials, product showcases, and more with minimal code.
 
 ## ✨ Features
 
-- 🎨 **Template Engine**: Create complex image compositions using a simple JSON structure
-- 🖼️ **Rich Component Library**: Text, images, shapes, and more with extensive styling options
-- ⚡ **Performance**: Built-in caching for fonts and images to speed up generation
-- 📦 **Extensible**: Easy to extend with custom components and templates
-- 🎯 **Production Ready**: Comprehensive validation and error handling
+- 🎨 **Intuitive JSON-based Templates** - Define complex image compositions with a clean, readable JSON structure
+- 🖼️ **Rich Component Library** - Extensive collection of built-in components (text, images, shapes, buttons, etc.)
+- ⚡ **High Performance** - Smart caching for fonts and images to ensure fast generation times
+- 🔄 **Dynamic Content** - Support for variables and expressions in templates
+- 🛡️ **Robust Validation** - Comprehensive input validation and helpful error messages
+- 🧩 **Extensible Architecture** - Easy to create and integrate custom components
+- 📱 **Responsive Design** - Create templates that adapt to different dimensions
+- 🧪 **Tested & Reliable** - Comprehensive test suite with high code coverage
 
 ## 📦 Installation
 
-Install the package using pip:
+Dolze Templates requires Python 3.8 or higher. Install the latest stable version from PyPI:
 
 ```bash
 pip install dolze-templates
 ```
 
-For development, you can install from source:
+### Optional Dependencies
+
+Some features require additional dependencies. Install them using:
+
+```bash
+# For image processing
+pip install dolze-templates[images]
+
+# For advanced text rendering
+pip install dolze-templates[text]
+
+# For all optional dependencies
+pip install dolze-templates[all]
+```
+
+### Development Installation
+
+To contribute or modify the source code:
 
 ```bash
 git clone https://github.com/yourusername/dolze-templates.git
 cd dolze-templates
-pip install -e .
+
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install in development mode with all dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
 ```
 
 ## 🚀 Quick Start
 
-### 1. Using Python API
+### 1. Basic Usage
+
+```python
+from dolze_templates import TemplateEngine, get_template_registry
+
+# Initialize the template engine
+engine = TemplateEngine(
+    output_dir="./output",  # Where to save generated images
+    cache_dir="./cache"     # Cache directory for assets
+)
+
+# Load and process a template
+result = engine.process_from_file("templates/social_media_post.json")
+print(f"Generated: {result}")
+```
+
+### 2. Template with Variables
 
 ```python
 from dolze_templates import TemplateEngine
 
-# Initialize the template engine
-engine = TemplateEngine(output_dir="output")
+engine = TemplateEngine()
 
-# Process a template file
-results = engine.process_from_file("templates/social_media_post.json")
+# Define template variables
+context = {
+    "title": "Welcome to Dolze",
+    "subtitle": "Create amazing images with ease",
+    "image_url": "https://example.com/hero.jpg"
+}
 
-# Process multiple templates from a directory
-# results = engine.process_from_file("templates/")
-
-print(f"Generated: {results}")
+# Process template with variables
+result = engine.process_template("my_template", template_config, context)
 ```
 
-### 2. Using the Command Line
+### 3. Using the Command Line Interface
+
+The package includes a CLI for quick template processing:
 
 ```bash
-# Process a single template
-dolze-templates render templates/social_media_post.json -o output
+# Render a single template
+dolze-templates render templates/post.json -o output/
 
 # Process all templates in a directory
-dolze-templates render templates/ -o output
+dolze-templates render templates/ -o output/ --recursive
 
-# Clear the cache
-dolze-templates cache clear
+# Use a different config file
+dolze-templates render template.json -c config.yaml -o output/
 
-# Show cache info
-dolze-templates cache info
+# Cache management
+dolze-templates cache clear  # Clear all cached assets
+dolze-templates cache info   # Show cache information
+```
+
+### 4. Available CLI Options
+
+```
+Usage: dolze-templates [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version   Show the version and exit.
+  -h, --help  Show this message and exit.
+
+Commands:
+  render  Render templates to images.
+  cache   Manage cached assets.
 ```
 
 ## 📋 Example Templates
 
-Check out the [examples](examples/) directory for ready-to-use templates:
+Explore our collection of ready-to-use templates in the [examples/](examples/) directory. Each template demonstrates different features and can be customized to fit your needs.
 
-1. **Social Media Post** - Create engaging social media posts with images and text overlays
-2. **Quote Image** - Generate beautiful quote images with custom styling
-3. **Product Showcase** - Showcase products with images, descriptions, and pricing
+### 1. Social Media Post
+
+Create engaging social media posts with dynamic text and images.
+
+```json
+{
+  "social_media_post": {
+    "settings": {
+      "size": [1080, 1080],
+      "background_color": [255, 255, 255]
+    },
+    "components": [
+      {
+        "type": "rectangle",
+        "position": [0, 0],
+        "size": [1080, 1080],
+        "color": [29, 161, 242, 30]
+      },
+      {
+        "type": "text",
+        "text": "{{title}}",
+        "position": [100, 200],
+        "font_size": 72,
+        "font_weight": "bold",
+        "max_width": 880
+      },
+      {
+        "type": "image",
+        "source": "{{image_url}}",
+        "position": [100, 400],
+        "size": [880, 500],
+        "fit": "cover"
+      }
+    ]
+  }
+}
+```
+
+### 2. Quote Image
+
+Generate beautiful quote images with custom styling.
+
+```json
+{
+  "quote_image": {
+    "settings": {
+      "size": [1200, 630],
+      "background_color": [18, 18, 18]
+    },
+    "components": [
+      {
+        "type": "text",
+        "text": "\"{{quote}}\"",
+        "position": [100, 200],
+        "font_size": 48,
+        "color": [255, 255, 255],
+        "max_width": 1000,
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "text": "— {{author}}",
+        "position": [600, 500],
+        "font_size": 36,
+        "color": [200, 200, 200],
+        "align": "right"
+      }
+    ]
+  }
+}
+```
+
+### 3. Product Showcase
+
+Showcase products with images, descriptions, and pricing.
+
+```json
+{
+  "product_showcase": {
+    "settings": {
+      "size": [1200, 1600],
+      "background_color": [245, 245, 245]
+    },
+    "components": [
+      {
+        "type": "image",
+        "source": "{{product_image}}",
+        "position": [0, 0],
+        "size": [1200, 800],
+        "fit": "cover"
+      },
+      {
+        "type": "rectangle",
+        "position": [0, 800],
+        "size": [1200, 800],
+        "color": [255, 255, 255]
+      },
+      {
+        "type": "text",
+        "text": "{{product_name}}",
+        "position": [100, 900],
+        "font_size": 64,
+        "font_weight": "bold"
+      },
+      {
+        "type": "text",
+        "text": "{{product_description}}",
+        "position": [100, 1000],
+        "font_size": 36,
+        "max_width": 1000,
+        "color": [100, 100, 100]
+      },
+      {
+        "type": "text",
+        "text": "{{product_price}}",
+        "position": [100, 1200],
+        "font_size": 72,
+        "font_weight": "bold",
+        "color": [0, 150, 0]
+      }
+    ]
+  }
+}
+```
+
+## 🏗️ Advanced Usage
+
+### Custom Components
+
+Create your own components by extending the `Component` class:
+
+```python
+from dolze_templates.components import Component
+from PIL import Image, ImageDraw
+
+class CustomShapeComponent(Component):
+    def __init__(self, position, size, color, **kwargs):
+        super().__init__(position=position, **kwargs)
+        self.size = size
+        self.color = color
+    
+    def render(self, image, context):
+        draw = ImageDraw.Draw(image)
+        # Draw a custom shape
+        draw.polygon([
+            (self.x, self.y + self.size[1] // 2),
+            (self.x + self.size[0] // 2, self.y),
+            (self.x + self.size[0], self.y + self.size[1] // 2),
+            (self.x + self.size[0] // 2, self.y + self.size[1])
+        ], fill=tuple(self.color))
+        return image
+
+# Register the custom component
+from dolze_templates import get_template_registry
+registry = get_template_registry()
+registry.register_component('custom_shape', CustomShapeComponent)
+```
+
+### Using Hooks
+
+Dolze Templates provides hooks for extending functionality:
+
+```python
+from dolze_templates import hooks
+
+@hooks.register('before_render')
+def log_render_start(template_name, context):
+    print(f"Rendering template: {template_name}")
+
+@hooks.register('after_render')
+def process_rendered_image(image, template_name, context):
+    # Apply custom image processing
+    return image.filter(ImageFilter.SHARPEN)
+```
+
+## 📚 API Reference
+
+### Core Classes
+
+#### `TemplateEngine`
+
+The main class for processing templates.
+
+```python
+engine = TemplateEngine(
+    output_dir='output',
+    cache_dir='.cache',
+    auto_create_dirs=True
+)
+
+# Process a template file
+result = engine.process_from_file('template.json')
+
+# Process a template dictionary
+result = engine.process_template('template_name', template_config, context={})
+
+# Clear cached assets
+engine.clear_cache()
+```
+
+#### `TemplateRegistry`
+
+Manages available components and template loaders.
+
+```python
+from dolze_templates import get_template_registry
+
+registry = get_template_registry()
+
+# Register a custom component
+registry.register_component('custom', CustomComponent)
+
+
+# Get a component class
+component_cls = registry.get_component('text')
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/your-feature`
+3. Make your changes and add tests
+4. Run tests: `pytest`
+5. Commit your changes: `git commit -am 'Add some feature'`
+6. Push to the branch: `git push origin feature/your-feature`
+7. Open a pull request
+
+### Development Setup
+
+```bash
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Run linter
+flake8 dolze_templates tests
+
+# Run type checking
+mypy dolze_templates
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📬 Contact
+
+For support or questions, please open an issue on GitHub or contact us at support@dolze.com.
+
+## 📈 Versioning
+
+This project uses [Semantic Versioning](https://semver.org/). For the versions available, see the [tags on this repository](https://github.com/yourusername/dolze-templates/tags).
 
 ## 🛠️ Template Structure
 
-Templates are defined using JSON and can include various components:
+Templates in Dolze are defined using a JSON structure that describes the layout, styling, and content of the generated image. Here's a comprehensive guide to the template structure:
+
+### Basic Template Structure
 
 ```json
 {
   "template_name": {
-    "size": [1200, 1200],
-    "background_color": [255, 255, 255],
-    "use_base_image": false,
+    "metadata": {
+      "name": "Social Media Post",
+      "description": "A template for social media posts",
+      "version": "1.0.0",
+      "author": "Your Name"
+    },
+    "settings": {
+      "size": [1080, 1080],  // width, height in pixels
+      "background_color": [255, 255, 255, 255],  // RGBA values (0-255)
+      "background_image": null,  // Optional background image URL or path
+      "output_format": "png",  // png, jpg, webp, etc.
+      "output_quality": 95  // 1-100 for lossy formats
+    },
+    "variables": {
+      "title": "Default Title",
+      "subtitle": "Default Subtitle",
+      "image_url": "https://example.com/default.jpg"
+    },
+    "components": [
+      // Component definitions go here
+    ]
+  }
+}
+```
+
+### Available Components
+
+#### 1. Text Component
+
+```json
+{
+  "type": "text",
+  "text": "{{title}}",  // Supports template variables
+  "position": [100, 100],  // x, y coordinates
+  "font_family": "Arial",
+  "font_size": 48,
+  "color": [0, 0, 0, 255],  // RGBA
+  "max_width": 800,  // Optional: wrap text to this width
+  "align": "left",  // left, center, right
+  "font_weight": "normal",  // normal, bold, etc.
+  "opacity": 1.0,  // 0.0 to 1.0
+  "rotation": 0  // degrees
+}
+```
+
+#### 2. Image Component
+
+```json
+{
+  "type": "image",
+  "source": "{{image_url}}",  // URL or local path
+  "position": [200, 200],
+  "size": [400, 300],  // width, height
+  "fit": "cover",  // cover, contain, fill, etc.
+  "opacity": 1.0,
+  "border_radius": 10,  // Rounded corners
+  "rotation": 0
+}
+```
+
+#### 3. Rectangle Component
+
+```json
+{
+  "type": "rectangle",
+  "position": [100, 100],
+  "size": [300, 200],
+  "color": [255, 0, 0, 128],  // Semi-transparent red
+  "border_radius": 5,
+  "border_width": 2,
+  "border_color": [0, 0, 0, 255]
+}
+```
+
+#### 4. Circle Component
+
+```json
+{
+  "type": "circle",
+  "center": [300, 300],
+  "radius": 100,
+  "color": [0, 128, 255, 200],
+  "border_width": 3,
+  "border_color": [0, 0, 0, 255]
+}
+```
+
+### Template Variables
+
+Templates support dynamic content through variables:
+
+```json
+{
+  "variables": {
+    "username": "johndoe",
+    "score": 95,
+    "is_premium": true
+  },
+  "components": [
+    {
+      "type": "text",
+      "text": "Hello, {{username}}! Your score is {{score}}",
+      "color": "{{is_premium ? '#FFD700' : '#000000'}}"
+    }
+  ]
+}
+```
+
+### Conditions and Loops
+
+```json
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "{{user.name}}",
+      "show": "{{user.is_active}}"  // Conditional rendering
+    },
+    {
+      "type": "loop",
+      "for": "item in items",
+      "components": [
+        {
+          "type": "text",
+          "text": "{{item.name}}",
+          "position": ["{{100 * loop.index}}", 100]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Template Inheritance
+
+Templates can extend other templates:
+
+```json
+{
+  "base_template": {
+    "settings": {
+      "size": [1200, 630],
+      "background_color": [240, 240, 240]
+    },
     "components": [
       {
         "type": "text",
-        "text": "Hello, World!",
-        "position": [100, 100],
-        "font_size": 48,
-        "color": [0, 0, 0]
-      },
+        "text": "Base Template Content"
+      }
+    ]
+  },
+  "derived_template": {
+    "extends": "base_template",
+    "components": [
       {
-        "type": "image",
-        "image_url": "https://example.com/image.jpg",
-        "position": [200, 200],
-        "size": [400, 300]
+        "type": "text",
+        "text": "Additional Content"
       }
     ]
   }
