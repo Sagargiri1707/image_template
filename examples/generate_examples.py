@@ -32,7 +32,23 @@ def generate_business_template(templateName: str):
     """Generate a business template post."""
     # Get the template registry
     registry = get_template_registry()
-
+    template_data = {
+        "cta_text": "LEARN MORE",
+        "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
+        "image_url": "https://www.calendar.com/wp-content/uploads/2019/09/CalendarAndroidApp.png.webp",
+        "cta_image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d",
+        "heading": "plan your day in a snap",
+        "subheading": "Driving success",
+        "contact_email": "contact@business.com",
+        "contact_phone": "+1-800-555-1234",
+        "website_url": "dolze.ai /download",
+        "quote": "The only way to do great work is to love what you do.",
+        "theme_color": "#d4ffdd",
+        "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
+        "user_name": "Alex Johnson",
+        "user_title": "Marketing Director, TechCorp",
+        "testimonial_text": "This product has completely transformed how our team works. The intuitive interface and powerful features have saved us countless hours of work. Highly recommended!",
+    }
     # Template data mapping
     if templateName == "calendar_app_promo":
         template_data = {
@@ -69,7 +85,7 @@ def generate_business_template(templateName: str):
             "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
             "title": "How to be environment conscious without being weird",
-            "author": "@username",
+            "author": "@username",  # to be inserted by db
             "read_time": "4",
             "image_url": "https://img.freepik.com/free-vector/underwater-ocean-reef-coral-background_107791-1853.jpg",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
@@ -79,7 +95,7 @@ def generate_business_template(templateName: str):
             "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
             "testimonial_text": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
-            "author": "@username",
+            "author": "@username",  # to be inserted by db
             "read_time": "4",
             "image_url": "https://img.freepik.com/free-photo/portrait-young-businesswoman-holding-eyeglasses-hand-against-gray-backdrop_23-2148029483.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
@@ -108,8 +124,11 @@ def main():
         templates = [
             # "calendar_app_promo",
             # "testimonials_template",
-            "blog_post",
-            "education_info",
+            # "blog_post",
+            # "education_info",
+            # "template69",
+            # "promotional_banner",
+            "payment_promotion",
         ]
         for template in templates:
             generate_business_template(template)
