@@ -19,6 +19,16 @@ from .core import (
 )
 
 
+def get_all_templates() -> list[str]:
+    """
+    Get a list of all available template names.
+    
+    Returns:
+        List[str]: A list of all available template names
+    """
+    return get_template_registry().get_all_templates()
+
+
 def render_template(
     template_name: str,
     variables: Optional[Dict[str, Any]] = None,

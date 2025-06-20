@@ -47,6 +47,15 @@ class TemplateRegistry:
                         self.templates[template_data["name"]] = template_data
             except (json.JSONDecodeError, IOError) as e:
                 print(f"Error loading template from {file_path}: {e}")
+                
+    def get_all_templates(self) -> List[str]:
+        """
+        Get a list of all available template names.
+        
+        Returns:
+            List[str]: A list of template names that are currently loaded and available
+        """
+        return list(self.templates.keys())
 
     def register_template(self, name: str, config: Dict[str, Any]) -> None:
         """
