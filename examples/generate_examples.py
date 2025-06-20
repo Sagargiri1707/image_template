@@ -125,6 +125,14 @@ def generate_business_template(templateName: str):
             "quote1": "the kanban board",
             "quote2": "you'll absolutely love",
         }
+    elif templateName == "product_showcase":
+        template_data = {
+            "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?w=200&h=200&white=true",
+            "product_image": "https://media.istockphoto.com/id/171384959/photo/executive-office-chair.jpg?s=612x612&w=0&k=20&c=5vRz91x_JdXHGrzWoDxtj7xEYvI35ls3pDfysHgd57M=",
+            "product_name": "Strong chair",
+            "product_price": "$52",
+            "product_description": "made with highly refined wood",
+        }
 
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
@@ -157,6 +165,7 @@ def main():
             "product_promotion",
             "qa_template",
             "quote_template",
+            "product_showcase",
         ]
         for template in templates:
             generate_business_template(template)

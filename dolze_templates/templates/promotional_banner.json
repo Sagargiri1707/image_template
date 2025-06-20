@@ -58,7 +58,7 @@
       "image_url": "${image_url}",
       "position": { "x": 690, "y": 950 },
       "size": { "width": 1180, "height": 1180 },
-      "circle_crop": true
+      "circle_crop": false
     },
     {
       "type": "circle",

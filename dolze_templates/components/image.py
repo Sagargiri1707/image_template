@@ -1,7 +1,3 @@
-"""
-Image component for rendering images in templates.
-"""
-
 import os
 import requests
 from io import BytesIO
@@ -216,31 +212,62 @@ class ImageComponent(Component):
             img_height = max(0, self.size[1] - (2 * b) if self.size[1] > 0 else 0)
 
             if img_width > 0 and img_height > 0:
-                # Load and resize the image to fit inside the border
+                # Load the image
                 img = self._load_image()
                 if img:
-                    img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
+                    # Get original image dimensions
+                    orig_width, orig_height = img.size
+                    # Calculate aspect ratio
+                    aspect_ratio = orig_width / orig_height
+                    target_aspect_ratio = img_width / img_height
 
-                    # Create a mask for the image
-                    img_mask = Image.new("L", (img_width, img_height), 0)
+                    # Adjust dimensions to maintain aspect ratio
+                    if aspect_ratio > target_aspect_ratio:
+                        # Image is wider than target, fit to width
+                        new_width = img_width
+                        new_height = int(img_width / aspect_ratio)
+                    else:
+                        # Image is taller than target, fit to height
+                        new_height = img_height
+                        new_width = int(img_height * aspect_ratio)
+
+                    # Ensure dimensions don't exceed target
+                    new_width = min(new_width, img_width)
+                    new_height = min(new_height, img_height)
+
+                    # Resize image while maintaining aspect ratio
+                    img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+
+                    # Create a mask for the image with the same dimensions as the resized image
+                    img_mask = Image.new("L", (new_width, new_height), 0)
                     img_draw = ImageDraw.Draw(img_mask)
 
                     if self.circle_crop:
                         # Create circular mask for image
-                        img_draw.ellipse([0, 0, img_width, img_height], fill=255)
+                        img_draw.ellipse([0, 0, new_width, new_height], fill=255)
                     elif self.border_radius > 0:
-                        # Create rounded rectangle mask for image
+                        # Create rounded rectangle mask for image with proportional radius
+                        radius_ratio = min(new_width, new_height) / max(
+                            img_width, img_height
+                        )
+                        scaled_radius = max(
+                            0, int((self.border_radius - b) * radius_ratio)
+                        )
                         img_draw.rounded_rectangle(
-                            [0, 0, img_width, img_height],
-                            radius=max(0, self.border_radius - b),
+                            [0, 0, new_width, new_height],
+                            radius=scaled_radius,
                             fill=255,
                         )
                     else:
                         # Rectangle mask
-                        img_draw.rectangle([0, 0, img_width, img_height], fill=255)
+                        img_draw.rectangle([0, 0, new_width, new_height], fill=255)
+
+                    # Calculate position to center the image within the content area
+                    paste_x = b + (img_width - new_width) // 2
+                    paste_y = b + (img_height - new_height) // 2
 
                     # Paste the image with the mask
-                    result_img.paste(img, (b, b), img_mask)
+                    result_img.paste(img, (paste_x, paste_y), img_mask)
 
         # Paste the result onto the base image
         image.paste(result_img, self.position, result_img)

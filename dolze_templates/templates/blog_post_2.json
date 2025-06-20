@@ -25,8 +25,8 @@
       "position": { "x": 171, "y": 350 },
       "size": { "width": 1919, "height": 1067 },
       "border_width": 90,
-      "border_color": "#FFFFFF",
-      "border_radius": 129
+      "border_color": [0, 0, 0, 0],
+      "border_radius": 150
     },
     {
       "type": "text",

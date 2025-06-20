@@ -8,7 +8,7 @@
       "type": "rectangle",
       "position": { "x": 0, "y": 0 },
       "size": { "width": 1067, "height": 2560 },
-      "fill_color": [255, 255, 255],
+      "fill_color": "${theme_color}",
       "outline_color": null
     },
     {
@@ -18,13 +18,14 @@
       "size": { "width": 1067, "height": 2560 },
       "opacity": 1.0,
       "tint_color": "#111111",
-      "tint_opacity": 0.3
+      "tint_opacity": 0.3,
+      "border_radius": 150
     },
     {
       "type": "rectangle",
       "position": { "x": 1067, "y": 0 },
       "size": { "width": 1493, "height": 2560 },
-      "fill_color": [144, 238, 144],
+      "fill_color": "${theme_color}",
       "outline_color": null
     },
     {
