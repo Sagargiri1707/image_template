@@ -80,9 +80,9 @@ def generate_business_template(templateName: str):
             "testimonial_text": "This product has completely transformed how we works. The intuitive interface and powerful features have saved us countless hours.",
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
         }
-    elif templateName == "blog_post":
+    elif templateName == "blog_post" or templateName == "blog_post_2":
         template_data = {
-            "theme_color": "#d4ffdd",
+            "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
             "title": "How to be environment conscious without being weird",
             "author": "@username",  # to be inserted by db
@@ -139,17 +139,7 @@ def main():
 
     try:
         # Generate all templates
-        templates = [
-            # "calendar_app_promo",
-            # "testimonials_template",
-            # "blog_post",
-            # "education_info",
-            # "product_promotion_2",
-            # "promotional_banner",
-            # "product_promotion",
-            # "qa_template",
-            "quote_template"
-        ]
+        templates = ["blog_post_2"]
         for template in templates:
             generate_business_template(template)
 

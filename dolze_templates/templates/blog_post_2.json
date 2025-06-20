@@ -1,5 +1,5 @@
 {
-  "name": "blog_post",
+  "name": "blog_post_2",
   "description": "Clean blog post template with featured image and metadata matching the reference design",
   "size": { "width": 2560, "height": 2560 },
   "use_base_image": false,
@@ -8,14 +8,14 @@
       "type": "rectangle",
       "position": { "x": 0, "y": 0 },
       "size": { "width": 2560, "height": 2560 },
-      "fill_color": "${theme_color}",
+      "fill_color": "#ffffff",
       "outline_color": null
     },
     {
       "type": "rectangle",
       "position": { "x": 171, "y": 350 },
       "size": { "width": 1919, "height": 1748 },
-      "fill_color": [255, 255, 255, 1],
+      "fill_color": "${theme_color}",
       "outline_color": null,
       "border_radius": 80
     },
@@ -44,7 +44,7 @@
       "text": "by ${author} • ${read_time} min",
       "position": { "x": 256, "y": 1877 },
       "font_size": 68,
-      "color": [102, 112, 133, 1],
+      "color": "#666666",
       "font_path": "Outfit-Regular",
       "alignment": "left"
     },
