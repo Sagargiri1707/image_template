@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 from typing import Dict, Any, Tuple, Optional, List, Union, Sequence
 import os
 import requests
@@ -594,6 +594,130 @@ class FooterComponent(Component):
         )
 
 
+class CircleComponent(Component):
+    """Component for rendering circles with optional background images"""
+
+    def __init__(
+        self,
+        position: Tuple[int, int] = (0, 0),
+        radius: int = 50,
+        fill_color: Optional[Tuple[int, int, int]] = (200, 200, 200),
+        outline_color: Optional[Tuple[int, int, int]] = None,
+        outline_width: int = 2,
+        image_url: Optional[str] = None,
+        image_path: Optional[str] = None,
+    ):
+        """
+        Initialize a circle component.
+
+        Args:
+            position: Position (x, y) of the center of the circle
+            radius: Radius of the circle in pixels
+            fill_color: RGB color tuple for the circle fill (None for transparent)
+            outline_color: RGB color tuple for the circle outline (None for no outline)
+            outline_width: Width of the outline in pixels
+            image_url: URL of an image to display inside the circle
+            image_path: Path to a local image file to display inside the circle
+        """
+        super().__init__(position)
+        self.radius = radius
+        self.fill_color = fill_color
+        self.outline_color = outline_color
+        self.outline_width = outline_width
+        self.image_url = image_url
+        self.image_path = image_path
+        self._cached_image = None
+
+    def _load_image(self) -> Optional[Image.Image]:
+        """Load image from URL or path if not already loaded"""
+        if self._cached_image is not None:
+            return self._cached_image
+
+        img = None
+        try:
+            if self.image_url:
+                response = requests.get(self.image_url, timeout=10)
+                img = Image.open(BytesIO(response.content)).convert("RGBA")
+            elif self.image_path and os.path.exists(self.image_path):
+                img = Image.open(self.image_path).convert("RGBA")
+        except Exception as e:
+            print(f"Error loading image: {e}")
+            return None
+
+        if img:
+            # Resize and crop image to be square with 2*radius dimensions
+            size = (self.radius * 2, self.radius * 2)
+            img = ImageOps.fit(img, size, method=Image.Resampling.LANCZOS)
+            
+            # Create circular mask
+            mask = Image.new("L", size, 0)
+            draw = ImageDraw.Draw(mask)
+            draw.ellipse((0, 0, size[0], size[1]), fill=255)
+            
+            # Apply mask to image
+            img.putalpha(mask)
+            self._cached_image = img
+            
+        return img
+
+    def render(self, image: Image.Image) -> Image.Image:
+        """Render the circle onto an image"""
+        if not any([self.fill_color, self.outline_color, self.image_url, self.image_path]):
+            return image
+
+        result = image.copy()
+        draw = ImageDraw.Draw(result)
+        
+        # Calculate bounding box
+        x, y = self.position
+        bbox = [
+            x - self.radius,
+            y - self.radius,
+            x + self.radius,
+            y + self.radius
+        ]
+
+        # Draw filled circle if color is specified
+        if self.fill_color:
+            draw.ellipse(bbox, fill=self.fill_color, outline=None)
+
+        # Draw outline if specified
+        if self.outline_color and self.outline_width > 0:
+            draw.ellipse(bbox, outline=self.outline_color, width=self.outline_width)
+
+        # Draw image if available
+        img = self._load_image()
+        if img:
+            # Calculate position to center the image
+            img_x = x - self.radius
+            img_y = y - self.radius
+            result.paste(img, (img_x, img_y), img)
+
+        return result
+
+    @classmethod
+    def from_config(cls, config: Dict[str, Any]) -> "CircleComponent":
+        """Create a circle component from a configuration dictionary"""
+        position = (
+            config.get("position", {}).get("x", 0),
+            config.get("position", {}).get("y", 0),
+        )
+
+        radius = config.get("radius", 50)
+        fill_color = tuple(config["fill_color"]) if "fill_color" in config else None
+        outline_color = tuple(config["outline_color"]) if "outline_color" in config else None
+        
+        return cls(
+            position=position,
+            radius=radius,
+            fill_color=fill_color,
+            outline_color=outline_color,
+            outline_width=config.get("outline_width", 2),
+            image_url=config.get("image_url"),
+            image_path=config.get("image_path"),
+        )
+
+
 class RectangleComponent(Component):
     """Component for rendering rectangles"""
 
@@ -706,5 +830,7 @@ def create_component_from_config(config: Dict[str, Any]) -> Optional[Component]:
         return FooterComponent.from_config(config)
     elif component_type == "rectangle":
         return RectangleComponent.from_config(config)
+    elif component_type == "circle":
+        return CircleComponent.from_config(config)
 
     return None

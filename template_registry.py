@@ -22,7 +22,137 @@ class TemplateRegistry:
         self._load_default_templates()
 
     def _load_default_templates(self) -> None:
-        """Load the default templates into the registry"""
+        """Register default templates."""
+        # Register clean_minimal template
+        self.register_template(
+            "clean_minimal",
+            {
+                "name": "clean_minimal",
+                "description": "Clean minimal business template with central alignment and creative design elements",
+                "size": {"width": 1080, "height": 1080},
+                "use_base_image": False,
+                "components": [
+                    # Background
+                    {
+                        "type": "rectangle",
+                        "position": {"x": 0, "y": 0},
+                        "size": {"width": 1080, "height": 1080},
+                        "fill_color": [255, 255, 255],
+                        "outline_color": None,
+                    },
+                    # Top right purple circle (centered)
+                    {
+                        "type": "circle",
+                        "position": {"x": 1100, "y": -200},
+                        "radius": 400,
+                        "fill_color": [239, 230, 250],
+                        "outline_color": [255, 255, 255],
+                        "outline_width": 2,
+                    },
+                    # Bottom left pink circle
+                    {
+                        "type": "circle",
+                        "position": {"x": 50, "y": 1080},
+                        "radius": 350,
+                        "fill_color": [255, 230, 240],
+                        "outline_color": [255, 255, 255],
+                        "outline_width": 2,
+                    },
+                    # Logo (top left)
+                    {
+                        "type": "image",
+                        "image_url": "${logo_url}",
+                        "position": {"x": 80, "y": 60},
+                        "size": {"width": 100, "height": 100},
+                    },
+                    # Main heading (centered)
+                    {
+                        "type": "text",
+                        "text": "${heading}",
+                        "position": {"x": 240, "y": 120},
+                        "font_size": 72,
+                        "color": [50, 50, 50],
+                        "font_path": get_font_manager().get_font_path("Roboto-Bold"),
+                        "alignment": "center",
+                        "max_width": 600,
+                    },
+                    # Subheading (centered)
+                    {
+                        "type": "text",
+                        "text": "${subheading}",
+                        "position": {"x": 140, "y": 290},
+                        "font_size": 32,
+                        "color": [100, 100, 100],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                        "alignment": "center",
+                        "max_width": 800,
+                    },
+                    # Main image (centered)
+                    {
+                        "type": "image",
+                        "image_url": "${image_url}",
+                        "position": {"x": 290, "y": 400},
+                        "size": {"width": 500, "height": 500},
+                        "circle_crop": True,
+                    },
+                    # Divider dots
+                    {
+                        "type": "circle",
+                        "position": {"x": 480, "y": 940},
+                        "radius": 10,
+                        "fill_color": [128, 0, 128],
+                        "outline_color": [255, 255, 255],
+                        "outline_width": 2,
+                    },
+                    {
+                        "type": "circle",
+                        "position": {"x": 520, "y": 940},
+                        "radius": 10,
+                        "fill_color": [255, 100, 150],
+                        "outline_color": [255, 255, 255],
+                        "outline_width": 2,
+                    },
+                    {
+                        "type": "circle",
+                        "position": {"x": 560, "y": 940},
+                        "radius": 10,
+                        "fill_color": [128, 0, 128],
+                        "outline_color": [255, 255, 255],
+                        "outline_width": 2,
+                    },
+                    # Contact info (centered)
+                    {
+                        "type": "text",
+                        "text": "${contact_email}",
+                        "position": {"x": 240, "y": 970},
+                        "font_size": 28,
+                        "color": [100, 100, 100],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                        "alignment": "center",
+                    },
+                    {
+                        "type": "text",
+                        "text": "${contact_phone}",
+                        "position": {"x": 550, "y": 970},
+                        "font_size": 28,
+                        "color": [100, 100, 100],
+                        "font_path": get_font_manager().get_font_path("Roboto-Light"),
+                        "alignment": "center",
+                    },
+                    # Website (centered)
+                    {
+                        "type": "text",
+                        "text": "${website_url}",
+                        "position": {"x": 440, "y": 1020},
+                        "font_size": 28,
+                        "color": [128, 0, 128],
+                        "font_path": get_font_manager().get_font_path("Roboto-Medium"),
+                        "alignment": "center",
+                    },
+                ],
+            },
+        )
+
         # Template 69 - Split layout with text left, image right
         self.register_template(
             "template69",
@@ -457,12 +587,10 @@ if __name__ == "__main__":
     for template in templates:
         print(f"- {template['name']}: {template['description']}")
 
-    # Example user data that works with both templates
+    # Example user data for clean_minimal template
+
     user_data = {
-        # Common fields (used by both templates)
         "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
-        "website_url": "www.rrefyne.com",
-        # Fields for business_template
         "image_url": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/3188fb75-00e1-4633-bc1b-55ba41346147.png",
         "heading": "Grow Your Business Today",
         "subheading": "Custom solutions for modern challenges in the digital landscape",
@@ -470,18 +598,14 @@ if __name__ == "__main__":
         "cta_image": "https://static.vecteezy.com/system/resources/thumbnails/035/576/450/small/ai-generated-3d-rendering-of-a-beautiful-colorful-candle-on-transparent-background-ai-generated-png.png",
         "contact_email": "info@rrefyne.com",
         "contact_phone": "+1-800-555-1234",
+        "website_url": "www.business.com",
     }
 
-    # Render the business template
-    output_path = registry.render_template("template69", user_data)
+    # Render the clean_minimal template
+    output_path = registry.render_template("clean_minimal", user_data)
 
     if output_path:
-        print(f"\nGenerated business template image: {output_path}")
+        print(f"\nGenerated clean minimal template image: {output_path}")
         print("Try opening the generated image to see the customized template!")
     else:
         print("Failed to generate template image.")
-
-
-# crop bg image and dotn squeeze
-# filter on bg imabe
-# blur on text
