@@ -12,29 +12,31 @@ from .base import Component
 
 class ImageComponent(Component):
     """Component for rendering images with optional borders and rounded corners.
-    
+
     The border is drawn inside the image bounds, so it won't expand the image dimensions.
     For best results, ensure the image has some padding if you want the border to be visible.
     """
-    
-    def _parse_color(self, color: Union[str, Tuple[int, int, int, int]]) -> Tuple[int, int, int, int]:
+
+    def _parse_color(
+        self, color: Union[str, Tuple[int, int, int, int]]
+    ) -> Tuple[int, int, int, int]:
         """Parse color from various formats to RGBA tuple.
-        
+
         Args:
             color: Color in one of these formats:
                 - Hex string (e.g., "#RRGGBB" or "#RRGGBBAA")
                 - RGB/RGBA tuple (3 or 4 integers 0-255)
-                
+
         Returns:
             RGBA tuple with values 0-255
         """
         if isinstance(color, str):
-            color = color.strip('#')
+            color = color.strip("#")
             if len(color) == 6:
-                r, g, b = (int(color[i:i+2], 16) for i in (0, 2, 4))
+                r, g, b = (int(color[i : i + 2], 16) for i in (0, 2, 4))
                 return (r, g, b, 255)
             elif len(color) == 8:
-                r, g, b, a = (int(color[i:i+2], 16) for i in (0, 2, 4, 6))
+                r, g, b, a = (int(color[i : i + 2], 16) for i in (0, 2, 4, 6))
                 return (r, g, b, a)
         elif isinstance(color, (list, tuple)):
             if len(color) == 3:  # RGB
@@ -54,6 +56,8 @@ class ImageComponent(Component):
         border_radius: int = 0,
         border_width: int = 0,
         border_color: Union[str, Tuple[int, int, int, int]] = (0, 0, 0, 255),
+        tint_color: Optional[Union[str, Tuple[int, int, int, int]]] = None,
+        tint_opacity: float = 0.5,
     ):
         """
         Initialize an image component.
@@ -66,6 +70,10 @@ class ImageComponent(Component):
             circle_crop: Whether to crop the image to a circle
             opacity: Opacity of the image (0.0 to 1.0)
             border_radius: Radius for rounded corners in pixels (0 for no rounding)
+            border_width: Width of the border in pixels
+            border_color: Color of the border (hex string or RGBA tuple)
+            tint_color: Color to overlay on the image (None for no tint, hex string or RGBA tuple)
+            tint_opacity: Opacity of the tint overlay (0.0 to 1.0)
         """
         super().__init__(position)
         self.image_path = image_path
@@ -76,6 +84,10 @@ class ImageComponent(Component):
         self.border_radius = max(0, int(border_radius))  # Ensure non-negative integer
         self.border_width = max(0, int(border_width))
         self.border_color = self._parse_color(border_color)
+        self.tint_color = self._parse_color(tint_color) if tint_color else None
+        self.tint_opacity = max(
+            0.0, min(1.0, float(tint_opacity))
+        )  # Clamp between 0 and 1
         self._cached_image = None
 
     def _load_image(self) -> Optional[Image.Image]:
@@ -108,6 +120,18 @@ class ImageComponent(Component):
                 alpha = Image.eval(alpha, lambda x: int(x * self.opacity))
                 img.putalpha(alpha)
 
+            # Apply tint overlay if specified
+            if self.tint_color and self.tint_opacity > 0:
+                # Create a solid color layer with the tint color
+                tint_layer = Image.new("RGBA", img.size, self.tint_color)
+                # Adjust tint layer opacity
+                if self.tint_opacity < 1.0:
+                    alpha = tint_layer.split()[3]
+                    alpha = Image.eval(alpha, lambda x: int(x * self.tint_opacity))
+                    tint_layer.putalpha(alpha)
+                # Blend the tint layer with the image
+                img = Image.alpha_composite(img, tint_layer)
+
             self._cached_image = img
             return img
 
@@ -131,62 +155,76 @@ class ImageComponent(Component):
 
         # Create a new layer for the image with border
         result_img = Image.new("RGBA", self.size if self.size else (0, 0), (0, 0, 0, 0))
-        
+
         # Calculate border width and content bounds
         b = max(0, self.border_width)
-        
+
         # Create a mask for the content area
         mask = Image.new("L", self.size if self.size else (0, 0), 0)
         draw = ImageDraw.Draw(mask)
-        
+
         # Calculate content area (inside border)
         content_box = [
             b,  # left
             b,  # top
             (self.size[0] - b - 1) if self.size else (0 - b - 1),  # right
-            (self.size[1] - b - 1) if self.size else (0 - b - 1)   # bottom
+            (self.size[1] - b - 1) if self.size else (0 - b - 1),  # bottom
         ]
-        
+
         # Draw border first if needed
         if b > 0:
-            border_img = Image.new("RGBA", self.size if self.size else (0, 0), (0, 0, 0, 0))
-            border_draw = ImageDraw.Draw(border_img, 'RGBA')
-            
+            border_img = Image.new(
+                "RGBA", self.size if self.size else (0, 0), (0, 0, 0, 0)
+            )
+            border_draw = ImageDraw.Draw(border_img, "RGBA")
+
             if self.circle_crop:
                 # Draw circular border
                 border_draw.ellipse(
-                    [b, b, (self.size[0] - b - 1) if self.size else (0 - b - 1), 
-                     (self.size[1] - b - 1) if self.size else (0 - b - 1)],
+                    [
+                        b,
+                        b,
+                        (self.size[0] - b - 1) if self.size else (0 - b - 1),
+                        (self.size[1] - b - 1) if self.size else (0 - b - 1),
+                    ],
                     outline=tuple(self.border_color),
-                    width=b
+                    width=b,
                 )
             else:
                 # Draw rounded rectangle border
                 border_draw.rounded_rectangle(
-                    [b, b, (self.size[0] - b - 1) if self.size else (0 - b - 1), 
-                     (self.size[1] - b - 1) if self.size else (0 - b - 1)],
-                    radius=max(0, self.border_radius - b // 2) if self.border_radius > 0 else 0,
+                    [
+                        b,
+                        b,
+                        (self.size[0] - b - 1) if self.size else (0 - b - 1),
+                        (self.size[1] - b - 1) if self.size else (0 - b - 1),
+                    ],
+                    radius=(
+                        max(0, self.border_radius - b // 2)
+                        if self.border_radius > 0
+                        else 0
+                    ),
                     outline=tuple(self.border_color),
-                    width=b
+                    width=b,
                 )
             result_img = border_img
-        
+
         # Now handle the image content
         if self.size:
             # Calculate size for the image (inside border)
             img_width = max(0, self.size[0] - (2 * b) if self.size[0] > 0 else 0)
             img_height = max(0, self.size[1] - (2 * b) if self.size[1] > 0 else 0)
-            
+
             if img_width > 0 and img_height > 0:
                 # Load and resize the image to fit inside the border
                 img = self._load_image()
                 if img:
                     img = img.resize((img_width, img_height), Image.Resampling.LANCZOS)
-                    
+
                     # Create a mask for the image
                     img_mask = Image.new("L", (img_width, img_height), 0)
                     img_draw = ImageDraw.Draw(img_mask)
-                    
+
                     if self.circle_crop:
                         # Create circular mask for image
                         img_draw.ellipse([0, 0, img_width, img_height], fill=255)
@@ -195,15 +233,15 @@ class ImageComponent(Component):
                         img_draw.rounded_rectangle(
                             [0, 0, img_width, img_height],
                             radius=max(0, self.border_radius - b),
-                            fill=255
+                            fill=255,
                         )
                     else:
                         # Rectangle mask
                         img_draw.rectangle([0, 0, img_width, img_height], fill=255)
-                    
+
                     # Paste the image with the mask
                     result_img.paste(img, (b, b), img_mask)
-        
+
         # Paste the result onto the base image
         image.paste(result_img, self.position, result_img)
         return image
@@ -243,4 +281,6 @@ class ImageComponent(Component):
             border_radius=int(config.get("border_radius", 0)),
             border_width=int(config.get("border_width", 0)),
             border_color=config.get("border_color", (0, 0, 0, 255)),
+            tint_color=config.get("tint_color"),
+            tint_opacity=float(config.get("tint_opacity", 0.5)),
         )

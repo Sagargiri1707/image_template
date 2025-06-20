@@ -74,6 +74,16 @@ def generate_business_template(templateName: str):
             "image_url": "https://img.freepik.com/free-vector/underwater-ocean-reef-coral-background_107791-1853.jpg",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
         }
+    elif templateName == "education_info":
+        template_data = {
+            "theme_color": "#44EC9D",
+            "website_url": "website.com/blog",
+            "testimonial_text": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
+            "author": "@username",
+            "read_time": "4",
+            "image_url": "https://img.freepik.com/free-photo/portrait-young-businesswoman-holding-eyeglasses-hand-against-gray-backdrop_23-2148029483.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
+            "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
+        }
 
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
@@ -99,6 +109,7 @@ def main():
             # "calendar_app_promo",
             # "testimonials_template",
             "blog_post",
+            "education_info",
         ]
         for template in templates:
             generate_business_template(template)
