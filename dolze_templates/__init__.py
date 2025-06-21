@@ -17,12 +17,13 @@ from .core import (
     FontManager,
     get_font_manager,
 )
+from typing import Optional, Dict, Any
 
 
 def get_all_templates() -> list[str]:
     """
     Get a list of all available template names.
-    
+
     Returns:
         List[str]: A list of all available template names
     """
@@ -34,35 +35,35 @@ def render_template(
     variables: Optional[Dict[str, Any]] = None,
     output_dir: str = "output",
     output_path: Optional[str] = None,
-    output_format: str = "png"
+    output_format: str = "png",
 ) -> str:
     """
     Render a template with the given variables.
-    
+
     This is a convenience function that creates a TemplateEngine instance and
     renders a template in one step. The template must be present in the templates directory.
-    
+
     Args:
         template_name: Name of the template to render (must be in the templates directory)
         variables: Dictionary of variables to substitute in the template
         output_dir: Directory to save the rendered image (used if output_path is None)
         output_path: Full path to save the rendered image. If None, a path will be generated.
         output_format: Output image format (e.g., 'png', 'jpg', 'jpeg')
-        
+
     Returns:
         Path to the rendered image
-        
+
     Example:
         ```python
         from dolze_templates import render_template
-        
+
         # Define template variables
         variables = {
             "title": "Welcome to Dolze",
             "subtitle": "Create amazing images with ease",
             "image_url": "https://example.com/hero.jpg"
         }
-        
+
         # Render a template from the templates directory
         output_path = render_template(
             template_name="my_template",
@@ -77,8 +78,9 @@ def render_template(
         template_name=template_name,
         variables=variables or {},
         output_path=output_path,
-        output_format=output_format
+        output_format=output_format,
     )
+
 
 # Resource management and caching
 from .resources import load_image, load_font
