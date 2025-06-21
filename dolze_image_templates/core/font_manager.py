@@ -45,10 +45,67 @@ class FontManager:
         Recursively scan the font directory and its subdirectories for available fonts.
         Fonts are stored with their base filename (without extension) as the key.
         """
-        if not os.path.exists(self.font_dir):
-            os.makedirs(self.font_dir, exist_ok=True)
-            logger.warning(
-                f"Font directory '{self.font_dir}' does not exist. Created directory."
+        # Get absolute path and log it
+        abs_font_dir = os.path.abspath(self.font_dir)
+        logger.info(f"[FontManager] Starting font scan in: {abs_font_dir}")
+
+        # Check if directory exists
+        if not os.path.exists(abs_font_dir):
+            logger.error(f"[FontManager] Font directory does not exist: {abs_font_dir}")
+            # Try to create it
+            try:
+                os.makedirs(abs_font_dir, exist_ok=True)
+                logger.info(f"[FontManager] Created font directory: {abs_font_dir}")
+                return  # Will be empty, nothing to scan
+            except Exception as e:
+                logger.error(f"[FontManager] Failed to create font directory: {e}")
+                return
+
+        # Check if it's a directory
+        if not os.path.isdir(abs_font_dir):
+            logger.error(f"[FontManager] Font path is not a directory: {abs_font_dir}")
+            return
+
+        # Log directory contents for debugging
+        try:
+            contents = []
+            for root, dirs, files in os.walk(abs_font_dir):
+                for f in files:
+                    rel_path = os.path.relpath(os.path.join(root, f), abs_font_dir)
+                    contents.append(rel_path)
+
+            logger.info(f"[FontManager] Found {len(contents)} files in font directory")
+            if contents:
+                logger.debug(
+                    f"[FontManager] Font files found:\n"
+                    + "\n".join(f"- {f}" for f in contents)
+                )
+            else:
+                logger.warning(f"[FontManager] No font files found in: {abs_font_dir}")
+                logger.warning(
+                    f"[FontManager] Current working directory: {os.getcwd()}"
+                )
+                logger.warning(
+                    f"[FontManager] Package directory: {os.path.dirname(os.path.abspath(__file__))}"
+                )
+
+                # Try to find where the fonts might be
+                package_dir = os.path.dirname(
+                    os.path.dirname(os.path.abspath(__file__))
+                )
+                fonts_path = os.path.join(package_dir, "fonts")
+                if os.path.exists(fonts_path) and os.path.isdir(fonts_path):
+                    logger.info(
+                        f"[FontManager] Found fonts in package directory: {fonts_path}"
+                    )
+                    # Update font directory to the found path
+                    self.font_dir = fonts_path
+                    # Rescan with new path
+                    return self._scan_fonts()
+
+        except Exception as e:
+            logger.error(
+                f"[FontManager] Error scanning font directory: {e}", exc_info=True
             )
             return
 

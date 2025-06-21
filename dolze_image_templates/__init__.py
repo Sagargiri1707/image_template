@@ -33,8 +33,18 @@ from .core import (
 )
 
 # Initialize font manager with the package's fonts directory
-package_dir = Path(__file__).parent
+import os
+import sys
+from pathlib import Path
+
+# Get the absolute path to the package directory
+package_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 fonts_dir = package_dir / 'fonts'
+
+# Debug information
+print(f"[DEBUG] Package directory: {package_dir}")
+print(f"[DEBUG] Fonts directory: {fonts_dir}")
+print(f"[DEBUG] Fonts directory exists: {fonts_dir.exists()}")
 
 # Create a new get_font_manager function that uses the package's fonts directory
 def get_font_manager():
@@ -44,7 +54,23 @@ def get_font_manager():
     Returns:
         FontManager: The font manager instance
     """
-    return _get_font_manager(str(fonts_dir))
+    # Try multiple possible font directory locations
+    possible_font_dirs = [
+        str(fonts_dir.absolute()),  # Standard package location
+        str((package_dir.parent / 'fonts').absolute()),  # Parent directory
+        str(Path(sys.prefix) / 'lib' / f'python{sys.version_info.major}.{sys.version_info.minor}' / 'site-packages' / 'dolze_image_templates' / 'fonts'),  # System site-packages
+        str(Path.home() / '.local' / 'lib' / f'python{sys.version_info.major}.{sys.version_info.minor}' / 'site-packages' / 'dolze_image_templates' / 'fonts'),  # User site-packages
+    ]
+    
+    # Find the first existing fonts directory
+    for font_dir in possible_font_dirs:
+        if os.path.isdir(font_dir):
+            print(f"[DEBUG] Using fonts from: {font_dir}")
+            return _get_font_manager(font_dir)
+    
+    # If no directory found, use the default one and log a warning
+    print(f"[WARNING] No fonts directory found in any standard location. Using: {fonts_dir}")
+    return _get_font_manager(str(fonts_dir.absolute()))
 from typing import Optional, Dict, Any, Union
 
 
