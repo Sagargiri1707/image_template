@@ -1,23 +1,61 @@
-<div align="center">
-  <h1>Dolze Templates</h1>
-  <p>
-    <strong>A powerful Python library for generating beautiful, dynamic images using JSON templates</strong>
-  </p>
-  <p>
-    <a href="https://pypi.org/project/dolze-templates/">
-      <img src="https://img.shields.io/pypi/v/dolze-templates?color=blue" alt="PyPI Version">
-    </a>
-    <a href="https://pypi.org/project/dolze-templates/">
-      <img src="https://img.shields.io/pypi/pyversions/dolze-templates" alt="Python Versions">
-    </a>
-    <a href="https://github.com/yourusername/dolze-templates/actions">
-      <img src="https://github.com/yourusername/dolze-templates/actions/workflows/tests.yml/badge.svg" alt="Tests Status">
-    </a>
-    <a href="https://github.com/yourusername/dolze-templates/blob/main/LICENSE">
-      <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
-    </a>
-  </p>
-</div>
+# Dolze Templates
+
+A powerful Python library for generating beautiful, dynamic images using JSON templates.
+
+## Features
+
+- 🎨 Create dynamic images from JSON templates
+- 🖼️ Support for text, shapes, and image components
+- 🎯 Easy template management and rendering
+- 🚀 Fast and efficient image generation
+- 🧩 Extensible component system
+
+## Installation
+
+You can install the package using pip:
+
+```bash
+# Install from PyPI (when available)
+pip install dolze-templates
+
+# Or install directly from the repository
+pip install git+https://github.com/yourusername/dolze-templates.git
+
+# For development installation
+pip install -e .
+```
+
+## Quick Start
+
+```python
+from dolze_templates import render_template, get_all_templates
+
+# List all available templates
+print("Available templates:", get_all_templates())
+
+# Render a template
+output_path = render_template(
+    template_name="your_template_name",
+    variables={
+        "title": "Hello World",
+        "subtitle": "Welcome to Dolze Templates"
+    },
+    output_dir="output"
+)
+print(f"Image saved to: {output_path}")
+```
+
+## Documentation
+
+For detailed documentation, please refer to the [Documentation](https://github.com/yourusername/dolze-templates/wiki).
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before making a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Dolze Templates is a versatile Python library that enables developers to generate stunning, dynamic images programmatically using simple JSON templates. Perfect for creating social media posts, marketing materials, product showcases, and more with minimal code.
 
