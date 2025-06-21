@@ -6,7 +6,7 @@ components in a template-based approach.
 """
 
 # Version information
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 
 # Core functionality
 from .core import (
@@ -20,7 +20,7 @@ from .core import (
 from typing import Optional, Dict, Any
 
 
-def get_all_templates() -> list[str]:
+def get_all_image_templates() -> list[str]:
     """
     Get a list of all available template names.
 
@@ -109,7 +109,7 @@ from .config import (
 )
 
 # Version
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 
 
 # Package metadata
