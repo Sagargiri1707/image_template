@@ -55,7 +55,7 @@ def render_template(
 
     Example:
         ```python
-        from dolze_templates import render_template
+        from dolze_image_templates import render_template
 
         # Define template variables
         variables = {

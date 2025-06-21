@@ -1,10 +1,11 @@
 """
 Footer component for templates.
 """
+
 from typing import Tuple, Optional, Dict, Any
 from PIL import Image, ImageDraw, ImageFont
 from .base import Component
-from dolze_templates.core.font_manager import get_font_manager
+from dolze_image_templates.core.font_manager import get_font_manager
 
 
 class FooterComponent(Component):
@@ -57,34 +58,34 @@ class FooterComponent(Component):
 
         result = image.copy()
         draw = ImageDraw.Draw(result)
-        
+
         # Get the font
         font = self._get_font()
-        
+
         # Calculate text size
         text_bbox = draw.textbbox((0, 0), self.text, font=font)
         text_width = text_bbox[2] - text_bbox[0]
         text_height = text_bbox[3] - text_bbox[1]
-        
+
         # Calculate position if auto-positioned
         if self._auto_position:
             x = (image.width - text_width) // 2
             y = image.height - text_height - self.padding * 2
             self.position = (x, y)
-        
+
         # Draw background if specified
         if self.bg_color is not None:
             bg_x1 = self.position[0] - self.padding
             bg_y1 = self.position[1] - self.padding
             bg_x2 = bg_x1 + text_width + self.padding * 2
             bg_y2 = bg_y1 + text_height + self.padding * 2
-            
+
             draw.rectangle(
                 [bg_x1, bg_y1, bg_x2, bg_y2],
                 fill=self.bg_color,
                 outline=None,
             )
-        
+
         # Draw the text
         draw.text(
             self.position,
@@ -92,11 +93,11 @@ class FooterComponent(Component):
             font=font,
             fill=self.color,
         )
-        
+
         return result
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> 'FooterComponent':
+    def from_config(cls, config: Dict[str, Any]) -> "FooterComponent":
         """Create a footer component from a configuration dictionary"""
         position = None
         if "position" in config:
@@ -104,14 +105,18 @@ class FooterComponent(Component):
                 config["position"].get("x", 0),
                 config["position"].get("y", 0),
             )
-        
+
         # Handle colors which might be lists or tuples
         color = config.get("color", (100, 100, 100))
         if isinstance(color, (list, tuple)) and len(color) >= 3:
             color = tuple(color[:3])
-            
+
         bg_color = config.get("bg_color")
-        if bg_color is not None and isinstance(bg_color, (list, tuple)) and len(bg_color) >= 3:
+        if (
+            bg_color is not None
+            and isinstance(bg_color, (list, tuple))
+            and len(bg_color) >= 3
+        ):
             bg_color = tuple(bg_color[:3])
 
         return cls(

@@ -9,8 +9,8 @@ import re
 from pathlib import Path
 from PIL import Image
 
-from dolze_templates.core.template_engine import Template
-from dolze_templates.core.font_manager import get_font_manager
+from dolze_image_templates.core.template_engine import Template
+from dolze_image_templates.core.font_manager import get_font_manager
 
 
 class TemplateRegistry:
@@ -47,11 +47,11 @@ class TemplateRegistry:
                         self.templates[template_data["name"]] = template_data
             except (json.JSONDecodeError, IOError) as e:
                 print(f"Error loading template from {file_path}: {e}")
-                
+
     def get_all_templates(self) -> List[str]:
         """
         Get a list of all available template names.
-        
+
         Returns:
             List[str]: A list of template names that are currently loaded and available
         """

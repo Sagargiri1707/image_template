@@ -10,9 +10,9 @@ from typing import Dict, Any, List, Optional, Tuple
 from pathlib import Path
 from PIL import Image
 
-from dolze_templates.components import create_component_from_config, Component
-from dolze_templates.resources import load_image, load_font
-from dolze_templates.exceptions import ResourceError
+from dolze_image_templates.components import create_component_from_config, Component
+from dolze_image_templates.resources import load_image, load_font
+from dolze_image_templates.exceptions import ResourceError
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -306,13 +306,15 @@ class TemplateEngine:
         try:
             # Get the template registry
             registry = get_template_registry()
-            
+
             # Render the template with variables
             variables = variables or {}
             image = registry.render_template(template_name, variables)
-            
+
             if image is None:
-                raise ValueError(f"Template '{template_name}' not found or failed to render")
+                raise ValueError(
+                    f"Template '{template_name}' not found or failed to render"
+                )
 
             # Generate output path if not provided
             if output_path is None:

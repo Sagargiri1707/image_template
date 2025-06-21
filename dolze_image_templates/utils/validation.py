@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 
 from PIL import Image, ImageFont
 
-from dolze_templates.exceptions import ValidationError, ResourceError
+from dolze_image_templates.exceptions import ValidationError, ResourceError
 
 # Constants for validation
 MIN_FONT_SIZE = 6
@@ -28,25 +28,38 @@ MIN_BLUR_RADIUS = 0
 MAX_BLUR_RADIUS = 100
 
 VALID_FONT_WEIGHTS = [
-    'normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500',
-    '600', '700', '800', '900'
+    "normal",
+    "bold",
+    "bolder",
+    "lighter",
+    "100",
+    "200",
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+    "900",
 ]
 
-VALID_TEXT_ALIGNS = ['left', 'center', 'right', 'justify']
-VALID_BORDER_STYLES = ['solid', 'dashed', 'dotted', 'double', 'none']
-VALID_EFFECTS = ['blur', 'shadow', 'glow', 'grayscale', 'sepia']
+VALID_TEXT_ALIGNS = ["left", "center", "right", "justify"]
+VALID_BORDER_STYLES = ["solid", "dashed", "dotted", "double", "none"]
+VALID_EFFECTS = ["blur", "shadow", "glow", "grayscale", "sepia"]
 
 # Regular expressions
-HEX_COLOR_PATTERN = re.compile(r'^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$')
+HEX_COLOR_PATTERN = re.compile(r"^#([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$")
 URL_PATTERN = re.compile(
-    r'^(https?|ftp)://'  # http:// or https:// or ftp://
-    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
-    r'localhost|'  # localhost...
-    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
-    r'(?::\d+)?'  # optional port
-    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    r"^(https?|ftp)://"  # http:// or https:// or ftp://
+    r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"  # domain...
+    r"localhost|"  # localhost...
+    r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"  # ...or ip
+    r"(?::\d+)?"  # optional port
+    r"(?:/?|[/?]\S+)$",
+    re.IGNORECASE,
+)
 
-T = TypeVar('T')  # Generic type variable
+T = TypeVar("T")  # Generic type variable
 URL_PATTERN = re.compile(
     r"^(https?|ftp)://"  # http:// or https:// or ftp://
     r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"  # domain...
@@ -387,322 +400,378 @@ def validate_font_path(font_path: Any, field: str = "font_path") -> Optional[str
 def validate_component(component: Dict[str, Any], index: int = 0) -> Dict[str, Any]:
     """
     Validate and normalize a component configuration.
-    
+
     Args:
         component: Component configuration to validate
         index: Index of the component in the components list (for error messages)
-        
+
     Returns:
         Normalized component configuration
-        
+
     Raises:
         ValidationError: If the component configuration is invalid
     """
     if not isinstance(component, dict):
         raise ValidationError(
-            field=f'components[{index}]',
+            field=f"components[{index}]",
             message="Component must be a dictionary",
-            value=component
+            value=component,
         )
-    
+
     # Create a copy to avoid modifying the original
     component = component.copy()
-    field_prefix = f'components[{index}]'
-    
+    field_prefix = f"components[{index}]"
+
     # Validate component type
-    if 'type' not in component:
+    if "type" not in component:
         raise ValidationError(
-            field=f'{field_prefix}.type',
+            field=f"{field_prefix}.type",
             message="Component type is required",
-            value=None
+            value=None,
         )
-    
-    component_type = component['type']
+
+    component_type = component["type"]
     if not isinstance(component_type, str):
         raise ValidationError(
-            field=f'{field_prefix}.type',
+            field=f"{field_prefix}.type",
             message="Component type must be a string",
-            value=component_type
+            value=component_type,
         )
-    
+
     # Common validations for all components
-    if 'position' in component:
+    if "position" in component:
         try:
-            component['position'] = validate_position(component['position'], f'{field_prefix}.position')
+            component["position"] = validate_position(
+                component["position"], f"{field_prefix}.position"
+            )
         except ValidationError as e:
-            e.field = f'{field_prefix}.position.{e.field}' if e.field else f'{field_prefix}.position'
+            e.field = (
+                f"{field_prefix}.position.{e.field}"
+                if e.field
+                else f"{field_prefix}.position"
+            )
             raise e
-    
+
     # Type-specific validations
-    if component_type == 'text':
+    if component_type == "text":
         component = validate_text_component(component, field_prefix)
-    elif component_type == 'image':
+    elif component_type == "image":
         component = validate_image_component(component, field_prefix)
-    elif component_type in ['rectangle', 'circle']:
+    elif component_type in ["rectangle", "circle"]:
         component = validate_shape_component(component, field_prefix, component_type)
     else:
         raise ValidationError(
-            field=f'{field_prefix}.type',
+            field=f"{field_prefix}.type",
             message=f"Unknown component type: {component_type}",
-            value=component_type
+            value=component_type,
         )
-    
+
     return component
 
 
-def validate_text_component(component: Dict[str, Any], field_prefix: str) -> Dict[str, Any]:
+def validate_text_component(
+    component: Dict[str, Any], field_prefix: str
+) -> Dict[str, Any]:
     """Validate a text component configuration."""
     # Required fields
-    if 'text' not in component:
+    if "text" not in component:
         raise ValidationError(
-            field=f'{field_prefix}.text',
+            field=f"{field_prefix}.text",
             message="Text content is required for text components",
-            value=None
+            value=None,
         )
-    
+
     # Validate text content
-    if not isinstance(component['text'], (str, int, float)):
+    if not isinstance(component["text"], (str, int, float)):
         raise ValidationError(
-            field=f'{field_prefix}.text',
+            field=f"{field_prefix}.text",
             message="Text must be a string or number",
-            value=component['text']
+            value=component["text"],
         )
-    
+
     # Convert to string if it's a number
-    if isinstance(component['text'], (int, float)):
-        component['text'] = str(component['text'])
-    
+    if isinstance(component["text"], (int, float)):
+        component["text"] = str(component["text"])
+
     # Validate optional fields
-    if 'font_size' in component:
+    if "font_size" in component:
         try:
             validate_range(
-                component['font_size'],
+                component["font_size"],
                 MIN_FONT_SIZE,
                 MAX_FONT_SIZE,
-                f'{field_prefix}.font_size'
+                f"{field_prefix}.font_size",
             )
         except ValidationError as e:
-            e.field = f'{field_prefix}.font_size.{e.field}' if e.field else f'{field_prefix}.font_size'
+            e.field = (
+                f"{field_prefix}.font_size.{e.field}"
+                if e.field
+                else f"{field_prefix}.font_size"
+            )
             raise e
-    
-    if 'color' in component:
+
+    if "color" in component:
         try:
-            component['color'] = validate_color(component['color'], f'{field_prefix}.color')
+            component["color"] = validate_color(
+                component["color"], f"{field_prefix}.color"
+            )
         except ValidationError as e:
-            e.field = f'{field_prefix}.color.{e.field}' if e.field else f'{field_prefix}.color'
+            e.field = (
+                f"{field_prefix}.color.{e.field}"
+                if e.field
+                else f"{field_prefix}.color"
+            )
             raise e
-    
-    if 'font_weight' in component:
+
+    if "font_weight" in component:
         try:
             validate_choice(
-                str(component['font_weight']).lower(),
+                str(component["font_weight"]).lower(),
                 VALID_FONT_WEIGHTS,
-                f'{field_prefix}.font_weight'
+                f"{field_prefix}.font_weight",
             )
-            component['font_weight'] = component['font_weight'].lower()
+            component["font_weight"] = component["font_weight"].lower()
         except ValidationError as e:
-            e.field = f'{field_prefix}.font_weight.{e.field}' if e.field else f'{field_prefix}.font_weight'
+            e.field = (
+                f"{field_prefix}.font_weight.{e.field}"
+                if e.field
+                else f"{field_prefix}.font_weight"
+            )
             raise e
-    
-    if 'align' in component:
+
+    if "align" in component:
         try:
             validate_choice(
-                str(component['align']).lower(),
+                str(component["align"]).lower(),
                 VALID_TEXT_ALIGNS,
-                f'{field_prefix}.align'
+                f"{field_prefix}.align",
             )
-            component['align'] = component['align'].lower()
+            component["align"] = component["align"].lower()
         except ValidationError as e:
-            e.field = f'{field_prefix}.align.{e.field}' if e.field else f'{field_prefix}.align'
+            e.field = (
+                f"{field_prefix}.align.{e.field}"
+                if e.field
+                else f"{field_prefix}.align"
+            )
             raise e
-    
+
     return component
 
 
-def validate_image_component(component: Dict[str, Any], field_prefix: str) -> Dict[str, Any]:
+def validate_image_component(
+    component: Dict[str, Any], field_prefix: str
+) -> Dict[str, Any]:
     """Validate an image component configuration."""
     # Required fields
-    if 'image_url' not in component:
+    if "image_url" not in component:
         raise ValidationError(
-            field=f'{field_prefix}.image_url',
+            field=f"{field_prefix}.image_url",
             message="Image URL is required for image components",
-            value=None
+            value=None,
         )
-    
+
     # Validate image URL
     try:
-        component['image_url'] = validate_url(component['image_url'], f'{field_prefix}.image_url')
+        component["image_url"] = validate_url(
+            component["image_url"], f"{field_prefix}.image_url"
+        )
     except ValidationError as e:
-        e.field = f'{field_prefix}.image_url.{e.field}' if e.field else f'{field_prefix}.image_url'
+        e.field = (
+            f"{field_prefix}.image_url.{e.field}"
+            if e.field
+            else f"{field_prefix}.image_url"
+        )
         raise e
-    
+
     # Validate size if present
-    if 'size' in component:
+    if "size" in component:
         try:
-            size = validate_size(component['size'], f'{field_prefix}.size')
-            component['size'] = size
-            
+            size = validate_size(component["size"], f"{field_prefix}.size")
+            component["size"] = size
+
             # Validate dimensions
-            for dim in ['width', 'height']:
+            for dim in ["width", "height"]:
                 if dim in size:
                     validate_range(
                         size[dim],
                         MIN_IMAGE_DIMENSION,
                         MAX_IMAGE_DIMENSION,
-                        f'{field_prefix}.size.{dim}'
+                        f"{field_prefix}.size.{dim}",
                     )
         except ValidationError as e:
-            e.field = f'{field_prefix}.size.{e.field}' if e.field else f'{field_prefix}.size'
+            e.field = (
+                f"{field_prefix}.size.{e.field}" if e.field else f"{field_prefix}.size"
+            )
             raise e
-    
+
     return component
 
 
-def validate_shape_component(component: Dict[str, Any], field_prefix: str, shape_type: str) -> Dict[str, Any]:
+def validate_shape_component(
+    component: Dict[str, Any], field_prefix: str, shape_type: str
+) -> Dict[str, Any]:
     """Validate a shape component (rectangle or circle) configuration."""
-    if 'fill_color' in component:
+    if "fill_color" in component:
         try:
-            component['fill_color'] = validate_color(component['fill_color'], f'{field_prefix}.fill_color')
+            component["fill_color"] = validate_color(
+                component["fill_color"], f"{field_prefix}.fill_color"
+            )
         except ValidationError as e:
-            e.field = f'{field_prefix}.fill_color.{e.field}' if e.field else f'{field_prefix}.fill_color'
+            e.field = (
+                f"{field_prefix}.fill_color.{e.field}"
+                if e.field
+                else f"{field_prefix}.fill_color"
+            )
             raise e
-    
-    if 'border_style' in component:
+
+    if "border_style" in component:
         try:
             validate_choice(
-                str(component['border_style']).lower(),
+                str(component["border_style"]).lower(),
                 VALID_BORDER_STYLES,
-                f'{field_prefix}.border_style'
+                f"{field_prefix}.border_style",
             )
-            component['border_style'] = component['border_style'].lower()
+            component["border_style"] = component["border_style"].lower()
         except ValidationError as e:
-            e.field = f'{field_prefix}.border_style.{e.field}' if e.field else f'{field_prefix}.border_style'
+            e.field = (
+                f"{field_prefix}.border_style.{e.field}"
+                if e.field
+                else f"{field_prefix}.border_style"
+            )
             raise e
-    
-    if 'border_radius' in component and shape_type == 'rectangle':
+
+    if "border_radius" in component and shape_type == "rectangle":
         try:
             validate_range(
-                component['border_radius'],
+                component["border_radius"],
                 0,
-                float('inf'),
-                f'{field_prefix}.border_radius'
+                float("inf"),
+                f"{field_prefix}.border_radius",
             )
         except ValidationError as e:
-            e.field = f'{field_prefix}.border_radius.{e.field}' if e.field else f'{field_prefix}.border_radius'
+            e.field = (
+                f"{field_prefix}.border_radius.{e.field}"
+                if e.field
+                else f"{field_prefix}.border_radius"
+            )
             raise e
-    
+
     return component
 
 
 def validate_template_config(config: Dict[str, Any]) -> Dict[str, Any]:
     """
     Validate and normalize a template configuration.
-    
+
     Args:
         config: Template configuration to validate
-        
+
     Returns:
         Normalized template configuration
-        
+
     Raises:
         ValidationError: If the configuration is invalid
     """
     if not isinstance(config, dict):
         raise ValidationError(
-            field='config',
-            message="Template config must be a dictionary",
-            value=config
+            field="config", message="Template config must be a dictionary", value=config
         )
-    
+
     # Create a copy to avoid modifying the original
     config = config.copy()
-    
+
     # Validate required fields
-    required_fields = ['name', 'components']
+    required_fields = ["name", "components"]
     for field in required_fields:
         if field not in config:
             raise ValidationError(
-                field=field,
-                message="This field is required",
-                value=None
+                field=field, message="This field is required", value=None
             )
-    
+
     # Validate name
-    if not isinstance(config['name'], str) or not config['name'].strip():
+    if not isinstance(config["name"], str) or not config["name"].strip():
         raise ValidationError(
-            field='name',
+            field="name",
             message="Template name must be a non-empty string",
-            value=config.get('name')
+            value=config.get("name"),
         )
-    
+
     # Validate components
-    if not isinstance(config['components'], list):
+    if not isinstance(config["components"], list):
         raise ValidationError(
-            field='components',
+            field="components",
             message="Components must be a list",
-            value=config.get('components')
+            value=config.get("components"),
         )
-    
+
     # Validate each component
-    for i, component in enumerate(config['components']):
+    for i, component in enumerate(config["components"]):
         try:
-            config['components'][i] = validate_component(component, i)
+            config["components"][i] = validate_component(component, i)
         except ValidationError as e:
             # Add component index to the field path if not already present
-            if not e.field.startswith('components['):
-                e.field = f'components[{i}].{e.field}'
+            if not e.field.startswith("components["):
+                e.field = f"components[{i}].{e.field}"
             raise e
-    
+
     # Validate size if present
-    if 'size' in config:
+    if "size" in config:
         try:
-            config['size'] = validate_size(config['size'], 'size')
+            config["size"] = validate_size(config["size"], "size")
         except ValidationError as e:
-            e.field = f'size.{e.field}' if e.field != 'size' else 'size'
+            e.field = f"size.{e.field}" if e.field != "size" else "size"
             raise e from None
-    
+
     # Validate background color if present
-    if 'background_color' in config:
+    if "background_color" in config:
         try:
-            config['background_color'] = validate_color(config['background_color'], 'background_color')
+            config["background_color"] = validate_color(
+                config["background_color"], "background_color"
+            )
         except ValidationError as e:
-            e.field = f'background_color.{e.field}' if e.field != 'background_color' else 'background_color'
+            e.field = (
+                f"background_color.{e.field}"
+                if e.field != "background_color"
+                else "background_color"
+            )
             raise e from None
-    
+
     # Validate use_base_image if present
-    if 'use_base_image' in config and not isinstance(config['use_base_image'], bool):
+    if "use_base_image" in config and not isinstance(config["use_base_image"], bool):
         raise ValidationError(
-            field='use_base_image',
+            field="use_base_image",
             message="use_base_image must be a boolean",
-            value=config['use_base_image']
+            value=config["use_base_image"],
         )
-    
+
     # Validate effects if present
-    if 'effects' in config:
-        effects = config['effects']
+    if "effects" in config:
+        effects = config["effects"]
         if not isinstance(effects, dict):
             raise ValidationError(
-                field='effects',
-                message="Effects must be a dictionary",
-                value=effects
+                field="effects", message="Effects must be a dictionary", value=effects
             )
-        
+
         for effect_name, effect_config in effects.items():
             try:
-                validate_choice(effect_name, VALID_EFFECTS, f'effects.{effect_name}')
-                
+                validate_choice(effect_name, VALID_EFFECTS, f"effects.{effect_name}")
+
                 # Validate effect-specific configurations
-                if effect_name == 'blur' and 'radius' in effect_config:
+                if effect_name == "blur" and "radius" in effect_config:
                     validate_range(
-                        effect_config['radius'],
+                        effect_config["radius"],
                         MIN_BLUR_RADIUS,
                         MAX_BLUR_RADIUS,
-                        'effects.blur.radius'
+                        "effects.blur.radius",
                     )
                 # Add more effect validations as needed
-                    
+
             except ValidationError as e:
-                e.field = f'effects.{effect_name}.{e.field}' if e.field else f'effects.{effect_name}'
+                e.field = (
+                    f"effects.{effect_name}.{e.field}"
+                    if e.field
+                    else f"effects.{effect_name}"
+                )
                 raise e
-    
+
     return config

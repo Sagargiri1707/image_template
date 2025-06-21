@@ -17,12 +17,12 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from dolze_templates import TemplateRegistry, get_template_registry, configure
+from dolze_image_templates import TemplateRegistry, get_template_registry, configure
 
 # Configure the library
 configure(
     templates_dir=os.path.join(
-        os.path.dirname(__file__), "..", "dolze_templates", "templates"
+        os.path.dirname(__file__), "..", "dolze_image_templates", "templates"
     ),
     output_dir=os.path.join(os.path.dirname(__file__), "output"),
 )

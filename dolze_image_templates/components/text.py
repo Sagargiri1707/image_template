@@ -1,12 +1,13 @@
 """
 Text component for rendering text in templates.
 """
+
 import os
 import re
 from typing import Tuple, Optional, Dict, Any, Union
 from PIL import Image, ImageDraw, ImageFont
 from .base import Component
-from dolze_templates.core.font_manager import get_font_manager
+from dolze_image_templates.core.font_manager import get_font_manager
 
 
 class TextComponent(Component):
@@ -107,42 +108,42 @@ class TextComponent(Component):
     @staticmethod
     def _parse_color(color: Union[str, list, tuple, None]) -> Tuple[int, int, int]:
         """Parse a color value from various formats to an RGB tuple.
-        
+
         Args:
             color: Color value in one of these formats:
                 - Hex string (e.g., "#FF0000" or "#F00")
                 - List/tuple of RGB values (e.g., [255, 0, 0] or (255, 0, 0))
                 - None (returns black)
-                
+
         Returns:
             Tuple of (R, G, B) values in range 0-255
         """
         if color is None:
             return (0, 0, 0)
-            
+
         # Handle hex color strings
-        if isinstance(color, str) and color.startswith('#'):
-            hex_color = color.lstrip('#')
+        if isinstance(color, str) and color.startswith("#"):
+            hex_color = color.lstrip("#")
             if len(hex_color) == 3:  # Short form (e.g. #ABC)
-                hex_color = ''.join([c * 2 for c in hex_color])
+                hex_color = "".join([c * 2 for c in hex_color])
             try:
                 # Convert hex to RGB
                 return (
                     int(hex_color[0:2], 16),
                     int(hex_color[2:4], 16),
-                    int(hex_color[4:6], 16)
+                    int(hex_color[4:6], 16),
                 )
             except (ValueError, IndexError):
                 return (0, 0, 0)
-                
+
         # Handle RGB lists/tuples
         if isinstance(color, (list, tuple)) and len(color) >= 3:
             return tuple(int(c) for c in color[:3])
-            
+
         return (0, 0, 0)  # Default to black if invalid
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> 'TextComponent':
+    def from_config(cls, config: Dict[str, Any]) -> "TextComponent":
         """Create a text component from a configuration dictionary"""
         position = (
             config.get("position", {}).get("x", 0),

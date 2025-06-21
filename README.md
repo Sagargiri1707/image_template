@@ -28,7 +28,7 @@ pip install -e .
 ## Quick Start
 
 ```python
-from dolze_templates import render_template, get_all_templates
+from dolze_image_templates import render_template, get_all_templates
 
 # List all available templates
 print("Available templates:", get_all_templates())
@@ -117,7 +117,7 @@ pytest
 ### 1. Basic Usage
 
 ```python
-from dolze_templates import TemplateEngine, get_template_registry
+from dolze_image_templates import TemplateEngine, get_template_registry
 
 # Initialize the template engine
 engine = TemplateEngine(
@@ -133,7 +133,7 @@ print(f"Generated: {result}")
 ### 2. Template with Variables
 
 ```python
-from dolze_templates import TemplateEngine
+from dolze_image_templates import TemplateEngine
 
 engine = TemplateEngine()
 
@@ -317,7 +317,7 @@ Showcase products with images, descriptions, and pricing.
 Create your own components by extending the `Component` class:
 
 ```python
-from dolze_templates.components import Component
+from dolze_image_templates.components import Component
 from PIL import Image, ImageDraw
 
 class CustomShapeComponent(Component):
@@ -325,7 +325,7 @@ class CustomShapeComponent(Component):
         super().__init__(position=position, **kwargs)
         self.size = size
         self.color = color
-    
+
     def render(self, image, context):
         draw = ImageDraw.Draw(image)
         # Draw a custom shape
@@ -338,7 +338,7 @@ class CustomShapeComponent(Component):
         return image
 
 # Register the custom component
-from dolze_templates import get_template_registry
+from dolze_image_templates import get_template_registry
 registry = get_template_registry()
 registry.register_component('custom_shape', CustomShapeComponent)
 ```
@@ -348,7 +348,7 @@ registry.register_component('custom_shape', CustomShapeComponent)
 Dolze Templates provides hooks for extending functionality:
 
 ```python
-from dolze_templates import hooks
+from dolze_image_templates import hooks
 
 @hooks.register('before_render')
 def log_render_start(template_name, context):
@@ -390,7 +390,7 @@ engine.clear_cache()
 Manages available components and template loaders.
 
 ```python
-from dolze_templates import get_template_registry
+from dolze_image_templates import get_template_registry
 
 registry = get_template_registry()
 
@@ -424,10 +424,10 @@ pip install -e ".[dev]"
 pytest
 
 # Run linter
-flake8 dolze_templates tests
+flake8 dolze_image_templates tests
 
 # Run type checking
-mypy dolze_templates
+mypy dolze_image_templates
 ```
 
 ## 📄 License
@@ -458,11 +458,11 @@ Templates in Dolze are defined using a JSON structure that describes the layout,
       "author": "Your Name"
     },
     "settings": {
-      "size": [1080, 1080],  // width, height in pixels
-      "background_color": [255, 255, 255, 255],  // RGBA values (0-255)
-      "background_image": null,  // Optional background image URL or path
-      "output_format": "png",  // png, jpg, webp, etc.
-      "output_quality": 95  // 1-100 for lossy formats
+      "size": [1080, 1080], // width, height in pixels
+      "background_color": [255, 255, 255, 255], // RGBA values (0-255)
+      "background_image": null, // Optional background image URL or path
+      "output_format": "png", // png, jpg, webp, etc.
+      "output_quality": 95 // 1-100 for lossy formats
     },
     "variables": {
       "title": "Default Title",
@@ -483,16 +483,16 @@ Templates in Dolze are defined using a JSON structure that describes the layout,
 ```json
 {
   "type": "text",
-  "text": "{{title}}",  // Supports template variables
-  "position": [100, 100],  // x, y coordinates
+  "text": "{{title}}", // Supports template variables
+  "position": [100, 100], // x, y coordinates
   "font_family": "Arial",
   "font_size": 48,
-  "color": [0, 0, 0, 255],  // RGBA
-  "max_width": 800,  // Optional: wrap text to this width
-  "align": "left",  // left, center, right
-  "font_weight": "normal",  // normal, bold, etc.
-  "opacity": 1.0,  // 0.0 to 1.0
-  "rotation": 0  // degrees
+  "color": [0, 0, 0, 255], // RGBA
+  "max_width": 800, // Optional: wrap text to this width
+  "align": "left", // left, center, right
+  "font_weight": "normal", // normal, bold, etc.
+  "opacity": 1.0, // 0.0 to 1.0
+  "rotation": 0 // degrees
 }
 ```
 
@@ -501,12 +501,12 @@ Templates in Dolze are defined using a JSON structure that describes the layout,
 ```json
 {
   "type": "image",
-  "source": "{{image_url}}",  // URL or local path
+  "source": "{{image_url}}", // URL or local path
   "position": [200, 200],
-  "size": [400, 300],  // width, height
-  "fit": "cover",  // cover, contain, fill, etc.
+  "size": [400, 300], // width, height
+  "fit": "cover", // cover, contain, fill, etc.
   "opacity": 1.0,
-  "border_radius": 10,  // Rounded corners
+  "border_radius": 10, // Rounded corners
   "rotation": 0
 }
 ```
@@ -518,7 +518,7 @@ Templates in Dolze are defined using a JSON structure that describes the layout,
   "type": "rectangle",
   "position": [100, 100],
   "size": [300, 200],
-  "color": [255, 0, 0, 128],  // Semi-transparent red
+  "color": [255, 0, 0, 128], // Semi-transparent red
   "border_radius": 5,
   "border_width": 2,
   "border_color": [0, 0, 0, 255]
@@ -567,7 +567,7 @@ Templates support dynamic content through variables:
     {
       "type": "text",
       "text": "{{user.name}}",
-      "show": "{{user.is_active}}"  // Conditional rendering
+      "show": "{{user.is_active}}" // Conditional rendering
     },
     {
       "type": "loop",
@@ -778,7 +778,7 @@ python examples/generate_examples.py
 
 ### Creating Custom Templates
 
-1. Create a new JSON file in the `dolze_templates/templates/` directory
+1. Create a new JSON file in the `dolze_image_templates/templates/` directory
 2. Define your template structure following the format shown above
 3. Register your template in the `TemplateRegistry`
 
