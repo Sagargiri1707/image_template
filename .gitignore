@@ -2,3 +2,4 @@
 output
 *.egg-info
 .env
+dist/

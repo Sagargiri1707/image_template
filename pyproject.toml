@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dolze-image-templates"
-version = "0.2.2"
+version = "0.2.11"
 description = "A package for generating Dolze templates"
 readme = "README.md"
 authors = [
@@ -29,3 +29,6 @@ dev = [
     "isort",
     "mypy",
 ]
+
+[tool.setuptools.packages.find]
+include = ["dolze_image_templates", "dolze_image_templates.*"]
