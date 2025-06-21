@@ -39,7 +39,7 @@ class ResourceCache:
         self._cache_dir = (
             Path(cache_dir)
             if cache_dir
-            else Path(tempfile.gettempdir()) / "dolze_templates_cache"
+            else Path(tempfile.gettempdir()) / "dolze_image_templates_cache"
         )
         self._cache_dir.mkdir(parents=True, exist_ok=True)
         self.max_size_bytes = max_size_mb * 1024 * 1024
