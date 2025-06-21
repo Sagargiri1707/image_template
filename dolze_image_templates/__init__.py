@@ -5,8 +5,21 @@ This package provides a powerful and extensible system for generating images wit
 components in a template-based approach.
 """
 
+import os
+import logging
+
 # Version information
 __version__ = "0.1.2"
+
+# Set up logging
+from .utils.logging_config import setup_logging
+
+# Default log level (can be overridden by applications using this package)
+LOG_LEVEL = os.environ.get("DOLZE_LOG_LEVEL", "WARNING").upper()
+LOG_LEVEL = getattr(logging, LOG_LEVEL, logging.WARNING)
+
+# Set up logging with default level
+setup_logging(level=LOG_LEVEL)
 
 # Core functionality
 from .core import (
@@ -17,7 +30,7 @@ from .core import (
     FontManager,
     get_font_manager,
 )
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 
 
 def get_all_image_templates() -> list[str]:
@@ -33,10 +46,11 @@ def get_all_image_templates() -> list[str]:
 def render_template(
     template_name: str,
     variables: Optional[Dict[str, Any]] = None,
+    output_format: str = "png",
+    return_bytes: bool = True,
     output_dir: str = "output",
     output_path: Optional[str] = None,
-    output_format: str = "png",
-) -> str:
+) -> Union[bytes, str]:
     """
     Render a template with the given variables.
 
@@ -46,12 +60,14 @@ def render_template(
     Args:
         template_name: Name of the template to render (must be in the templates directory)
         variables: Dictionary of variables to substitute in the template
-        output_dir: Directory to save the rendered image (used if output_path is None)
-        output_path: Full path to save the rendered image. If None, a path will be generated.
         output_format: Output image format (e.g., 'png', 'jpg', 'jpeg')
+        return_bytes: If True, returns the image as bytes instead of saving to disk
+        output_dir: Directory to save the rendered image (used if return_bytes is False and output_path is None)
+        output_path: Full path to save the rendered image. If None and return_bytes is False, a path will be generated.
 
     Returns:
-        Path to the rendered image
+        If return_bytes is True: Image bytes
+        If return_bytes is False: Path to the rendered image
 
     Example:
         ```python
@@ -64,21 +80,26 @@ def render_template(
             "image_url": "https://example.com/hero.jpg"
         }
 
-        # Render a template from the templates directory
-        output_path = render_template(
+        # Render a template and get bytes
+        image_bytes = render_template(
             template_name="my_template",
             variables=variables,
-            output_dir="output"
+            return_bytes=True
         )
-        print(f"Rendered image saved to: {output_path}")
+        
+        # Use the bytes directly (e.g., send in API response)
+        # Or save to file if needed
+        with open('my_image.png', 'wb') as f:
+            f.write(image_bytes)
         ```
     """
     engine = TemplateEngine(output_dir=output_dir)
     return engine.render_template(
         template_name=template_name,
         variables=variables or {},
-        output_path=output_path,
+        output_path=output_path if not return_bytes else None,
         output_format=output_format,
+        return_bytes=return_bytes,
     )
 
 
@@ -125,14 +146,17 @@ def init() -> None:
     Initialize the Dolze Templates package.
     This function ensures all required directories exist and performs any necessary setup.
     """
+    logger = logging.getLogger(__name__)
+    logger.info("Initializing Dolze Templates package")
+    
     settings = get_settings()
 
     # Ensure required directories exist
-    import os
-
     os.makedirs(settings.templates_dir, exist_ok=True)
     os.makedirs(settings.fonts_dir, exist_ok=True)
     os.makedirs(settings.output_dir, exist_ok=True)
+    
+    logger.debug("Package initialization complete")
 
 
 # Initialize the package when imported

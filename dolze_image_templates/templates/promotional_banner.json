@@ -31,7 +31,8 @@
       "type": "image",
       "image_url": "${logo_url}",
       "position": { "x": 190, "y": 140 },
-      "size": { "width": 240, "height": 240 }
+      "size": { "width": 240, "height": 240 },
+      "circle_crop": true
     },
     {
       "type": "text",
@@ -86,17 +87,8 @@
     },
     {
       "type": "text",
-      "text": "${contact_email}",
-      "position": { "x": 570, "y": 2300 },
-      "font_size": 66,
-      "color": [100, 100, 100],
-      "font_path": "Roboto-Light",
-      "alignment": "center"
-    },
-    {
-      "type": "text",
-      "text": "${contact_phone}",
-      "position": { "x": 1300, "y": 2300 },
+      "text": "${contact_email}  *   ${contact_phone}",
+      "position": { "x": 370, "y": 2300 },
       "font_size": 66,
       "color": [100, 100, 100],
       "font_path": "Roboto-Light",

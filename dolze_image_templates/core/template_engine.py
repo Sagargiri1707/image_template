@@ -5,17 +5,19 @@ Template engine for rendering templates with components.
 import os
 import json
 import logging
+import time
 from io import BytesIO
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional, Tuple, Union
 from pathlib import Path
 from PIL import Image
 
 from dolze_image_templates.components import create_component_from_config, Component
 from dolze_image_templates.resources import load_image, load_font
 from dolze_image_templates.exceptions import ResourceError
+from dolze_image_templates.utils.logging_config import get_logger
 
 # Set up logging
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class Template:
@@ -285,18 +287,21 @@ class TemplateEngine:
         variables: Optional[Dict[str, Any]] = None,
         output_path: Optional[str] = None,
         output_format: str = "png",
-    ) -> str:
+        return_bytes: bool = False,
+    ) -> Union[str, bytes]:
         """
         Render a template with the given variables.
 
         Args:
             template_name: Name of the template to render (must be in the templates directory)
             variables: Dictionary of variables to substitute in the template
-            output_path: Path to save the rendered image. If None, a path will be generated.
+            output_path: Path to save the rendered image. If None and return_bytes is False, a path will be generated.
             output_format: Output image format (e.g., 'png', 'jpg', 'jpeg')
+            return_bytes: If True, returns the image as bytes instead of saving to disk
 
         Returns:
-            Path to the rendered image
+            If return_bytes is True: Image bytes
+            If return_bytes is False: Path to the rendered image
 
         Raises:
             ValueError: If the template is not found or configuration is invalid
@@ -304,18 +309,29 @@ class TemplateEngine:
             RuntimeError: If there's an error during rendering
         """
         try:
-            # Get the template registry
+            from dolze_image_templates.core.template_registry import get_template_registry
+            
             registry = get_template_registry()
-
-            # Render the template with variables
             variables = variables or {}
+            
+            # Log start of rendering
+            logger.info(f"Rendering template: {template_name}")
+            start_time = time.time()
+            
+            # Render the template
             image = registry.render_template(template_name, variables)
-
             if image is None:
-                raise ValueError(
-                    f"Template '{template_name}' not found or failed to render"
-                )
-
+                error_msg = f"Template '{template_name}' not found or failed to render"
+                logger.error(error_msg)
+                raise ValueError(error_msg)
+            
+            # Handle output based on return_bytes flag
+            if return_bytes:
+                img_byte_arr = BytesIO()
+                image.save(img_byte_arr, format=output_format.upper())
+                logger.debug(f"Rendered template to bytes: {template_name}")
+                return img_byte_arr.getvalue()
+            
             # Generate output path if not provided
             if output_path is None:
                 os.makedirs(self.output_dir, exist_ok=True)
@@ -323,18 +339,19 @@ class TemplateEngine:
                     self.output_dir,
                     f"{template_name}_{int(time.time())}.{output_format.lower()}",
                 )
-
+            
             # Ensure output directory exists
             os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
-
+            
             # Save the image
             image.save(output_path, format=output_format.upper())
-
+            logger.info(f"Saved rendered template to: {output_path} (took {time.time() - start_time:.2f}s)")
+            
             return output_path
-
+            
         except Exception as e:
             error_msg = f"Error rendering template '{template_name}': {str(e)}"
-            logger.error(error_msg)
+            logger.error(error_msg, exc_info=True)
             if not isinstance(e, (ValueError, IOError, RuntimeError)):
                 raise RuntimeError(error_msg) from e
             raise

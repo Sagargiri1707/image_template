@@ -183,7 +183,6 @@ def main():
             "qa_template_2",
             "qa_template",
             "qa_template_3",
-            "education_info",
             "education_info_2",
         ]
         for template in templates:
