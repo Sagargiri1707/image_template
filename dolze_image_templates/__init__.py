@@ -7,9 +7,10 @@ components in a template-based approach.
 
 import os
 import logging
+from pathlib import Path
 
 # Version information
-__version__ = "0.1.2"
+__version__ = "0.1.4"
 
 # Set up logging
 from .utils.logging_config import setup_logging
@@ -28,8 +29,22 @@ from .core import (
     TemplateRegistry,
     get_template_registry,
     FontManager,
-    get_font_manager,
+    get_font_manager as _get_font_manager,
 )
+
+# Initialize font manager with the package's fonts directory
+package_dir = Path(__file__).parent
+fonts_dir = package_dir / 'fonts'
+
+# Create a new get_font_manager function that uses the package's fonts directory
+def get_font_manager():
+    """
+    Get the font manager instance, initialized with the package's fonts directory.
+    
+    Returns:
+        FontManager: The font manager instance
+    """
+    return _get_font_manager(str(fonts_dir))
 from typing import Optional, Dict, Any, Union
 
 

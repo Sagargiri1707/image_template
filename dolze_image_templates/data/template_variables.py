@@ -190,7 +190,7 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "type": "qna",
         "description": "Question and answer template",
         "variables": {
-            "question": "What is Title?",
+            "question": "a question about the product/product space in which it operates in under 4-5 words",
             "answer": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
             "username": "@username",
             "caption": "Create a caption: Promote wind energy knowledge from a Q&A session, under 300 characters, with hashtags",
@@ -212,8 +212,7 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "type": "quote",
         "description": "Inspirational quote template",
         "variables": {
-            "quote1": "The only way to do",
-            "quote2": "great work is to love what you do",
+            "quote1": "genereate a phrase in about 30-35 words about this business/problem its solving and so on",
             "username": "@stevejobs",
             "caption": "Create a caption: Highlight Steve Jobs' wisdom on passion-driven work, under 300 characters, with hashtags ",
         },
@@ -298,10 +297,11 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "description": "Promotional banner template",
         "variables": {
             "image_url": "Generate a prompt for a visually appealing image of this product",
-            "heading": "Heading",
-            "subheading": "Subheading",
+            "heading": "Heading in under 3 words",
+            "subheading": "Subheading in under 10 words",
             "contact_email": "Contact email",
             "contact_phone": "Contact phone",
+            "caption": "Create a caption: Promote a bestselling product for $99.99, under 300 characters, with hashtags",
         },
         "required": [],
     },

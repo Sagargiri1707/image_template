@@ -22,12 +22,12 @@
     {
       "type": "text",
       "text": "${quote1}",
-      "position": { "x": 480, "y": 950 },
+      "position": { "x": 280, "y": 940 },
       "font_size": 150,
       "color": [30, 30, 30],
       "font_path": "EBGaramond-ExtraBold",
       "alignment": "center",
-      "max_width": 1600,
+      "max_width": 1900,
       "line_spacing": 1.4
     },
     {

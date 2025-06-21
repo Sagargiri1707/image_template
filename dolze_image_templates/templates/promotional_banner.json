@@ -87,12 +87,13 @@
     },
     {
       "type": "text",
-      "text": "${contact_email}  *   ${contact_phone}",
-      "position": { "x": 370, "y": 2300 },
+      "text": "${contact_email}     ${contact_phone}",
+      "position": { "x": 0, "y": 2300 },
       "font_size": 66,
       "color": [100, 100, 100],
       "font_path": "Roboto-Light",
-      "alignment": "center"
+      "alignment": "center",
+      "max_width": 2300
     },
     {
       "type": "text",

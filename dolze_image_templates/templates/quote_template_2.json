@@ -30,7 +30,7 @@
     },
     {
       "type": "text",
-      "text": "${quote1} ${quote2}",
+      "text": "${quote1}",
       "position": { "x": 380, "y": 600 },
       "font_family": "HappyMonkey-Regular",
       "font_size": 100,
@@ -57,7 +57,7 @@
     },
     {
       "type": "text",
-      "text": "${username} • ${website_url}",
+      "text": "${username} ••• ${website_url}",
       "position": { "x": 330, "y": 2350 },
       "font_family": "Outfit-Medium",
       "font_size": 60,

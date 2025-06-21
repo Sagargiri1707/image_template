@@ -66,7 +66,7 @@
     {
       "type": "text",
       "text": "${answer}",
-      "position": { "x": 380, "y": 950 },
+      "position": { "x": 500, "y": 950 },
       "font_family": "Outfit-Medium",
       "font_size": 100,
       "color": [75, 85, 99, 1],
