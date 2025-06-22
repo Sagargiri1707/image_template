@@ -154,7 +154,7 @@ def generate_business_template(templateName: str):
             "product_image": "https://media.istockphoto.com/id/171384959/photo/executive-office-chair.jpg?s=612x612&w=0&k=20&c=5vRz91x_JdXHGrzWoDxtj7xEYvI35ls3pDfysHgd57M=",
             "product_name": "Strong chair",
             "product_price": "$52",
-            "product_description": "made with highly refined wood",
+            "product_description": "made with highly refined wood made with highly refined wood ",
             "theme_color": "#44EC9D",
             "badge_text": "Bestseller",
         }
@@ -197,10 +197,10 @@ def main():
             # "product_showcase",
             # "testimonials_template_2",
             # "product_showcase_2",
-            # "product_showcase_3",
+            "product_showcase_3",
             # "qa_template_2",
             # "qa_template",
-            "qa_template_3",
+            # "qa_template_3",
             # "education_info_2",
         ]
         for template in templates:

@@ -59,11 +59,11 @@
     {
       "type": "text",
       "text": "${badge_text}",
-      "position": { "x": 1925, "y": 160 },
+      "position": { "x": 1930, "y": 170 },
       "font_family": "Outfit-Medium",
       "font_size": 48,
       "color": [255, 255, 255, 1],
-      "max_width": 200,
+      "max_width": 400,
       "line_spacing": 1.2,
       "align": "center",
       "font_weight": "bold"

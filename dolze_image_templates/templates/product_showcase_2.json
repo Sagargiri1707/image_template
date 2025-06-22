@@ -1,6 +1,6 @@
 {
   "name": "product_showcase_2",
-  "description": "Modern product showcase with elegant design and improved typography",
+  "description": "Ultra-modern product showcase with soft gradients, floating card, badge, and strong CTA focus",
   "size": { "width": 2560, "height": 2560 },
   "use_base_image": false,
   "components": [
@@ -8,158 +8,152 @@
       "type": "rectangle",
       "position": { "x": 0, "y": 0 },
       "size": { "width": 2560, "height": 2560 },
-      "fill_color": [250, 250, 252, 1],
+      "fill_color": null,
       "gradient": {
         "type": "linear",
-        "colors": ["#fafafc", "#f0f2f5"],
-        "direction": 135
-      },
-      "border_radius": 0
+        "colors": ["#f4fafe", "#dde7fa", "#fafafc"],
+        "direction": 130
+      }
     },
     {
       "type": "polygon",
       "position": { "x": 0, "y": 0 },
       "points": [
         [0, 0],
-        [2560, 0],
-        [0, 2560]
+        [1960, 0],
+        [0, 720]
       ],
-      "fill_color": "${theme_color}",
-      "opacity": 0.95,
-      "outline_color": null
+      "fill_color": "${theme_color}"
+    },
+    {
+      "type": "polygon",
+      "position": { "x": 0, "y": 0 },
+      "points": [
+        [2560, 1900],
+        [2560, 2560],
+        [1100, 2560]
+      ],
+      "fill_color": "${theme_color}"
     },
     {
       "type": "rectangle",
-      "position": { "x": 460, "y": 160 },
-      "size": { "width": 1640, "height": 1350 },
-      "fill_color": [255, 255, 255, 1],
-      "border_radius": 40,
-      "rotation_angle": -2,
-      "shadow": {
-        "color": [0, 0, 0, 0.12],
-        "offset_x": 0,
-        "offset_y": 30,
-        "blur_radius": 60
-      }
+      "position": { "x": 400, "y": 200 },
+      "size": { "width": 1760, "height": 1400 },
+      "fill_color": "#fff",
+      "border_radius": 80
     },
     {
       "type": "image",
       "image_url": "${product_image}",
-      "position": { "x": 460, "y": 120 },
-      "size": { "width": 1640, "height": 1350 },
-      "border_radius": 40,
-      "rotation_angle": -2
+      "position": { "x": 480, "y": 320 },
+      "size": { "width": 1600, "height": 1200 },
+      "border_radius": 64
     },
     {
       "type": "rectangle",
-      "position": { "x": 1750, "y": 200 },
-      "size": { "width": 300, "height": 80 },
+      "position": { "x": 1770, "y": 280 },
+      "size": { "width": 280, "height": 84 },
       "fill_color": "${theme_color}",
-      "border_radius": 40,
-      "rotation_angle": 4,
+      "border_radius": 42,
+      "rotation_angle": 5,
       "shadow": {
-        "color": [0, 0, 0, 0.15],
+        "color": [0, 0, 0, 0.11],
         "offset_x": 0,
         "offset_y": 10,
-        "blur_radius": 20
+        "blur_radius": 24
       }
     },
     {
       "type": "text",
       "text": "${badge_text}",
-      "position": { "x": 1800, "y": 215 },
+      "position": { "x": 1810, "y": 303 },
       "font_family": "Outfit-Bold",
-      "font_size": 44,
+      "font_size": 46,
       "color": [255, 255, 255, 1],
-      "max_width": 280,
-      "align": "left",
-      "rotation_angle": 4
+      "max_width": 240,
+      "align": "center",
+      "rotation_angle": 5
     },
-
     {
       "type": "rectangle",
-      "position": { "x": 0, "y": 1550 },
-      "size": { "width": 2560, "height": 1010 },
-      "fill_color": [255, 255, 255, 1],
-      "border_radius": 60,
-      "shadow": {
-        "color": [0, 0, 0, 0.05],
-        "offset_x": 0,
-        "offset_y": -10,
-        "blur_radius": 30
-      }
+      "position": { "x": 250, "y": 1680 },
+      "size": { "width": 2060, "height": 780 },
+      "fill_color": "#fff",
+      "border_radius": 70,
+      "font_path": "EBGaramond-SemiBold"
     },
     {
       "type": "text",
       "text": "${product_name}",
-      "position": { "x": 460, "y": 1600 },
-      "font_family": "Outfit-Bold",
-      "font_size": 110,
+      "position": { "x": 490, "y": 1760 },
+      "font_family": "Outfit-ExtraBold",
+      "font_size": 120,
       "color": [17, 24, 39, 1],
-      "max_width": 1800,
-      "line_spacing": 1.2,
-      "letter_spacing": -0.5,
-      "align": "left"
+      "max_width": 1580,
+      "line_spacing": 1.18,
+      "letter_spacing": -1.1,
+      "align": "left",
+      "font_path": "EBGaramond-Regular"
     },
     {
       "type": "rectangle",
-      "position": { "x": 460, "y": 1800 },
-      "size": { "width": 160, "height": 6 },
+      "position": { "x": 490, "y": 1910 },
+      "size": { "width": 180, "height": 7 },
       "fill_color": "${theme_color}",
       "border_radius": 3,
-      "opacity": 0.8
+      "opacity": 0.75
     },
     {
       "type": "text",
       "text": "${product_description}",
-      "position": { "x": 460, "y": 1840 },
+      "position": { "x": 490, "y": 1940 },
       "font_family": "Outfit-Regular",
-      "font_size": 50,
+      "font_size": 60,
       "color": [75, 85, 99, 1],
-      "max_width": 1800,
+      "max_width": 1580,
       "line_spacing": 1.5,
       "align": "left"
     },
     {
       "type": "text",
-      "text": "${product_price}",
-      "position": { "x": 460, "y": 2200 },
+      "text": "Get it now for ${product_price}",
+      "position": { "x": 490, "y": 2140 },
       "font_family": "Outfit-Bold",
-      "font_size": 90,
-      "color": [115, 115, 115, 1],
-      "max_width": 800,
-      "line_spacing": 1.1,
+      "font_size": 60,
+      "color": [55, 124, 206, 1],
+      "line_spacing": 1.12,
       "letter_spacing": -1,
-      "align": "left"
+      "align": "left",
+      "font_path": "EBGaramond-Medium"
     },
     {
       "type": "rectangle",
-      "position": { "x": 460, "y": 2330 },
-      "size": { "width": 420, "height": 120 },
-      "fill_color": "#ffffff",
-      "border_radius": 60,
-      "outline_color": "${theme_color}",
-      "outline_width": 5
+      "position": { "x": 490, "y": 2260 },
+      "size": { "width": 420, "height": 122 },
+      "fill_color": "${theme_color}",
+      "border_radius": 61
     },
     {
       "type": "text",
       "text": "Order Now",
-      "position": { "x": 525, "y": 2355 },
-      "font_family": "Outfit-Medium",
-      "font_size": 55,
-      "color": "${theme_color}",
+      "position": { "x": 550, "y": 2290 },
+      "font_family": "Outfit-Bold",
+      "font_size": 56,
+      "color": "#fff",
       "align": "center",
-      "max_width": 800,
+      "max_width": 350,
       "line_spacing": 1.1,
-      "letter_spacing": 0.5
+      "letter_spacing": 0.3
     },
     {
       "type": "image",
       "image_url": "${logo_url}",
-      "position": { "x": 2000, "y": 2300 },
-      "size": { "width": 200, "height": 200 },
-      "opacity": 0.7,
-      "circle_crop": true
+      "position": { "x": 2030, "y": 2270 },
+      "size": { "width": 180, "height": 180 },
+      "opacity": 0.78,
+      "circle_crop": true,
+      "border_width": 5,
+      "border_color": "#fff"
     }
   ]
 }
