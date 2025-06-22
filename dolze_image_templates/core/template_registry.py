@@ -48,14 +48,56 @@ class TemplateRegistry:
             except (json.JSONDecodeError, IOError) as e:
                 print(f"Error loading template from {file_path}: {e}")
 
-    def get_all_templates(self) -> List[str]:
-        """
-        Get a list of all available template names.
+    def _has_image_upload(self, config: Any) -> bool:
+        """Check if the template configuration contains any image upload fields.
+
+        Args:
+            config: Template configuration or part of it
 
         Returns:
-            List[str]: A list of template names that are currently loaded and available
+            bool: True if any field value is "${image_url}", False otherwise
         """
-        return list(self.templates.keys())
+        if isinstance(config, str):
+            return config == "${image_url}"
+
+        if not isinstance(config, (dict, list)):
+            return False
+
+        if isinstance(config, dict):
+            for value in config.values():
+                if value == "${image_url}":
+                    return True
+                if isinstance(value, (dict, list)) and self._has_image_upload(value):
+                    return True
+        elif isinstance(config, list):
+            for item in config:
+                if item == "${image_url}":
+                    return True
+                if isinstance(item, (dict, list)) and self._has_image_upload(item):
+                    return True
+
+        return False
+
+    def get_all_templates(self) -> List[Dict[str, Any]]:
+        """
+        Get information about all available templates.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing template information with keys:
+                - template_name: str - Name of the template
+                - isImageUploadPresent: bool - True if template contains any image upload fields
+                - sample_url: str - Placeholder for future sample URL (currently empty string)
+        """
+        result = []
+        for name, config in self.templates.items():
+            result.append(
+                {
+                    "template_name": name,
+                    "isImageUploadPresent": self._has_image_upload(config),
+                    "sample_url": "",  # Empty for now as per requirements
+                }
+            )
+        return result
 
     def register_template(self, name: str, config: Dict[str, Any]) -> None:
         """

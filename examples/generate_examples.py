@@ -188,7 +188,7 @@ def main():
             # "calendar_app_promo",
             # "blog_post_2",
             # "education_info",
-            "product_promotion_2",
+            # "product_promotion_2",
             # "promotional_banner",
             # "product_promotion",
             # "qa_template",
@@ -200,7 +200,7 @@ def main():
             # "product_showcase_3",
             # "qa_template_2",
             # "qa_template",
-            # "qa_template_3",
+            "qa_template_3",
             # "education_info_2",
         ]
         for template in templates:

@@ -192,8 +192,8 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "type": "qna",
         "description": "Question and answer template",
         "variables": {
-            "question": "What is Title?",
-            "answer": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
+            "question": "a question in under 3-4 words",
+            "answer": "a 30-40 words answer for the above question",
             "username": "@username",
             "caption": "Create a caption: Share wind turbine energy insights from a Q&A, under 300 characters, with hashtags ",
         },
@@ -203,8 +203,8 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "type": "qna",
         "description": "Question and answer template",
         "variables": {
-            "question": "a question about the product/product space in which it operates in under 4-5 words",
-            "answer": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
+            "question": "a question about the product/product space in which it operates in under 3-4 words",
+            "answer": "a 24-30 words answer for the above question",
             "username": "@username",
             "caption": "Create a caption: Promote wind energy knowledge from a Q&A session, under 300 characters, with hashtags",
         },
@@ -225,7 +225,7 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "type": "quote",
         "description": "Inspirational quote template",
         "variables": {
-            "quote1": "genereate a phrase in about 30-35 words about this business/problem its solving and so on",
+            "quote1": "genereate a phrase in about 35-40 words about this business/problem its solving or the industry it operates in",
             "username": "@stevejobs",
             "caption": "Create a caption: Highlight Steve Jobs' wisdom on passion-driven work, under 300 characters, with hashtags ",
         },
