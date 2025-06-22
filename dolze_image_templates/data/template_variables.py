@@ -160,6 +160,8 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
             "author": "@username",
             "read_time": "4",
             "image_url": "Generate a prompt for a vibrant image of green living practices, featuring reusable items, plants, and a modern eco-home, in a clean, aesthetic style",
+            "publish_date": "2025-06-22",
+            "excerpt": "This si a short description of the blog post. this is to be inserted by db and will be used to display the blog post in the feed",
             "caption": "Create a caption: Promote simple, practical green living tips, under 300 characters, with hashtags",
         },
         "required": ["title", "author", "read_time", "image_url"],

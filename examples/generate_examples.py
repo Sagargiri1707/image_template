@@ -87,6 +87,8 @@ def generate_business_template(templateName: str):
             "title": "How to be environment conscious without being weird",
             "author": "@username",  # to be inserted by db
             "read_time": "4",
+            "publish_date": "2025-06-22",
+            "excerpt": "This si a short description of the blog post. this is to be inserted by db and will be used to display the blog post in the feed",
             "image_url": "https://img.freepik.com/free-vector/underwater-ocean-reef-coral-background_107791-1853.jpg",
             "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
         }
@@ -165,25 +167,25 @@ def main():
     try:
         # Generate all templates
         templates = [
-            "calendar_app_promo",
-            "testimonials_template",
-            "blog_post",
+            # "calendar_app_promo",
+            # "testimonials_template",
+            # "blog_post",
             "blog_post_2",
-            "education_info",
-            "product_promotion_2",
-            "promotional_banner",
-            "product_promotion",
-            "qa_template",
-            "quote_template",
-            "quote_template_2",
-            "product_showcase",
-            "testimonials_template_2",
-            "product_showcase_2",
-            "product_showcase_3",
-            "qa_template_2",
-            "qa_template",
-            "qa_template_3",
-            "education_info_2",
+            # "education_info",
+            # "product_promotion_2",
+            # "promotional_banner",
+            # "product_promotion",
+            # "qa_template",
+            # "quote_template",
+            # "quote_template_2",
+            # "product_showcase",
+            # "testimonials_template_2",
+            # "product_showcase_2",
+            # "product_showcase_3",
+            # "qa_template_2",
+            # "qa_template",
+            # "qa_template_3",
+            # "education_info_2",
         ]
         for template in templates:
             generate_business_template(template)
