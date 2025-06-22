@@ -264,6 +264,7 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
             "heading": "a simple 2-3 word heading related to the product",
             "subheading": "a simple 30-40 word subheading related to the product",
             "cta_text": "a simple 1-2 word CTA text related to the product",
+            "caption": "Create a caption: Promote a kanban board for effortless task organization, under 300 characters, with hashtags",
             "website_url": "a simple 1-2 word website url related to the product",
         },
         "required": [
@@ -280,8 +281,8 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "description": "Product promotion template",
         "variables": {
             "image_url": "Generate a prompt for a visually appealing image of a kanban board interface with colorful task cards and a modern, user-friendly layout",
-            "quote1": "the kanban board",
-            "quote2": "you'll absolutely love",
+            "quote1": "the first line of quote in 3-4 words to be shown in white color",
+            "quote2": "the continued quote to be shown in next line for few words",
             "caption": "Create a caption: Promote a kanban board for effortless task organization, under 300 characters, with hashtags",
         },
         "required": ["image_url", "quote1", "quote2"],
@@ -305,8 +306,8 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "variables": {
             "product_image": "Generate a prompt for a high-quality image for this product based on context you have",
             "product_name": "Product Name",
-            "product_price": "$99.99",
-            "product_description": "Detailed product description",
+            "product_price": "a price for this product in INR",
+            "product_description": "Detailed product description in aroudn 20-30 words",
             "badge_text": "Bestseller",
             "caption": "Create a caption: Highlight a top-rated product for $99.99, under 300 characters, with hashtags",
         },

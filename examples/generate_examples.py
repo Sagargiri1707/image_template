@@ -118,7 +118,8 @@ def generate_business_template(templateName: str):
         template_data = {
             "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
-            "testimonial_text": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
+            "product_name": "Product Name",
+            "product_info": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
             "author": "@username",  # to be inserted by db
             "read_time": "4",
             "image_url": "https://img.freepik.com/free-photo/portrait-young-businesswoman-holding-eyeglasses-hand-against-gray-backdrop_23-2148029483.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
@@ -130,6 +131,18 @@ def generate_business_template(templateName: str):
             "image_url": "https://media.licdn.com/dms/image/v2/D4D12AQGnbgq78a4LMg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1677634984855?e=1755734400&v=beta&t=PS0JBTOx91C-z1Tb4Ky4NOnQeRosuW-7i1GIDUj088o",
             "quote1": "the kanban board",
             "quote2": "you'll absolutely love",
+            "theme_color": "#44EC9D",
+            "website_url": "dolze.ai/download",
+        }
+    elif templateName == "product_promotion":
+        template_data = {
+            "image_url": "https://media.licdn.com/dms/image/v2/D4D12AQGnbgq78a4LMg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1677634984855?e=1755734400&v=beta&t=PS0JBTOx91C-z1Tb4Ky4NOnQeRosuW-7i1GIDUj088o",
+            "heading": "the kanban board",
+            "subheading": "you'll absolutely loveyou'll absolutely loveyou'll absolutely loveyou'll absolutely loveyou'll absolutely loveyou'll absolutely love",
+            "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?w=200&h=200&white=true",
+            "cta_text": "LEARN MORE",
+            "website_url": "dolze.ai/download",
+            "theme_color": "#44EC9D",
         }
     elif (
         templateName == "product_showcase"
@@ -170,9 +183,12 @@ def main():
             # "calendar_app_promo",
             # "testimonials_template",
             # "blog_post",
-            "blog_post_2",
             # "education_info",
-            # "product_promotion_2",
+            # "education_info_2",
+            # "calendar_app_promo",
+            # "blog_post_2",
+            # "education_info",
+            "product_promotion_2",
             # "promotional_banner",
             # "product_promotion",
             # "qa_template",
