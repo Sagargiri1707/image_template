@@ -22,6 +22,7 @@ class TextComponent(Component):
         max_width: Optional[int] = None,
         font_path: Optional[str] = None,
         alignment: str = "left",
+        line_height: Optional[float] = None,
     ):
         """
         Initialize a text component.
@@ -29,11 +30,13 @@ class TextComponent(Component):
         Args:
             text: Text to render
             position: Position (x, y) to place the text
-            font_size: Font size
-            color: RGB color tuple
-            max_width: Maximum width for text wrapping
-            font_path: Path to a TTF font file or font name
+            font_size: Font size in points
+            color: RGB color tuple (0-255, 0-255, 0-255)
+            max_width: Maximum width for text wrapping in pixels
+            font_path: Path to a TTF/OTF font file or font name
             alignment: Text alignment ('left', 'center', 'right')
+            line_height: Line height as a multiplier of font size (e.g., 1.2 for 120% of font size).
+                       If None, a default of 1.2 will be used.
         """
         super().__init__(position)
         self.text = text
@@ -42,11 +45,16 @@ class TextComponent(Component):
         self.max_width = max_width
         self.font_path = font_path
         self.alignment = alignment.lower()
+        self.line_height = line_height if line_height is not None else 1.2
 
-        # Validate alignment
+        # Validate alignment and line height
         if self.alignment not in ["left", "center", "right"]:
             print(f"Warning: Invalid alignment '{alignment}'. Defaulting to 'left'.")
             self.alignment = "left"
+            
+        if self.line_height <= 0:
+            print(f"Warning: Invalid line height {self.line_height}. Must be > 0. Defaulting to 1.2.")
+            self.line_height = 1.2
 
     def render(self, image: Image.Image) -> Image.Image:
         """Render text onto an image"""
@@ -97,7 +105,9 @@ class TextComponent(Component):
                     x = self.position[0]
 
                 draw.text((x, y_offset), line, font=font, fill=self.color)
-                y_offset += self.font_size + 5  # Add some spacing between lines
+                # Calculate line spacing based on line height
+                line_spacing = int(self.font_size * (self.line_height - 1) + 0.5)  # rounded to nearest int
+                y_offset += self.font_size + line_spacing
         else:
             # For single line without max_width, just draw the text at the given position
             # (alignment doesn't apply as there's no width constraint)
@@ -144,7 +154,25 @@ class TextComponent(Component):
 
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> "TextComponent":
-        """Create a text component from a configuration dictionary"""
+        """
+        Create a text component from a configuration dictionary.
+        
+        Args:
+            config: Dictionary containing text component configuration
+            
+        Returns:
+            Configured TextComponent instance
+            
+        Config keys:
+            - text: The text to display
+            - position: Dict with x, y coordinates
+            - font_size: Font size in points
+            - color: Color as hex string or RGB list/tuple
+            - max_width: Optional max width in pixels
+            - font_path: Path to font file or font name
+            - alignment: Text alignment ('left', 'center', 'right')
+            - line_height: Optional line height multiplier (e.g., 1.5)
+        """
         position = (
             config.get("position", {}).get("x", 0),
             config.get("position", {}).get("y", 0),
@@ -161,4 +189,5 @@ class TextComponent(Component):
             max_width=config.get("max_width"),
             font_path=config.get("font_path"),
             alignment=config.get("alignment", "left"),
+            line_height=config.get("line_height"),
         )
