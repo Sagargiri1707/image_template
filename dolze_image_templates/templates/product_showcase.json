@@ -24,7 +24,7 @@
     {
       "type": "rectangle",
       "position": { "x": 65, "y": 1700 },
-      "size": { "width": 900, "height": 300 },
+      "size": { "width": 1200, "height": 300 },
       "fill_color": "#eeeeee",
       "outline_color": "#efefef",
       "border_radius": 20

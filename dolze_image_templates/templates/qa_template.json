@@ -21,7 +21,7 @@
     {
       "type": "text",
       "text": "${question}",
-      "position": { "x": 250, "y": 1000 },
+      "position": { "x": 250, "y": 850 },
       "font_size": 240,
       "color": [40, 40, 40],
       "font_path": "HappyMonkey-Regular",

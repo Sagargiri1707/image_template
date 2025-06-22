@@ -2,10 +2,6 @@
 Validation utilities for template and component configurations.
 """
 
-"""
-Validation utilities for template and component configurations.
-"""
-
 import os
 import re
 import json

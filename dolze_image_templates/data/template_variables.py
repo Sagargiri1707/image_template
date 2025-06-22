@@ -168,7 +168,7 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         "type": "qna",
         "description": "Question and answer template",
         "variables": {
-            "question": "What is Title?",
+            "question": "A question in under 3-4 words",
             "answer": "One wind turbine can produce enough electricity to power around 1,500 homes annually!",
             "username": "@username",
             "caption": "Create a caption: Highlight wind energy facts from a Q&A, focusing on turbine power, under 300 characters, with hashtags",
