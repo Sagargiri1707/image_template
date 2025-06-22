@@ -17,7 +17,11 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from dolze_image_templates import TemplateRegistry, get_template_registry, configure
+from dolze_image_templates import TemplateRegistry, get_template_registry, configure, get_font_manager
+
+# Initialize font manager to scan for fonts
+font_manager = get_font_manager()
+print("Font manager initialized. Available fonts:", font_manager.list_fonts())
 
 # Configure the library
 configure(
@@ -202,6 +206,7 @@ def main():
             # "qa_template",
             # "qa_template_3",
             # "education_info_2",
+            "coming_soon_page",
         ]
         for template in templates:
             generate_business_template(template)

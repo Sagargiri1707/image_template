@@ -81,6 +81,16 @@ class FontManager:
                     + "\n".join(f"- {f}" for f in contents)
                 )
             else:
+                contents = []
+                path = (
+                    os.path.dirname(os.path.abspath(__file__))
+                    + "/dolze_image_templates/fonts"
+                )
+                for root, dirs, files in os.walk(path):
+                    for f in files:
+                        rel_path = os.path.relpath(os.path.join(root, f), path)
+                        contents.append(rel_path)
+
                 logger.warning(f"[FontManager] No font files found in: {abs_font_dir}")
                 logger.warning(
                     f"[FontManager] Current working directory: {os.getcwd()}"

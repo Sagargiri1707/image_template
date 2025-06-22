@@ -35,7 +35,7 @@
       "type": "text",
       "position": { "x": 250, "y": 550 },
       "text": "❝",
-      "font_family": "Georgia, serif",
+      "font_path": "Georgia, serif",
       "font_size": 200,
       "color": [209, 213, 219, 1],
       "align": "left"
@@ -44,7 +44,7 @@
       "type": "text",
       "position": { "x": 350, "y": 650 },
       "text": "${testimonial_text}",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 80,
       "color": [31, 41, 55, 1],
       "max_width": 1400,
@@ -85,7 +85,7 @@
       "type": "text",
       "position": { "x": 350, "y": 1400 },
       "text": "${user_name}",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 70,
       "color": [31, 41, 55, 1],
       "align": "center"
@@ -94,7 +94,7 @@
       "type": "text",
       "position": { "x": 350, "y": 1500 },
       "text": "${user_title}",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 50,
       "color": [107, 114, 128, 1],
       "align": "center"
@@ -103,7 +103,7 @@
       "type": "text",
       "position": { "x": 350, "y": 1600 },
       "text": "${website_url}",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 50,
       "color": [107, 114, 128, 1],
       "align": "center"

@@ -58,7 +58,7 @@
       "type": "text",
       "position": { "x": 190, "y": 512 },
       "text": "\"${testimonial_text}\"",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 99,
       "color": "#333333",
       "max_width": 1707,
@@ -88,7 +88,7 @@
       "type": "text",
       "position": { "x": 303, "y": 1327 },
       "text": "${user_name}",
-      "font_family": "Outfit-SemiBold",
+      "font_path": "Outfit-SemiBold",
       "font_size": 61,
       "color": "#333333"
     },
@@ -96,7 +96,7 @@
       "type": "text",
       "position": { "x": 303, "y": 1422 },
       "text": "${user_title}",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 53,
       "color": "#666666"
     },
@@ -104,7 +104,7 @@
       "type": "text",
       "position": { "x": 95, "y": 1896 },
       "text": "${website_url}",
-      "font_family": "Outfit-Regular",
+      "font_path": "Outfit-Regular",
       "font_size": 64,
       "color": "#666666",
       "align": "left"
