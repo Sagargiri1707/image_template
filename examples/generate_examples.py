@@ -17,7 +17,12 @@ import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from dolze_image_templates import TemplateRegistry, get_template_registry, configure, get_font_manager
+from dolze_image_templates import (
+    TemplateRegistry,
+    get_template_registry,
+    configure,
+    get_font_manager,
+)
 
 # Initialize font manager to scan for fonts
 font_manager = get_font_manager()
@@ -162,7 +167,13 @@ def generate_business_template(templateName: str):
             "theme_color": "#44EC9D",
             "badge_text": "Bestseller",
         }
-
+    elif templateName == "coming_soon_page":
+        template_data = {
+            "header_text": "We're Coming",
+            "theme_color": "#44EC9D",
+            "website_url": "dolze.ai/download",
+            "contact_email": "contact@yourwebsite.com",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -193,7 +204,7 @@ def main():
             # "blog_post_2",
             # "education_info",
             # "product_promotion_2",
-            "promotional_banner",
+            # "promotional_banner",
             # "product_promotion",
             # "qa_template",
             # "quote_template",
@@ -207,6 +218,7 @@ def main():
             # "qa_template_3",
             # "education_info_2",
             "coming_soon_page",
+            # "minimal_blog_post",
         ]
         for template in templates:
             generate_business_template(template)

@@ -313,6 +313,14 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         },
         "required": ["product_image", "product_name", "product_price"],
     },
+    "coming_soon_page": {
+        "type": "coming_soon",
+        "description": "Coming soon page template",
+        "variables": {
+            "header_text": "a 2-3 word text for the coming soon page which would be placed above the coming soon text in the coming soon post for social media",
+        },
+        "required": ["website_url", "contact_details"],
+    },
     "product_showcase_3": {
         "type": "product",
         "description": "Product showcase template",
