@@ -27,13 +27,7 @@
         "direction": 90
       },
       "outline_color": null,
-      "border_radius": 40,
-      "shadow": {
-        "offset_x": 0,
-        "offset_y": 10,
-        "blur": 20,
-        "color": [0, 0, 0, 0.1]
-      }
+      "border_radius": 40
     },
     {
       "type": "image",

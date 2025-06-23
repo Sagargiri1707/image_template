@@ -16,13 +16,7 @@
       "position": { "x": 76, "y": 474 },
       "size": { "width": 1896, "height": 664 },
       "fill_color": "#f8f9fa",
-      "border_radius": 38,
-      "shadow": {
-        "color": "rgba(0,0,0,0.1)",
-        "offset_x": 0,
-        "offset_y": 8,
-        "blur_radius": 19
-      }
+      "border_radius": 38
     },
     {
       "type": "image",

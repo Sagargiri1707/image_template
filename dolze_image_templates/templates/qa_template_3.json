@@ -53,13 +53,7 @@
       "size": { "width": 320, "height": 320 },
       "frame_shape": "hexagon",
       "circle_crop": true,
-      "animation_glow": [236, 72, 153, 0.35],
-      "shadow": {
-        "color": [236, 72, 153, 0.1],
-        "offset_x": 0,
-        "offset_y": 15,
-        "blur_radius": 24
-      }
+      "animation_glow": [236, 72, 153, 0.35]
     },
     {
       "type": "text",
@@ -97,13 +91,7 @@
       "position": { "x": 360, "y": 1960 },
       "path_data": "M0,40 Q450,-50 1100,40 Q1700,120 2140,60 L2140,180 Q1700,230 1100,170 Q450,200 0,160 Z",
       "fill_color": [251, 191, 36, 1],
-      "ribbon_style": "curved",
-      "shadow": {
-        "color": [0, 0, 0, 0.08],
-        "offset_x": 4,
-        "offset_y": 8,
-        "blur_radius": 10
-      }
+      "ribbon_style": "curved"
     },
     {
       "type": "text",
@@ -115,13 +103,7 @@
       "max_width": 1400,
       "line_spacing": 1.2,
       "align": "center",
-      "font_style": "italic",
-      "shadow": {
-        "color": [124, 58, 237, 0.1],
-        "offset_x": 0,
-        "offset_y": 5,
-        "blur_radius": 8
-      }
+      "font_style": "italic"
     }
   ]
 }

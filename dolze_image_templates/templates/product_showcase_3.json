@@ -24,13 +24,7 @@
       "size": { "width": 1900, "height": 1300 },
       "fill_color": [255, 255, 255, 1],
       "border_radius": 50,
-      "rotation_angle": 3,
-      "shadow": {
-        "color": [0, 0, 0, 0.2],
-        "offset_x": 10,
-        "offset_y": 10,
-        "blur_radius": 25
-      }
+      "rotation_angle": 3
     },
     {
       "type": "image",
@@ -48,12 +42,7 @@
       "fill_color": [234, 179, 8, 1],
       "border_radius": 20,
       "rotation_angle": -10,
-      "shadow": {
-        "color": [0, 0, 0, 0.1],
-        "offset_x": 4,
-        "offset_y": 4,
-        "blur_radius": 10
-      },
+
       "shape": "angled"
     },
     {
@@ -109,12 +98,6 @@
       "size": { "width": 450, "height": 120 },
       "gradient_fill": "linear-gradient(90deg, [59,130,246,1] 0%, [147,51,234,1] 100%)",
       "border_radius": 25,
-      "shadow": {
-        "color": [0, 0, 0, 0.15],
-        "offset_x": 6,
-        "offset_y": 6,
-        "blur_radius": 15
-      },
       "button_url": "${button_url}"
     },
     {

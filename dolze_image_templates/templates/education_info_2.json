@@ -21,25 +21,13 @@
       "position": { "x": 100, "y": 100 },
       "size": { "width": 2360, "height": 2360 },
       "fill_color": [255, 255, 255, 0.95],
-      "border_radius": 80,
-      "shadow": {
-        "color": [0, 0, 0, 0.08],
-        "offset_x": 0,
-        "offset_y": 30,
-        "blur_radius": 60
-      }
+      "border_radius": 80
     },
     {
       "type": "circle",
       "position": { "x": 780, "y": 300 },
       "size": { "width": 1000, "height": 1000 },
-      "fill_color": [255, 255, 255, 1],
-      "shadow": {
-        "color": [0, 0, 0, 0.1],
-        "offset_x": 0,
-        "offset_y": 20,
-        "blur_radius": 40
-      }
+      "fill_color": [255, 255, 255, 1]
     },
     {
       "type": "image",

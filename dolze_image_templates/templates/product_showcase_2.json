@@ -55,13 +55,7 @@
       "size": { "width": 280, "height": 84 },
       "fill_color": "${theme_color}",
       "border_radius": 42,
-      "rotation_angle": 5,
-      "shadow": {
-        "color": [0, 0, 0, 0.11],
-        "offset_x": 0,
-        "offset_y": 10,
-        "blur_radius": 24
-      }
+      "rotation_angle": 5
     },
     {
       "type": "text",

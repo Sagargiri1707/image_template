@@ -32,26 +32,14 @@
       "size": { "width": 2120, "height": 1860 },
       "fill_color": [255, 255, 255, 0.82],
       "border_radius": 80,
-      "blur_radius": 32,
-      "shadow": {
-        "color": [44, 62, 80, 0.07],
-        "offset_x": 0,
-        "offset_y": 24,
-        "blur_radius": 60
-      }
+      "blur_radius": 32
     },
     {
       "type": "image",
       "image_url": "${logo_url}",
       "position": { "x": 240, "y": 340 },
       "size": { "width": 140, "height": 140 },
-      "circle_crop": true,
-      "shadow": {
-        "color": [24, 160, 255, 0.14],
-        "offset_x": 0,
-        "offset_y": 6,
-        "blur_radius": 16
-      }
+      "circle_crop": true
     },
     {
       "type": "rectangle",

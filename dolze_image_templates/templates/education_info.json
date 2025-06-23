@@ -23,12 +23,6 @@
       "size": { "width": 2000, "height": 1600 },
       "fill_color": [255, 255, 255, 0.92],
       "border_radius": 60,
-      "shadow": {
-        "color": [0, 0, 0, 0.15],
-        "offset_x": 0,
-        "offset_y": 25,
-        "blur_radius": 60
-      },
       "border_width": 1,
       "border_color": [230, 230, 235, 0.5]
     },
@@ -68,13 +62,7 @@
       "font_path": "Roboto-Regular",
       "alignment": "left",
       "max_width": 1800,
-      "line_height": 2.5,
-      "shadow": {
-        "color": [0, 0, 0, 0.05],
-        "offset_x": 0,
-        "offset_y": 2,
-        "blur_radius": 4
-      }
+      "line_height": 2.5
     },
     {
       "type": "rectangle",
@@ -118,12 +106,6 @@
       "border_radius": 100,
       "border_width": 5,
       "border_color": [255, 255, 255, 1],
-      "shadow": {
-        "color": [0, 0, 0, 0.1],
-        "offset_x": 0,
-        "offset_y": 10,
-        "blur_radius": 20
-      },
       "opacity": 0.95
     }
   ]

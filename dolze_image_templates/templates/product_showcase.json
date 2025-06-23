@@ -42,26 +42,14 @@
       "position": { "x": 430, "y": 420 },
       "size": { "width": 1700, "height": 1700 },
       "fill_color": "#fff",
-      "border_radius": 60,
-      "shadow": {
-        "color": [123, 167, 188, 0.16],
-        "offset_x": 0,
-        "offset_y": 28,
-        "blur_radius": 80
-      }
+      "border_radius": 60
     },
     {
       "type": "image",
       "position": { "x": 630, "y": 520 },
       "size": { "width": 1300, "height": 900 },
       "image_url": "${product_image}",
-      "border_radius": 46,
-      "shadow": {
-        "color": [40, 49, 73, 0.12],
-        "offset_x": 0,
-        "offset_y": 12,
-        "blur_radius": 32
-      }
+      "border_radius": 46
     },
     {
       "type": "image",
@@ -70,13 +58,7 @@
       "size": { "width": 130, "height": 130 },
       "circle_crop": true,
       "border_width": 5,
-      "border_color": [255, 255, 255, 1],
-      "shadow": {
-        "color": [123, 167, 188, 0.22],
-        "offset_x": 0,
-        "offset_y": 8,
-        "blur_radius": 14
-      }
+      "border_color": [255, 255, 255, 1]
     },
     {
       "type": "text",
@@ -123,13 +105,7 @@
       "position": { "x": 1130, "y": 1960 },
       "size": { "width": 400, "height": 108 },
       "fill_color": "#7BA7BC",
-      "border_radius": 54,
-      "shadow": {
-        "color": [40, 49, 73, 0.09],
-        "offset_x": 0,
-        "offset_y": 6,
-        "blur_radius": 20
-      }
+      "border_radius": 54
     },
     {
       "type": "text",
