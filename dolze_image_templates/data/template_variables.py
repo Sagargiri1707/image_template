@@ -140,6 +140,15 @@ TEMPLATE_VARIABLES_REGISTRY: Dict[str, Dict[str, Any]] = {
         },
         "required": ["user_name", "testimonial_text"],
     },
+    "coming_soon_post_2": {
+        "type": "coming_soon",
+        "description": "Coming soon post template with featured image",
+        "variables": {
+            "text": "a text in 10-12 words telling users that one of thier new product will be launch in few days",
+            "cta_text": "A Good cta text in 3-4 words ",
+        },
+        "required": ["text", "cta_text"],
+    },
     "blog_post": {
         "type": "blog",
         "description": "Blog post template with featured image",

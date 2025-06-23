@@ -44,7 +44,7 @@ def generate_business_template(templateName: str):
     template_data = {
         "cta_text": "LEARN MORE",
         "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
-        "image_url": "https://www.calendar.com/wp-content/uploads/2019/09/CalendarAndroidApp.png.webp",
+        "image_url": "https://images.pexels.com/photos/235986/pexels-photo-235986.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
         "cta_image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d",
         "heading": "plan your day in a snap",
         "subheading": "Driving success",
@@ -174,6 +174,12 @@ def generate_business_template(templateName: str):
             "website_url": "dolze.ai/download",
             "contact_email": "contact@yourwebsite.com",
         }
+    elif templateName == "coming_soon_post_2":
+        template_data = {
+            "text": "3 days left for our grand launch, get to experience our new product",
+            "cta_text": "STAY TUNED",
+            "website_url": "dolze.ai/download",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -217,8 +223,8 @@ def main():
             # "qa_template",
             # "qa_template_3",
             # "education_info_2",
-            "coming_soon_page",
-            # "minimal_blog_post",
+            # "coming_soon_page",
+            "coming_soon_post_2",
         ]
         for template in templates:
             generate_business_template(template)
