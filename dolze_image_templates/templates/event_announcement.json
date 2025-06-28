@@ -1,0 +1,152 @@
+{
+  "name": "event_announcement",
+  "description": "Modern event announcement template with bold typography and clear event details",
+  "size": { "width": 2560, "height": 2560 },
+  "use_base_image": false,
+  "components": [
+    {
+      "type": "rectangle",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 2560, "height": 2560 },
+      "fill_color": null,
+      "gradient": {
+        "type": "linear",
+        "colors": ["${theme_color}", "#1e3a8a"],
+        "direction": 135
+      }
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [2200, 0],
+        [2560, 0],
+        [2560, 360]
+      ],
+      "position": { "x": 0, "y": 0 },
+      "fill_color": [255, 255, 255, 0.1],
+      "opacity": 1
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [0, 2200],
+        [360, 2560],
+        [0, 2560]
+      ],
+      "position": { "x": 0, "y": 0 },
+      "fill_color": [255, 255, 255, 0.1],
+      "opacity": 1
+    },
+    {
+      "type": "circle",
+      "position": { "x": 200, "y": 200 },
+      "radius": 120,
+      "fill_color": [255, 255, 255, 0.15],
+      "outline_color": [255, 255, 255, 0.3],
+      "outline_width": 2
+    },
+    {
+      "type": "image",
+      "image_url": "${logo_url}",
+      "position": { "x": 130, "y": 130 },
+      "size": { "width": 140, "height": 140 },
+      "circle_crop": true,
+      "border_width": 3,
+      "border_color": [255, 255, 255, 1]
+    },
+    {
+      "type": "image",
+      "image_url": "${image_url}",
+      "position": { "x": 400, "y": 400 },
+      "size": { "width": 1760, "height": 900 },
+      "border_radius": 20,
+      "image_fit": "cover"
+    },
+    {
+      "type": "text",
+      "text": "${event_title}",
+      "position": { "x": 400, "y": 1400 },
+      "font_size": 115,
+      "color": [255, 255, 255, 1],
+      "font_path": "EBGaramond-ExtraBold",
+      "alignment": "left",
+      "max_width": 1760,
+      "line_spacing": 1.2
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 400, "y": 1580 },
+      "size": { "width": 1760, "height": 3 },
+      "fill_color": [255, 255, 255, 0.6],
+      "border_radius": 2
+    },
+    {
+      "type": "text",
+      "text": "📅 ${event_date}",
+      "position": { "x": 400, "y": 1640 },
+      "font_size": 70,
+      "color": [255, 255, 255, 0.9],
+      "font_path": "Outfit-Medium",
+      "alignment": "left",
+      "max_width": 800
+    },
+    {
+      "type": "text",
+      "text": "⏰ ${event_time}",
+      "position": { "x": 1350, "y": 1640 },
+      "font_size": 70,
+      "color": [255, 255, 255, 0.9],
+      "font_path": "Outfit-Medium",
+      "alignment": "left",
+      "max_width": 800
+    },
+    {
+      "type": "text",
+      "text": "📍 ${event_location}",
+      "position": { "x": 400, "y": 1740 },
+      "font_size": 70,
+      "color": [255, 255, 255, 0.9],
+      "font_path": "Outfit-Medium",
+      "alignment": "left",
+      "max_width": 1760
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 400, "y": 1900 },
+      "size": { "width": 400, "height": 120 },
+      "fill_color": [255, 255, 255, 1],
+      "border_radius": 60
+    },
+    {
+      "type": "text",
+      "text": "${cta_text}",
+      "position": { "x": 450, "y": 1930 },
+      "font_size": 56,
+      "color": "${theme_color}",
+      "font_path": "Outfit-Bold",
+      "alignment": "center",
+      "max_width": 300
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2300, "y": 2300 },
+      "radius": 15,
+      "fill_color": [255, 255, 255, 0.7],
+      "outline_color": null
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2380, "y": 2320 },
+      "radius": 10,
+      "fill_color": [255, 255, 255, 0.5],
+      "outline_color": null
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2320, "y": 2380 },
+      "radius": 8,
+      "fill_color": [255, 255, 255, 0.4],
+      "outline_color": null
+    }
+  ]
+}

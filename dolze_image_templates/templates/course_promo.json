@@ -1,0 +1,176 @@
+{
+  "name": "course_promo",
+  "description": "Professional course promotion template with clean design and educational elements",
+  "size": { "width": 2560, "height": 2560 },
+  "use_base_image": false,
+  "components": [
+    {
+      "type": "rectangle",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 2560, "height": 2560 },
+      "fill_color": [248, 250, 252, 1],
+      "outline_color": null
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [0, 0],
+        [2560, 0],
+        [2560, 800],
+        [0, 600]
+      ],
+      "position": { "x": 0, "y": 0 },
+      "fill_color": null,
+      "gradient": {
+        "type": "linear",
+        "colors": ["${theme_color}", "#1e40af"],
+        "direction": 45
+      }
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2200, "y": 150 },
+      "radius": 40,
+      "fill_color": [255, 255, 255, 0.3],
+      "outline_color": [255, 255, 255, 0.6],
+      "outline_width": 2
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2400, "y": 250 },
+      "radius": 25,
+      "fill_color": [255, 255, 255, 0.2],
+      "outline_color": null
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2100, "y": 350 },
+      "radius": 30,
+      "fill_color": [255, 255, 255, 0.25],
+      "outline_color": [255, 255, 255, 0.5],
+      "outline_width": 1
+    },
+    {
+      "type": "image",
+      "image_url": "${logo_url}",
+      "position": { "x": 100, "y": 100 },
+      "size": { "width": 180, "height": 180 },
+      "circle_crop": true,
+      "border_width": 4,
+      "border_color": [255, 255, 255, 1]
+    },
+    {
+      "type": "text",
+      "text": "📚 LEARN",
+      "position": { "x": 350, "y": 120 },
+      "font_size": 65,
+      "color": [255, 255, 255, 0.9],
+      "font_path": "Roboto-SemiBold",
+      "alignment": "left"
+    },
+    {
+      "type": "text",
+      "text": "${course_title}",
+      "position": { "x": 350, "y": 210 },
+      "font_size": 95,
+      "color": [255, 255, 255, 1],
+      "font_path": "CormorantGaramond-Bold",
+      "alignment": "left",
+      "max_width": 1800,
+      "line_spacing": 1.2
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 200, "y": 850 },
+      "size": { "width": 2160, "height": 1400 },
+      "fill_color": [255, 255, 255, 1],
+      "border_radius": 30,
+      "outline_color": [229, 231, 235, 1],
+      "outline_width": 2
+    },
+    {
+      "type": "image",
+      "image_url": "${image_url}",
+      "position": { "x": 300, "y": 950 },
+      "size": { "width": 1960, "height": 800 },
+      "border_radius": 20,
+      "image_fit": "cover"
+    },
+    {
+      "type": "text",
+      "text": "👨‍🏫 Instructor: ${instructor}",
+      "position": { "x": 300, "y": 1820 },
+      "font_size": 70,
+      "color": [31, 41, 55, 1],
+      "font_path": "Outfit-SemiBold",
+      "alignment": "left",
+      "max_width": 1200
+    },
+    {
+      "type": "text",
+      "text": "⏱️ Duration: ${course_length}",
+      "position": { "x": 1600, "y": 1820 },
+      "font_size": 70,
+      "color": [31, 41, 55, 1],
+      "font_path": "Outfit-SemiBold",
+      "alignment": "left",
+      "max_width": 600
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 300, "y": 1940 },
+      "size": { "width": 1960, "height": 3 },
+      "fill_color": [229, 231, 235, 1],
+      "border_radius": 2
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 900, "y": 2020 },
+      "size": { "width": 400, "height": 100 },
+      "fill_color": "${theme_color}",
+      "border_radius": 50
+    },
+    {
+      "type": "text",
+      "text": "${cta_text}",
+      "position": { "x": 950, "y": 2045 },
+      "font_size": 54,
+      "color": [255, 255, 255, 1],
+      "font_path": "Outfit-Bold",
+      "alignment": "center",
+      "max_width": 300
+    },
+    {
+      "type": "text",
+      "text": "Visit: ${website_url}",
+      "position": { "x": 1400, "y": 2050 },
+      "font_size": 50,
+      "color": "${theme_color}",
+      "font_path": "Outfit-Medium",
+      "alignment": "left",
+      "max_width": 800
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [0, 2560],
+        [600, 2560],
+        [0, 2200]
+      ],
+      "position": { "x": 0, "y": 0 },
+      "fill_color": [229, 231, 235, 0.3],
+      "opacity": 1
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [2560, 2560],
+        [2560, 2200],
+        [1960, 2560]
+      ],
+      "position": { "x": 0, "y": 0 },
+      "fill_color": [229, 231, 235, 0.3],
+      "opacity": 1
+    }
+  ]
+}
