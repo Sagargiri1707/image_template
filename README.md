@@ -705,6 +705,64 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
    - Eye-catching banner for promotions and announcements
    - Features gradient backgrounds and clear call-to-action
 
+4. **Award Celebration** (`award_celebration.json`)
+   - Elegant award ceremony template with golden theme and celebration elements
+   - Perfect for recognizing achievements, awards, and milestones
+   - Features gradient backgrounds, star decorations, and professional typography
+   ```json
+   {
+     "award_title": "Excellence in Innovation",
+     "recipient_name": "John Doe",
+     "award_year": "2024",
+     "logo_url": "https://example.com/logo.png",
+     "theme_color": "#d97706"
+   }
+   ```
+
+5. **Course Promotion** (`course_promo.json`)
+   - Professional course promotion template with clean design and educational elements
+   - Ideal for online courses, workshops, and educational content
+   - Includes instructor info, duration, and clear call-to-action
+   ```json
+   {
+     "course_title": "Python for Beginners",
+     "instructor": "Jane Smith",
+     "course_length": "8 weeks",
+     "cta_text": "Enroll Now",
+     "website_url": "courses.example.com",
+     "theme_color": "#3b82f6"
+   }
+   ```
+
+6. **Event Announcement** (`event_announcement.json`)
+   - Modern event announcement template with bold typography and clear event details
+   - Perfect for conferences, meetups, workshops, and special events
+   - Features date, time, location, and registration call-to-action
+   ```json
+   {
+     "event_title": "Tech Innovation Summit 2024",
+     "event_date": "March 15, 2024",
+     "event_time": "9:00 AM PST",
+     "event_location": "San Francisco Convention Center",
+     "cta_text": "Register",
+     "theme_color": "#1e40af"
+   }
+   ```
+
+7. **Newsletter Signup** (`newsletter_signup.json`)
+   - Encourage email newsletter subscriptions and list building
+   - Eye-catching design to boost email signup conversions
+   - Features compelling headlines and clear subscription call-to-action
+   ```json
+   {
+     "headline": "Stay Updated",
+     "subheadline": "Get the latest news and insights delivered to your inbox",
+     "cta_text": "Subscribe",
+     "website_url": "newsletter.example.com",
+     "theme_color": "#059669"
+   }
+   ```
+
 ## Template Format
 
 Templates are defined using a simple JSON structure. Here's an example:

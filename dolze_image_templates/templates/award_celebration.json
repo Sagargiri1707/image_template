@@ -1,0 +1,165 @@
+{
+  "name": "award_celebration",
+  "description": "Elegant award celebration template with golden theme and celebration elements",
+  "size": { "width": 2560, "height": 2560 },
+  "use_base_image": false,
+  "components": [
+    {
+      "type": "rectangle",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 2560, "height": 2560 },
+      "fill_color": null,
+      "gradient": {
+        "type": "radial",
+        "colors": ["${theme_color}", "#b45309"],
+        "direction": 0
+      }
+    },
+    {
+      "type": "circle",
+      "position": { "x": 100, "y": 100 },
+      "radius": 80,
+      "fill_color": [255, 215, 0, 0.3],
+      "outline_color": [255, 215, 0, 0.6],
+      "outline_width": 3
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2400, "y": 200 },
+      "radius": 60,
+      "fill_color": [255, 215, 0, 0.2],
+      "outline_color": [255, 215, 0, 0.5],
+      "outline_width": 2
+    },
+    {
+      "type": "circle",
+      "position": { "x": 200, "y": 2400 },
+      "radius": 100,
+      "fill_color": [255, 215, 0, 0.25],
+      "outline_color": [255, 215, 0, 0.7],
+      "outline_width": 4
+    },
+    {
+      "type": "circle",
+      "position": { "x": 2300, "y": 2300 },
+      "radius": 70,
+      "fill_color": [255, 215, 0, 0.2],
+      "outline_color": [255, 215, 0, 0.4],
+      "outline_width": 2
+    },
+    {
+      "type": "polygon",
+      "points": [
+        [1180, 300],
+        [1230, 400],
+        [1330, 400],
+        [1260, 470],
+        [1280, 570],
+        [1180, 520],
+        [1080, 570],
+        [1100, 470],
+        [1030, 400],
+        [1130, 400]
+      ],
+      "position": { "x": 0, "y": 0 },
+      "fill_color": [255, 215, 0, 1],
+      "outline_color": [255, 255, 255, 1],
+      "outline_width": 3
+    },
+    {
+      "type": "image",
+      "image_url": "${background_image}",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 2560, "height": 2560 },
+      "opacity": 0.3,
+      "image_fit": "cover"
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 320, "y": 800 },
+      "size": { "width": 1920, "height": 1400 },
+      "fill_color": [255, 255, 255, 0.95],
+      "border_radius": 40,
+      "outline_color": [255, 215, 0, 0.8],
+      "outline_width": 4
+    },
+    {
+      "type": "text",
+      "text": "🏆 AWARD WINNER 🏆",
+      "position": { "x": 380, "y": 880 },
+      "font_size": 70,
+      "color": "${theme_color}",
+      "font_path": "Roboto-Bold",
+      "alignment": "center",
+      "max_width": 1800
+    },
+    {
+      "type": "text",
+      "text": "${award_title}",
+      "position": { "x": 380, "y": 980 },
+      "font_size": 100,
+      "color": [40, 40, 40, 1],
+      "font_path": "CormorantGaramond-Bold",
+      "alignment": "center",
+      "max_width": 1800,
+      "line_spacing": 1.3
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 1080, "y": 1200 },
+      "size": { "width": 400, "height": 4 },
+      "fill_color": "${theme_color}",
+      "border_radius": 2
+    },
+    {
+      "type": "text",
+      "text": "Presented to",
+      "position": { "x": 380, "y": 1260 },
+      "font_size": 50,
+      "color": [120, 120, 120, 1],
+      "font_path": "Outfit-Regular",
+      "alignment": "center",
+      "max_width": 1800
+    },
+    {
+      "type": "text",
+      "text": "${recipient_name}",
+      "position": { "x": 380, "y": 1340 },
+      "font_size": 85,
+      "color": [50, 50, 50, 1],
+      "font_path": "EBGaramond-Bold",
+      "alignment": "center",
+      "max_width": 1800,
+      "line_spacing": 1.2
+    },
+    {
+      "type": "text",
+      "text": "Year ${award_year}",
+      "position": { "x": 380, "y": 1480 },
+      "font_size": 60,
+      "color": [100, 100, 100, 1],
+      "font_path": "Roboto-Medium",
+      "alignment": "center",
+      "max_width": 1800
+    },
+    {
+      "type": "image",
+      "image_url": "${logo_url}",
+      "position": { "x": 1180, "y": 1600 },
+      "size": { "width": 200, "height": 200 },
+      "circle_crop": true,
+      "border_width": 4,
+      "border_color": "${theme_color}"
+    },
+    {
+      "type": "text",
+      "text": "✨ CONGRATULATIONS ✨",
+      "position": { "x": 380, "y": 1890 },
+      "font_size": 55,
+      "color": "${theme_color}",
+      "font_path": "HappyMonkey-Regular",
+      "alignment": "center",
+      "max_width": 1800
+    }
+  ]
+}
