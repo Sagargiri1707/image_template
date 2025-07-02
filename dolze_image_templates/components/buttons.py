@@ -143,7 +143,7 @@ class CTAButtonComponent(Component):
         else:  # center
             text_x = x + (width - text_width) // 2
             
-        text_y = y + (height - self.font_size) // 2 - 8  # Small vertical adjustment
+        text_y = y + (height - self.font_size) // 2 - 6  # Small vertical adjustment
 
         draw.text(
             (text_x, text_y),

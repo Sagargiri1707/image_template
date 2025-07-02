@@ -187,8 +187,20 @@ def generate_business_template(templateName: str):
             "subheading": "understood this? we are looking for you!",
             "job_title": "Social Media Lead",
             "website_url": "dolze.ai/download",
-            "company_name": "zepto",
+            "company_name": "Dolze",
             "cta_text": "apply now!",
+        }
+    elif templateName == "product_sale":
+        template_data = {
+            "product_name": "PROBIOTICS",
+            "sale_text": "Flat 15% OFF",
+            "product_description":"With Prebiotic Blend",
+            "product_image":"https://t4.ftcdn.net/jpg/14/68/86/23/360_F_1468862392_uFV91fk0dgIrSUpRhYUqw7OcikgXpelA.webp",
+            "bg_image": "https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/uploads/a6fc48a9-8d1a-4dcf-87bc-93a4269c002c.png",
+            "logo_url": "https://img.freepik.com/free-vector/gradient-s-letter-logo_343694-1365.jpg",
+            "cta_text": "BUY NOW",
+            "sale_end_text": "Ends 10th july at midnight",
+            "sale_heading": "Flash Sale!"
         }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
@@ -235,7 +247,8 @@ def main():
             # "education_info_2",
             # "coming_soon_page",
             # "coming_soon_post_2",
-            "hiring_post"
+            "hiring_post",
+            "product_sale"
         ]
         for template in templates:
             generate_business_template(template)
