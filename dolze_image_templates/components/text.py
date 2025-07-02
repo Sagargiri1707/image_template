@@ -4,6 +4,7 @@ Text component for rendering text in templates.
 
 import os
 import re
+import random
 from typing import Tuple, Optional, Dict, Any, Union
 from PIL import Image, ImageDraw, ImageFont
 from .base import Component
@@ -23,6 +24,7 @@ class TextComponent(Component):
         font_path: Optional[str] = None,
         alignment: str = "left",
         line_height: Optional[float] = None,
+        underline: Optional[Union[bool, str]] = None,  # None/False: no underline, "normal", "funky"
     ):
         """
         Initialize a text component.
@@ -46,6 +48,7 @@ class TextComponent(Component):
         self.font_path = font_path
         self.alignment = alignment.lower()
         self.line_height = line_height if line_height is not None else 1.2
+        self.underline = str(underline).lower() if underline else None
 
         # Validate alignment and line height
         if self.alignment not in ["left", "center", "right"]:
@@ -104,7 +107,13 @@ class TextComponent(Component):
                 else:  # left alignment (default)
                     x = self.position[0]
 
+                # Draw text
                 draw.text((x, y_offset), line, font=font, fill=self.color)
+                
+                # Draw underline if specified
+                if self.underline:
+                    self._draw_underline(draw, line, x, y_offset, font)
+                
                 # Calculate line spacing based on line height
                 line_spacing = int(self.font_size * (self.line_height - 1) + 0.5)  # rounded to nearest int
                 y_offset += self.font_size + line_spacing
@@ -112,6 +121,10 @@ class TextComponent(Component):
             # For single line without max_width, just draw the text at the given position
             # (alignment doesn't apply as there's no width constraint)
             draw.text(self.position, self.text, font=font, fill=self.color)
+            
+            # Draw underline if specified for single line text
+            if self.underline:
+                self._draw_underline(draw, self.text, self.position[0], self.position[1], font)
 
         return result
 
@@ -152,6 +165,27 @@ class TextComponent(Component):
 
         return (0, 0, 0)  # Default to black if invalid
 
+    def _draw_underline(self, draw: ImageDraw.Draw, text: str, x: int, y: int, font: ImageFont.FreeTypeFont) -> None:
+        """Draw an underline for the given text.
+        
+        Args:
+            draw: ImageDraw instance
+            text: Text to underline
+            x: X position of text
+            y: Y position of text
+            font: Font used for the text
+        """
+        # Get text metrics
+        text_bbox = draw.textbbox((x, y), text, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+        
+        # Underline position (slightly below the text)
+        underline_y = y + text_height + 2  # 2px below text
+        
+        draw.line([(x, underline_y), (x + text_width, underline_y)], 
+                     fill=self.color, width=1)
+
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> "TextComponent":
         """
@@ -190,4 +224,5 @@ class TextComponent(Component):
             font_path=config.get("font_path"),
             alignment=config.get("alignment", "left"),
             line_height=config.get("line_height"),
+            underline=config.get("underline"),
         )

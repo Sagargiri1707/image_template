@@ -2,7 +2,7 @@
 Button components for interactive elements in templates.
 """
 
-from typing import Tuple, Optional, Dict, Any
+from typing import Tuple, Optional, Dict, Any, Union
 from PIL import Image, ImageDraw, ImageFont
 from .base import Component
 from dolze_image_templates.core.font_manager import get_font_manager
@@ -16,13 +16,15 @@ class CTAButtonComponent(Component):
         text: str,
         position: Tuple[int, int] = (0, 0),
         size: Tuple[int, int] = (200, 50),
-        bg_color: Tuple[int, int, int] = (0, 123, 255),
+        bg_color: Union[Tuple[int, int, int], str] = (0, 123, 255),  # Can be RGB tuple or hex string
         text_color: Tuple[int, int, int] = (255, 255, 255),
         corner_radius: int = 10,
         font_size: int = 18,
         font_path: Optional[str] = None,
         url: Optional[str] = None,
-        alignment: str = "center"
+        alignment: str = "center",
+        auto_width: bool = False,
+        padding: int = 40  # Horizontal padding on each side when auto_width is True
     ):
         """
         Initialize a CTA button component.
@@ -41,19 +43,44 @@ class CTAButtonComponent(Component):
         super().__init__(position)
         self.text = text
         self.size = size
-        self.bg_color = bg_color
+        # Convert hex color to RGB if needed
+        if isinstance(bg_color, str) and bg_color.startswith('#'):
+            self.bg_color = self._hex_to_rgb(bg_color)
+        else:
+            self.bg_color = bg_color
         self.text_color = text_color
         self.corner_radius = corner_radius
         self.font_size = font_size
         self.font_path = font_path
         self.url = url
-        self.alignment = alignment.lower()
+        self.alignment = alignment
+        self.auto_width = auto_width
+        self.padding = max(0, padding)  # Ensure padding is not negative
         self._font = None
         
         # Validate alignment
         if self.alignment not in ["left", "center", "right"]:
             print(f"Warning: Invalid alignment '{alignment}'. Defaulting to 'center'.")
             self.alignment = "center"
+            
+        # If auto_width is True, calculate the width based on text length
+        if self.auto_width and self.text:
+            # Create a dummy image to calculate text size
+            dummy_img = Image.new('RGB', (1, 1))
+            dummy_draw = ImageDraw.Draw(dummy_img)
+            font = self._get_font()
+            text_bbox = dummy_draw.textbbox((0, 0), self.text, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            # Reduce padding for a tighter fit
+            self.size = (text_width + self.padding, self.size[1])  # Removed *2 to have padding only on right side
+
+    @staticmethod
+    def _hex_to_rgb(hex_color: str) -> Tuple[int, int, int]:
+        """Convert hex color string to RGB tuple"""
+        hex_color = hex_color.lstrip('#')
+        if len(hex_color) == 3:
+            hex_color = ''.join([c * 2 for c in hex_color])
+        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
 
     def _get_font(self) -> ImageFont.FreeTypeFont:
         """Get the font for the button text"""
@@ -160,4 +187,6 @@ class CTAButtonComponent(Component):
             font_path=config.get("font_path"),
             url=config.get("url"),
             alignment=config.get("alignment", "center"),
+            auto_width=config.get("auto_width", False),
+            padding=config.get("padding", 40)
         )

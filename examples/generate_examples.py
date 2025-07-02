@@ -180,6 +180,16 @@ def generate_business_template(templateName: str):
             "cta_text": "STAY TUNED",
             "website_url": "dolze.ai/download",
         }
+    elif templateName == "hiring_post":
+        template_data = {
+            "theme_color": "#850aff",
+            "heading": "dame un grrr",
+            "subheading": "understood this? we are looking for you!",
+            "job_title": "Social Media Lead",
+            "website_url": "dolze.ai/download",
+            "company_name": "zepto",
+            "cta_text": "apply now!",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -219,12 +229,13 @@ def main():
             # "testimonials_template_2",
             # "product_showcase_2",
             # "product_showcase_3",
-            "qa_template_2",
+            # "qa_template_2",
             # "qa_template",
             # "qa_template_3",
             # "education_info_2",
             # "coming_soon_page",
             # "coming_soon_post_2",
+            "hiring_post"
         ]
         for template in templates:
             generate_business_template(template)
