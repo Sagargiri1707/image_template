@@ -59,14 +59,7 @@
       "max_width": 2086
     },
     {
-      "type": "rectangle",
-      "position": { "x": 237, "y": 2134 },
-      "size": { "width": 616, "height": 190 },
-      "fill_color": "${theme_color}",
-      "border_radius": 47
-    },
-    {
-      "type": "text",
+      "type": "cta_button",
       "text": "Read now",
       "position": { "x": 237, "y": 2184 },
       "size": { "width": 616, "height": 190 },
@@ -75,7 +68,8 @@
       "font_path": "Outfit-Medium",
       "alignment": "center",
       "max_width": 616,
-      "line_height": 1.5
+      "line_height": 1.5,
+      "corner_radius": 25
     },
     {
       "type": "image",

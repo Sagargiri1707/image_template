@@ -22,6 +22,7 @@ class CTAButtonComponent(Component):
         font_size: int = 18,
         font_path: Optional[str] = None,
         url: Optional[str] = None,
+        alignment: str = "center"
     ):
         """
         Initialize a CTA button component.
@@ -46,7 +47,13 @@ class CTAButtonComponent(Component):
         self.font_size = font_size
         self.font_path = font_path
         self.url = url
+        self.alignment = alignment.lower()
         self._font = None
+        
+        # Validate alignment
+        if self.alignment not in ["left", "center", "right"]:
+            print(f"Warning: Invalid alignment '{alignment}'. Defaulting to 'center'.")
+            self.alignment = "center"
 
     def _get_font(self) -> ImageFont.FreeTypeFont:
         """Get the font for the button text"""
@@ -100,8 +107,16 @@ class CTAButtonComponent(Component):
         # Draw the button text
         font = self._get_font()
         text_width = draw.textlength(self.text, font=font)
-        text_x = x + (width - text_width) // 2
-        text_y = y + (height - self.font_size) // 2 - 2  # Small vertical adjustment
+        
+        # Calculate text position based on alignment
+        if self.alignment == "left":
+            text_x = x + 20  # 10px padding from left
+        elif self.alignment == "right":
+            text_x = x + width - text_width - 20  # 10px padding from right
+        else:  # center
+            text_x = x + (width - text_width) // 2
+            
+        text_y = y + (height - self.font_size) // 2 - 8  # Small vertical adjustment
 
         draw.text(
             (text_x, text_y),
@@ -144,4 +159,5 @@ class CTAButtonComponent(Component):
             font_size=config.get("font_size", 18),
             font_path=config.get("font_path"),
             url=config.get("url"),
+            alignment=config.get("alignment", "center"),
         )

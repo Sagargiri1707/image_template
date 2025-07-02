@@ -69,7 +69,7 @@ def generate_business_template(templateName: str):
             "subheading": "Driving your success forward",
             "contact_email": "contact@business.com",
             "contact_phone": "+1-800-555-1234",
-            "website_url": "dolze.ai /download",
+            "website_url": "dolze.ai/download",
             "quote": "The only way to do great work is to love what you do.",
             "theme_color": "#44EC9D",
             "user_avatar": "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
@@ -219,12 +219,12 @@ def main():
             # "testimonials_template_2",
             # "product_showcase_2",
             # "product_showcase_3",
-            # "qa_template_2",
+            "qa_template_2",
             # "qa_template",
             # "qa_template_3",
             # "education_info_2",
             # "coming_soon_page",
-            "coming_soon_post_2",
+            # "coming_soon_post_2",
         ]
         for template in templates:
             generate_business_template(template)

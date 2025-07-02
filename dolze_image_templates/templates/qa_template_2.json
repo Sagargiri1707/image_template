@@ -42,27 +42,17 @@
       "circle_crop": true
     },
     {
-      "type": "rectangle",
-      "position": { "x": 440, "y": 480 },
-      "size": { "width": 1680, "height": 180 },
-      "fill_color": null,
-      "gradient": {
-        "type": "linear",
-        "colors": ["#111111", "#121221"],
-        "direction": 120
-      },
-      "border_radius": 40
-    },
-    {
-      "type": "text",
+      "type": "cta_button",
       "text": "${question}",
       "position": { "x": 470, "y": 510 },
       "font_path": "Outfit-Bold",
       "font_size": 120,
       "color": "#ffffff",
-      "max_width": 1620,
       "line_spacing": 1.2,
-      "align": "center"
+      "alignment": "left",
+      "size": { "width": 1680, "height": 200 },
+      "bg_color": [100, 200, 255, 0.18],
+      "corner_radius": 20
     },
     {
       "type": "rectangle",
