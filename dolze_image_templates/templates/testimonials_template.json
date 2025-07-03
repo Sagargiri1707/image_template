@@ -19,36 +19,6 @@
       "border_radius": 38
     },
     {
-      "type": "image",
-      "image_url": "https://t4.ftcdn.net/jpg/05/40/09/17/360_F_540091788_AvDyNUSbtnKQfNccukuFa3ZlsHFnMYrK.webp",
-      "position": { "x": 76, "y": 190 },
-      "size": { "width": 114, "height": 114 }
-    },
-    {
-      "type": "image",
-      "image_url": "https://t4.ftcdn.net/jpg/05/40/09/17/360_F_540091788_AvDyNUSbtnKQfNccukuFa3ZlsHFnMYrK.webp",
-      "position": { "x": 228, "y": 190 },
-      "size": { "width": 114, "height": 114 }
-    },
-    {
-      "type": "image",
-      "image_url": "https://t4.ftcdn.net/jpg/05/40/09/17/360_F_540091788_AvDyNUSbtnKQfNccukuFa3ZlsHFnMYrK.webp",
-      "position": { "x": 379, "y": 190 },
-      "size": { "width": 114, "height": 114 }
-    },
-    {
-      "type": "image",
-      "image_url": "https://t4.ftcdn.net/jpg/05/40/09/17/360_F_540091788_AvDyNUSbtnKQfNccukuFa3ZlsHFnMYrK.webp",
-      "position": { "x": 531, "y": 190 },
-      "size": { "width": 114, "height": 114 }
-    },
-    {
-      "type": "image",
-      "image_url": "https://t4.ftcdn.net/jpg/05/40/09/17/360_F_540091788_AvDyNUSbtnKQfNccukuFa3ZlsHFnMYrK.webp",
-      "position": { "x": 683, "y": 190 },
-      "size": { "width": 114, "height": 114 }
-    },
-    {
       "type": "text",
       "position": { "x": 190, "y": 512 },
       "text": "\"${testimonial_text}\"",
