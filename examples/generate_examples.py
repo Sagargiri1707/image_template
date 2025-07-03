@@ -1,3 +1,4 @@
+
 """
 Example script demonstrating how to use the Dolze Templates library.
 
@@ -202,6 +203,17 @@ def generate_business_template(templateName: str):
             "sale_end_text": "Ends 10th july at midnight",
             "sale_heading": "Flash Sale!"
         }
+    elif templateName == "summer_sale_promotion":
+        template_data = {
+            "background_image_url": "https://img.freepik.com/free-photo/portrait-young-businesswoman-holding-eyeglasses-hand-against-gray-backdrop_23-2148029483.jpg?ga=GA1.1.1623013982.1744968336&semt=ais_hybrid&w=740",
+            "theme_color": "#850aff",
+            "brand_name": "Dolze AI",
+            "sale_heading": "Summer Sale!",
+            "sale_description": "Don't miss out on our biggest sale of the season. Shop now and refresh your business with our exclusive AI offerings.",
+            "discount_text": "Up to 50% Off",
+            "social_handle": "@dolze_ai",
+            "contact_number": "+123-456-7890"
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -247,8 +259,9 @@ def main():
             # "education_info_2",
             # "coming_soon_page",
             # "coming_soon_post_2",
-            "hiring_post",
-            "product_sale"
+            # "hiring_post",
+            # "product_sale",
+            "summer_sale_promotion"
         ]
         for template in templates:
             generate_business_template(template)

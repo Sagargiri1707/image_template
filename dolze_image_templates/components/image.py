@@ -1,9 +1,10 @@
 import os
 import requests
 from io import BytesIO
-from typing import Tuple, Optional, Dict, Any, Union
+from typing import Tuple, Optional, Dict, Any, Union, List
 from PIL import Image, ImageOps, ImageDraw
 from .base import Component
+from .shapes import GradientUtils
 
 
 class ImageComponent(Component):
@@ -54,6 +55,7 @@ class ImageComponent(Component):
         border_color: Union[str, Tuple[int, int, int, int]] = (0, 0, 0, 255),
         tint_color: Optional[Union[str, Tuple[int, int, int, int]]] = None,
         tint_opacity: float = 0.5,
+        gradient_tint_config: Optional[Dict[str, Any]] = None,
     ):
         """
         Initialize an image component.
@@ -70,6 +72,14 @@ class ImageComponent(Component):
             border_color: Color of the border (hex string or RGBA tuple)
             tint_color: Color to overlay on the image (None for no tint, hex string or RGBA tuple)
             tint_opacity: Opacity of the tint overlay (0.0 to 1.0)
+            gradient_tint_config: Configuration for gradient tint overlay. Format:
+                {
+                    "type": "linear" or "radial",
+                    "colors": ["#color1", "#color2", ...],
+                    "direction": 0-360 (for linear, degrees),
+                    "center": [x, y] (for radial, normalized 0-1),
+                    "opacity": 0.0-1.0 (optional, overrides tint_opacity)
+                }
         """
         super().__init__(position)
         self.image_path = image_path
@@ -84,6 +94,7 @@ class ImageComponent(Component):
         self.tint_opacity = max(
             0.0, min(1.0, float(tint_opacity))
         )  # Clamp between 0 and 1
+        self.gradient_tint_config = gradient_tint_config
         self._cached_image = None
 
     def _load_image(self) -> Optional[Image.Image]:
@@ -117,16 +128,44 @@ class ImageComponent(Component):
                 img.putalpha(alpha)
 
             # Apply tint overlay if specified
-            if self.tint_color and self.tint_opacity > 0:
-                # Create a solid color layer with the tint color
-                tint_layer = Image.new("RGBA", img.size, self.tint_color)
-                # Adjust tint layer opacity
-                if self.tint_opacity < 1.0:
-                    alpha = tint_layer.split()[3]
-                    alpha = Image.eval(alpha, lambda x: int(x * self.tint_opacity))
-                    tint_layer.putalpha(alpha)
-                # Blend the tint layer with the image
-                img = Image.alpha_composite(img, tint_layer)
+            if self.gradient_tint_config:
+                # Create gradient tint layer
+                try:
+                    gradient_type = self.gradient_tint_config.get("type", "linear").lower()
+                    colors = [GradientUtils.parse_color(c) for c in self.gradient_tint_config.get("colors", [])]
+                    
+                    if not colors:
+                        print("Warning: No colors specified for gradient tint")
+                        return img
+                    
+                    if gradient_type == "radial":
+                        center = self.gradient_tint_config.get("center", [0.5, 0.5])
+                        gradient = GradientUtils.create_radial_gradient(img.size, colors, center)
+                    else:  # default to linear
+                        direction = self.gradient_tint_config.get("direction", 0)
+                        gradient = GradientUtils.create_linear_gradient(img.size, colors, direction)
+                    
+                    # Use gradient-specific opacity or fall back to tint_opacity
+                    gradient_opacity = self.gradient_tint_config.get("opacity", self.tint_opacity)
+                    gradient_opacity = max(0.0, min(1.0, float(gradient_opacity)))
+                    
+                    # Apply opacity to the gradient
+                    if gradient_opacity < 1.0:
+                        alpha = gradient.split()[3]
+                        alpha = Image.eval(alpha, lambda x: int(x * gradient_opacity))
+                        gradient.putalpha(alpha)
+                    
+                    # Blend the gradient with the image
+                    img = Image.alpha_composite(img, gradient)
+                    
+                except Exception as e:
+                    print(f"Error applying gradient tint: {e}")
+                    # Fall back to solid color tint if gradient fails
+                    if self.tint_color and self.tint_opacity > 0:
+                        img = self._apply_solid_tint(img)
+                        
+            elif self.tint_color and self.tint_opacity > 0:
+                img = self._apply_solid_tint(img)
 
             self._cached_image = img
             return img
@@ -134,6 +173,15 @@ class ImageComponent(Component):
         except (IOError, requests.RequestException) as e:
             print(f"Error loading image: {e}")
             return None
+
+    def _apply_solid_tint(self, img: Image.Image) -> Image.Image:
+        """Apply a solid color tint to the image."""
+        tint_layer = Image.new("RGBA", img.size, self.tint_color)
+        if self.tint_opacity < 1.0:
+            alpha = tint_layer.split()[3]
+            alpha = Image.eval(alpha, lambda x: int(x * self.tint_opacity))
+            tint_layer.putalpha(alpha)
+        return Image.alpha_composite(img, tint_layer)
 
     def render(self, image: Image.Image) -> Image.Image:
         """
@@ -279,7 +327,26 @@ class ImageComponent(Component):
         Create an image component from a configuration dictionary.
 
         Args:
-            config: Configuration dictionary
+            config: Configuration dictionary with the following structure:
+                {
+                    "image_path": "path/to/image.jpg",  # optional
+                    "image_url": "https://example.com/image.jpg",  # optional
+                    "position": {"x": 0, "y": 0},
+                    "size": {"width": 100, "height": 100},  # optional
+                    "circle_crop": false,
+                    "opacity": 1.0,
+                    "border_radius": 0,
+                    "border_width": 0,
+                    "border_color": "#000000" or [0, 0, 0, 255],
+                    "tint": {
+                        "type": "solid",  # or "linear" or "radial"
+                        "color": "#FF0000",  # for solid tint
+                        "colors": ["#FF0000", "#00FF00", "#0000FF"],  # for gradient tint
+                        "opacity": 0.5,
+                        "direction": 45,  # for linear gradient (degrees)
+                        "center": [0.5, 0.5]  # for radial gradient (normalized)
+                    }
+                }
 
         Returns:
             A new ImageComponent instance
@@ -298,6 +365,32 @@ class ImageComponent(Component):
             if None in size:
                 size = None
 
+        # Handle tint configuration
+        tint_config = config.get("tint", {})
+        tint_color = None
+        tint_opacity = 0.5
+        gradient_tint_config = None
+
+        if tint_config:
+            tint_type = tint_config.get("type", "solid").lower()
+            tint_opacity = float(tint_config.get("opacity", 0.5))
+            
+            if tint_type == "solid":
+                # Solid color tint
+                tint_color = tint_config.get("color")
+            elif tint_type in ["linear", "radial"]:
+                # Gradient tint
+                gradient_tint_config = {
+                    "type": tint_type,
+                    "colors": tint_config.get("colors", []),
+                    "opacity": tint_opacity
+                }
+                
+                if tint_type == "linear":
+                    gradient_tint_config["direction"] = tint_config.get("direction", 0)
+                elif tint_type == "radial":
+                    gradient_tint_config["center"] = tint_config.get("center", [0.5, 0.5])
+
         return cls(
             image_path=config.get("image_path"),
             image_url=config.get("image_url"),
@@ -308,6 +401,7 @@ class ImageComponent(Component):
             border_radius=int(config.get("border_radius", 0)),
             border_width=int(config.get("border_width", 0)),
             border_color=config.get("border_color", (0, 0, 0, 255)),
-            tint_color=config.get("tint_color"),
-            tint_opacity=float(config.get("tint_opacity", 0.5)),
+            tint_color=tint_color,
+            tint_opacity=tint_opacity,
+            gradient_tint_config=gradient_tint_config,
         )
