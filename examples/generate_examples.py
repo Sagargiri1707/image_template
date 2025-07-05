@@ -214,7 +214,7 @@ def generate_business_template(templateName: str):
             "social_handle": "@dolze_ai",
             "contact_number": "+123-456-7890"
         }
-    elif templateName == "product_showcase_3":
+    elif templateName == "product_showcase_3" :
         template_data = {
             "product_name": "Classic Scooter",
             "product_description": "Rent now for just $15.99/day.",
@@ -232,6 +232,13 @@ def generate_business_template(templateName: str):
             "text": "Minimalist product service",
             "website_url": "dolze.ai/shop",
             "product_image":"https://img.freepik.com/free-photo/furniture-background-clean-wall-wood_1253-666.jpg?t=st=1751691647~exp=1751695247~hmac=d5a191ec06d19843dcb271039a8e46a0374789e5a09714f0335e34139da25e43&w=1380",
+        }
+    elif templateName == "product_showcase_4":
+        template_data = {
+            "offer_text": "Get it only with Dolze",
+            "product_image": "https://media-public.canva.com/A6MI4/MAGbaAA6MI4/1/s3.png",
+            "website_url": "dolze.ai/shop",
+            "theme_color": "#4A90E2",
         }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
@@ -282,8 +289,8 @@ def main():
             # "product_sale",
             # "summer_sale_promotion",
             # "qa2",
-            # "product_showcase_3",
-            "product_service_minimal"
+            "product_showcase_4",
+            # "product_service_minimal"
         ]
         for template in templates:
             generate_business_template(template)
