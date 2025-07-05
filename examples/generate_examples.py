@@ -246,6 +246,14 @@ def generate_business_template(templateName: str):
             "product_tagline": "Leading specialty brew",
             "social_handle": "@dolze_ai",
         }
+    elif templateName == "coming_soon":
+        template_data = {
+            "background_image_url": "https://img.freepik.com/free-photo/close-up-meat-with-baked-potatoes-eggplant-tomato-pepper-decorated-with-pomegranate-wooden-bark_176474-2443.jpg?t=st=1751704275~exp=1751707875~hmac=1bb3b262f6a44e5898fcf5f70fb1be071981253d1b1db308ac972cf7f0e9e0ab&w=1380",
+            "text": "COMING SOON",
+            "website_url": "rumi.in",
+            "business_name": "Rumi Restaurant",
+            "logo_url": "https://img.freepik.com/free-vector/detailed-chef-logo-template_23-2148987940.jpg?t=st=1751704940~exp=1751708540~hmac=d327a7d9b9b689564d411580764d3308e521d60ea9b470ce9ed0c75b978d29d7&w=1380",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -296,7 +304,8 @@ def main():
             # "summer_sale_promotion",
             # "qa2",
             # "product_showcase_4",
-            "cafe_post",
+            # "cafe_post",
+            "coming_soon",
             # "product_service_minimal"
         ]
         for template in templates:
