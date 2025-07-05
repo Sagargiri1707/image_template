@@ -31,9 +31,9 @@
       "position": { "x": 30, "y": 700 },
       "font_size": 80,
       "color": [255, 255, 255, 1],
-      "font_path": "Raleway-Bold",
+      "font_path": "Montserrat-Bold",
       "alignment": "left",
-      "max_width": 400
+      "max_width": 430
     },
     {
       "type": "text",
