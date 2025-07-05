@@ -8,6 +8,7 @@ This script shows how to:
 3. Save the generated images
 """
 
+from cgitb import text
 import os
 import json
 from datetime import datetime
@@ -226,6 +227,12 @@ def generate_business_template(templateName: str):
             "quote": "The only way to do your best work is to love what you do and dont do what you dont love.",
             "username": "@DolzeAi",
         }
+    elif templateName == "product_service":
+        template_data = {
+            "text": "Minimalist product service",
+            "website_url": "dolze.ai/shop",
+            "product_image":"https://img.freepik.com/free-photo/furniture-background-clean-wall-wood_1253-666.jpg?t=st=1751691647~exp=1751695247~hmac=d5a191ec06d19843dcb271039a8e46a0374789e5a09714f0335e34139da25e43&w=1380",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -259,7 +266,7 @@ def main():
             # "promotional_banner",
             # "product_promotion",
             # "qa_template",
-            "quote_template",
+            # "quote_template",
             # "quote_template_2",
             # "product_showcase",
             # "testimonials_template_2",
@@ -275,7 +282,8 @@ def main():
             # "product_sale",
             # "summer_sale_promotion",
             # "qa2",
-            # "product_showcase_3"
+            # "product_showcase_3",
+            "product_service"
         ]
         for template in templates:
             generate_business_template(template)
