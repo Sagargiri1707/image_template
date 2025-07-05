@@ -227,7 +227,7 @@ def generate_business_template(templateName: str):
             "quote": "The only way to do your best work is to love what you do and dont do what you dont love.",
             "username": "@DolzeAi",
         }
-    elif templateName == "product_service":
+    elif templateName == "product_service_minimal":
         template_data = {
             "text": "Minimalist product service",
             "website_url": "dolze.ai/shop",
@@ -283,7 +283,7 @@ def main():
             # "summer_sale_promotion",
             # "qa2",
             # "product_showcase_3",
-            "product_service"
+            "product_service_minimal"
         ]
         for template in templates:
             generate_business_template(template)

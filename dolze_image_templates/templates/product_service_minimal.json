@@ -1,5 +1,5 @@
 {
-  "name": "product_service",
+  "name": "product_service_minimal",
   "description": "Clean Q&A template with centered profile picture and question/answer layout",
   "size": { "width": 1080, "height": 1080 },
   "use_base_image": false,
