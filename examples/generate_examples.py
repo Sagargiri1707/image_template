@@ -240,6 +240,12 @@ def generate_business_template(templateName: str):
             "website_url": "dolze.ai/shop",
             "theme_color": "#4A90E2",
         }
+    elif templateName == "cafe_post":
+        template_data = {
+            "business_name": "The kind",
+            "product_tagline": "Leading specialty brew",
+            "social_handle": "@dolze_ai",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -289,7 +295,8 @@ def main():
             # "product_sale",
             # "summer_sale_promotion",
             # "qa2",
-            "product_showcase_4",
+            # "product_showcase_4",
+            "cafe_post",
             # "product_service_minimal"
         ]
         for template in templates:
