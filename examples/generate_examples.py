@@ -115,7 +115,7 @@ def generate_business_template(templateName: str):
             "theme_color": "#44EC9D",
             "website_url": "website.com/blog",
         }
-    elif templateName == "quote_template" or templateName == "quote_template_2":
+    elif  templateName == "quote_template_2":
         template_data = {
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg",
             "quote1": "The only way to do",
@@ -221,6 +221,11 @@ def generate_business_template(templateName: str):
             "product_image": "https://media-public.canva.com/A6MI4/MAGbaAA6MI4/1/s3.png",
             "website_url": "dolze.ai/shop",
         }
+    elif templateName == "quote_template":
+        template_data = {
+            "quote": "The only way to do your best work is to love what you do and dont do what you dont love.",
+            "username": "@DolzeAi",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -254,7 +259,7 @@ def main():
             # "promotional_banner",
             # "product_promotion",
             # "qa_template",
-            # "quote_template",
+            "quote_template",
             # "quote_template_2",
             # "product_showcase",
             # "testimonials_template_2",
@@ -270,7 +275,7 @@ def main():
             # "product_sale",
             # "summer_sale_promotion",
             # "qa2",
-            "product_showcase_3"
+            # "product_showcase_3"
         ]
         for template in templates:
             generate_business_template(template)
