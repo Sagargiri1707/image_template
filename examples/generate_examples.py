@@ -157,7 +157,6 @@ def generate_business_template(templateName: str):
     elif (
         templateName == "product_showcase"
         or templateName == "product_showcase_2"
-        or templateName == "product_showcase_3"
     ):
         template_data = {
             "logo_url": "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?w=200&h=200&white=true",
@@ -214,6 +213,14 @@ def generate_business_template(templateName: str):
             "social_handle": "@dolze_ai",
             "contact_number": "+123-456-7890"
         }
+    elif templateName == "product_showcase_3":
+        template_data = {
+            "product_name": "Classic Scooter",
+            "product_description": "Rent now for just $15.99/day.",
+            "cta_text": "Book yours",
+            "product_image": "https://media-public.canva.com/A6MI4/MAGbaAA6MI4/1/s3.png",
+            "website_url": "dolze.ai/shop",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -261,7 +268,9 @@ def main():
             # "coming_soon_post_2",
             # "hiring_post",
             # "product_sale",
-            "summer_sale_promotion"
+            # "summer_sale_promotion",
+            # "qa2",
+            "product_showcase_3"
         ]
         for template in templates:
             generate_business_template(template)
