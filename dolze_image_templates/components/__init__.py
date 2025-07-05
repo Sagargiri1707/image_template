@@ -7,9 +7,10 @@ from typing import Dict, Any, Type, Optional
 from .base import Component
 from .text import TextComponent
 from .image import ImageComponent
-from .shapes import CircleComponent, RectangleComponent, PolygonComponent
+from .shapes import CircleComponent, RectangleComponent, PolygonComponent,RibbonFrame
 from .buttons import CTAButtonComponent
 from .footer import FooterComponent
+
 
 # Map of component types to their corresponding classes
 COMPONENT_CLASSES: Dict[str, Type[Component]] = {
@@ -20,6 +21,7 @@ COMPONENT_CLASSES: Dict[str, Type[Component]] = {
     "polygon": PolygonComponent,
     "cta_button": CTAButtonComponent,
     "footer": FooterComponent,
+    "ribbon_frame": RibbonFrame
 }
 
 

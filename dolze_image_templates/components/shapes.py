@@ -3,10 +3,12 @@ Shape components for rendering basic shapes in templates with gradient support.
 """
 
 from typing import Tuple, Optional, Dict, Any, List, Union
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import colorsys
 import re
+import os
 from .base import Component
+from dolze_image_templates.core.font_manager import get_font_manager
 
 
 class GradientUtils:
@@ -543,6 +545,227 @@ class RectangleComponent(Component):
             outline_width=config.get("outline_width", 1),
             border_radius=config.get("border_radius", 0),
             gradient_config=config.get("gradient"),
+        )
+
+
+class RibbonFrame(Component):
+    """Component for rendering a ribbon frame with text inside.
+    
+    The ribbon will automatically adjust its width based on the text content.
+    """
+    
+    def __init__(
+        self,
+        text: str,
+        position: Tuple[int, int] = (0, 0),
+        font_size: int = 24,
+        font_path: Optional[str] = None,
+        text_color: Tuple[int, int, int] = (255, 255, 255),
+        fill_color: Tuple[int, int, int] = (255, 0, 0),
+        outline_color: Optional[Tuple[int, int, int]] = None,
+        padding: int = 20,
+        pointer_size: int = 20,
+        rotation: int = 0,
+        triangle_direction: str = 'open',
+    ):
+        """
+        Initialize a ribbon frame component.
+        
+        Args:
+            text: Text to display in the ribbon
+            position: Position (x, y) of the ribbon's top-left corner
+            font_size: Font size in points
+            font_path: Path to a custom font file
+            text_color: RGB color tuple for the text
+            fill_color: RGB color tuple for the ribbon
+            outline_color: RGB color tuple for the outline (None for no outline)
+            padding: Padding around the text in pixels
+            pointer_size: Size of the ribbon's pointer in pixels
+        """
+        super().__init__(position)
+        self.text = text
+        self.font_size = font_size
+        self.font_path = font_path
+        self.text_color = text_color
+        self.fill_color = fill_color
+        self.outline_color = outline_color
+        self.padding = padding
+        self.pointer_size = pointer_size
+        self.rotation = rotation % 360  # Normalize to 0-359 degrees
+        self.triangle_direction = triangle_direction.lower()  # 'open' or 'closed'
+        if self.triangle_direction not in ['open', 'closed']:
+            raise ValueError("triangle_direction must be either 'open' or 'closed'")
+        self._font = None
+        self._ribbon_image = None  # Cached ribbon image
+    
+    def _get_font(self) -> ImageFont.FreeTypeFont:
+        """Get the font with the specified size"""
+        if self._font is None:
+            font_manager = get_font_manager()
+            if self.font_path and os.path.exists(self.font_path):
+                self._font = ImageFont.truetype(self.font_path, self.font_size)
+            else:
+                font_name = self.font_path or "Montserrat-Bold"
+                self._font = font_manager.get_font(font_name, self.font_size)
+        return self._font
+    
+    def _get_text_size(self) -> Tuple[int, int]:
+        """Calculate the size of the text with padding"""
+        font = self._get_font()
+        dummy_img = Image.new('RGB', (1, 1))
+        draw = ImageDraw.Draw(dummy_img)
+        bbox = draw.textbbox((0, 0), self.text, font=font)
+        return (
+            bbox[2] - bbox[0] + self.padding * 2,
+            bbox[3] - bbox[1] + self.padding * 2
+        )
+    
+    def _generate_ribbon_image(self) -> Image.Image:
+        """Generate the ribbon image with text"""
+        if not self.text:
+            return None
+            
+        # Calculate text size with padding
+        text_bbox = self._get_font().getbbox(self.text)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+        
+        # Create a new image for the ribbon with extra space for rotation
+        ribbon_width = text_width + self.padding * 2 + self.pointer_size * 2
+        ribbon_height = text_height + self.padding * 2
+        
+        # Create points for the ribbon shape based on triangle direction
+        if self.triangle_direction == 'open':
+            points = [
+                (0, ribbon_height // 2),  # Left middle
+                (self.pointer_size, 0),  # Top-left pointer
+                (ribbon_width - self.pointer_size, 0),  # Top-right before pointer
+                (ribbon_width, ribbon_height // 2),  # Right middle
+                (ribbon_width - self.pointer_size, ribbon_height),  # Bottom-right before pointer
+                (self.pointer_size, ribbon_height),  # Bottom-left pointer
+            ]
+        else:  # 'closed' - triangles point inwards
+            points = [
+                (0, 0),  # Top-left corner
+                (ribbon_width, 0),  # Top-right corner
+                (ribbon_width - self.pointer_size, ribbon_height // 2),  # Right middle
+                (ribbon_width, ribbon_height),  # Bottom-right corner
+                (0, ribbon_height),  # Bottom-left corner
+                (self.pointer_size, ribbon_height // 2),  # Left middle
+            ]
+        
+        # Create a new image for the ribbon with transparency
+        ribbon_img = Image.new('RGBA', (ribbon_width, ribbon_height), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(ribbon_img)
+        
+        # Draw the ribbon
+        draw.polygon(points, fill=tuple(self.fill_color), outline=self.outline_color)
+        
+        # Draw the text
+        font = self._get_font()
+        text_x = (ribbon_width - text_width) // 2 - text_bbox[0]
+        text_y = (ribbon_height - text_height) // 2 - text_bbox[1]
+        
+        draw.text(
+            (text_x, text_y),
+            self.text,
+            fill=tuple(self.text_color),
+            font=font,
+            align='center'
+        )
+        
+        # Apply rotation if needed
+        if self.rotation != 0:
+            # Expand the image to fit the rotated ribbon
+            expanded_size = (
+                int(ribbon_width * 1.5),
+                int(ribbon_height * 1.5)
+            )
+            expanded_img = Image.new('RGBA', expanded_size, (0, 0, 0, 0))
+            # Center the ribbon in the expanded image
+            pos = (
+                (expanded_size[0] - ribbon_width) // 2,
+                (expanded_size[1] - ribbon_height) // 2
+            )
+            expanded_img.paste(ribbon_img, pos, ribbon_img)
+            # Rotate around the center
+            rotated = expanded_img.rotate(
+                -self.rotation,  # Negative because PIL uses CCW rotation
+                expand=True,
+                resample=Image.BICUBIC
+            )
+            return rotated
+            
+        return ribbon_img
+
+    def render(self, image: Image.Image) -> Image.Image:
+        """
+        Render the ribbon with text onto an image.
+        
+        Args:
+            image: The image to render the ribbon on
+            
+        Returns:
+            The image with the ribbon rendered on it
+        """
+        if not self.text:
+            return image
+            
+        # Generate or use cached ribbon image
+        if self._ribbon_image is None:
+            self._ribbon_image = self._generate_ribbon_image()
+            if self._ribbon_image is None:
+                return image
+        
+        # Calculate position to center the ribbon
+        x = self.position[0] - (self._ribbon_image.width // 2)
+        y = self.position[1] - (self._ribbon_image.height // 2)
+        
+        # Paste the ribbon onto the original image
+        image.alpha_composite(self._ribbon_image, (x, y))
+        return image
+    
+    @classmethod
+    def from_config(cls, config: Dict[str, Any]) -> 'RibbonFrame':
+        """
+        Create a ribbon frame component from a configuration dictionary.
+        
+        Args:
+            config: Configuration dictionary with the following structure:
+                {
+                    "text": "Ribbon Text",
+                    "position": {"x": 0, "y": 0},
+                    "font_size": 24,
+                    "font_path": "path/to/font.ttf",  # optional
+                    "text_color": [255, 255, 255],
+                    "fill_color": [255, 0, 0],
+                    "outline_color": [0, 0, 0],  # optional
+                    "padding": 20,
+                    "pointer_size": 20,
+                    "rotation": 0,  # Rotation in degrees (0-360)
+                    "triangle_direction": "open"  # 'open' (triangles out) or 'closed' (triangles in)
+                }
+                
+        Returns:
+            A new RibbonFrame instance
+        """
+        position = (
+            config.get("position", {}).get("x", 0),
+            config.get("position", {}).get("y", 0),
+        )
+        
+        return cls(
+            text=config.get("text", ""),
+            position=position,
+            font_size=config.get("font_size", 24),
+            font_path=config.get("font_path"),
+            text_color=tuple(config.get("text_color", (255, 255, 255))),
+            fill_color=tuple(config.get("fill_color", (255, 0, 0))),
+            outline_color=tuple(config.get("outline_color")) if config.get("outline_color") else None,
+            padding=config.get("padding", 20),
+            pointer_size=config.get("pointer_size", 20),
+            rotation=config.get("rotation", 0),
+            triangle_direction=config.get("triangle_direction", "open")
         )
 
 

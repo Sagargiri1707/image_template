@@ -254,6 +254,14 @@ def generate_business_template(templateName: str):
             "business_name": "Rumi Restaurant",
             "logo_url": "https://img.freepik.com/free-vector/detailed-chef-logo-template_23-2148987940.jpg?t=st=1751704940~exp=1751708540~hmac=d327a7d9b9b689564d411580764d3308e521d60ea9b470ce9ed0c75b978d29d7&w=1380",
         }
+    elif templateName == "event_day":
+        template_data = {
+            "celebration_text":"SPECIAL SALE",
+            "celebration_name": "Mother's day",
+            "celebration_description":"This mothers day come celebrate it with us in our deluxe stores",
+            "celebration_image":"https://dolze-templates-uat.s3.eu-north-1.amazonaws.com/uploads/9b130834-14ac-4624-b794-2287749ef906.png",
+            "sale_info":"Get flat Rs 10 off",
+        }
     # Render the template with the data
     output_path = os.path.join("output", f"{templateName}.png")
     rendered_image = registry.render_template(
@@ -305,7 +313,8 @@ def main():
             # "qa2",
             # "product_showcase_4",
             # "cafe_post",
-            "coming_soon",
+            # "coming_soon",
+            "event_day",
             # "product_service_minimal"
         ]
         for template in templates:
